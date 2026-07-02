@@ -1,0 +1,78 @@
+import { createFileRoute, notFound, Link } from "@tanstack/react-router";
+import { ProductCard } from "@/components/site/ProductCard";
+import { findCategory, productsByCategory, categories, type Product } from "@/lib/site-data";
+
+export const Route = createFileRoute("/categoria/$slug")({
+  loader: ({ params }) => {
+    const cat = findCategory(params.slug);
+    if (!cat) throw notFound();
+    return { category: cat, products: productsByCategory(params.slug) };
+  },
+  head: ({ loaderData }) => {
+    if (!loaderData) return { meta: [{ title: "Categoria não encontrada" }, { name: "robots", content: "noindex" }] };
+    const c = loaderData.category;
+    return {
+      meta: [
+        { title: `${c.name} — Nane Benites` },
+        { name: "description", content: `${c.name} premium: ${c.description}` },
+        { property: "og:title", content: `${c.name} — Nane Benites` },
+        { property: "og:description", content: c.description },
+        { property: "og:url", content: `/categoria/${c.slug}` },
+        { property: "og:type", content: "product.group" },
+      ],
+      links: [{ rel: "canonical", href: `/categoria/${c.slug}` }],
+    };
+  },
+  component: CategoryPage,
+  notFoundComponent: () => (
+    <div className="container-x py-32 text-center">
+      <p className="eyebrow">404</p>
+      <h1 className="mt-3 font-display text-4xl font-semibold">Categoria não encontrada</h1>
+      <Link to="/catalogo" className="mt-6 inline-block link-underline text-sm">Ver catálogo</Link>
+    </div>
+  ),
+  errorComponent: () => <div className="container-x py-32 text-center">Erro ao carregar.</div>,
+});
+
+function CategoryPage() {
+  const { category, products } = Route.useLoaderData();
+
+  return (
+    <>
+      <section className="relative h-[50vh] min-h-[380px] w-full overflow-hidden bg-foreground text-background">
+        <img src={category.image} alt={category.name} className="absolute inset-0 h-full w-full object-cover" />
+        <div className="absolute inset-0 bg-gradient-to-t from-foreground/80 via-foreground/40 to-foreground/20" />
+        <div className="container-x relative z-10 flex h-full flex-col justify-end pb-12">
+          <p className="text-[10px] font-medium uppercase tracking-[0.35em] text-background/70">Categoria</p>
+          <h1 className="mt-3 font-display text-5xl font-semibold leading-tight tracking-tight md:text-7xl">{category.name}</h1>
+          <p className="mt-4 max-w-2xl text-base text-background/80">{category.description}</p>
+        </div>
+      </section>
+
+      <section className="container-x py-16 md:py-24">
+        {products.length === 0 ? (
+          <p className="py-20 text-center text-muted-foreground">Em breve novas peças nesta categoria.</p>
+        ) : (
+          <div className="grid grid-cols-2 gap-4 md:grid-cols-3 md:gap-6 lg:grid-cols-4">
+            {products.map((p: Product) => (
+              <ProductCard key={p.slug} product={p} />
+            ))}
+          </div>
+        )}
+      </section>
+
+      <section className="border-t border-border bg-[color:var(--surface)] py-16">
+        <div className="container-x">
+          <p className="eyebrow mb-6">Outras categorias</p>
+          <div className="flex flex-wrap gap-2">
+            {categories.filter((c) => c.slug !== category.slug).map((c) => (
+              <Link key={c.slug} to="/categoria/$slug" params={{ slug: c.slug }} className="rounded-full border border-border bg-background px-5 py-2 text-xs uppercase tracking-widest text-foreground transition-colors hover:border-brand hover:text-brand">
+                {c.name}
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+    </>
+  );
+}
