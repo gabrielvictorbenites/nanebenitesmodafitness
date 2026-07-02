@@ -1,9 +1,8 @@
 import { createFileRoute, notFound, Link } from "@tanstack/react-router";
 import { useState } from "react";
-import { Heart, Share2, MessageCircle, ChevronLeft } from "lucide-react";
-import { PageHero } from "@/components/site/PageHero";
+import { Heart, Share2, MessageCircle } from "lucide-react";
 import { ProductCard } from "@/components/site/ProductCard";
-import { findProduct, findCategory, products as allProducts, formatPrice } from "@/lib/site-data";
+import { findProduct, findCategory, products as allProducts, formatPrice, type Product } from "@/lib/site-data";
 import { whatsappLink, productWhatsappMessage } from "@/lib/whatsapp";
 
 export const Route = createFileRoute("/produto/$slug")({
@@ -104,7 +103,7 @@ function ProductPage() {
           </div>
           {gallery.length > 1 ? (
             <div className="mt-4 grid grid-cols-4 gap-2">
-              {gallery.map((g, i) => (
+              {gallery.map((g: string, i: number) => (
                 <button
                   key={i}
                   onClick={() => setActive(i)}
@@ -138,7 +137,7 @@ function ProductPage() {
           <div className="mt-8">
             <p className="text-xs uppercase tracking-widest text-muted-foreground">Cor: <span className="text-foreground">{color}</span></p>
             <div className="mt-3 flex flex-wrap gap-2">
-              {product.colors.map((c) => (
+              {product.colors.map((c: string) => (
                 <button key={c} onClick={() => setColor(c)} className={`rounded-full border px-4 py-2 text-xs uppercase tracking-widest transition-colors ${
                   c === color ? "border-brand bg-brand text-brand-foreground" : "border-border hover:border-foreground"
                 }`}>
@@ -151,7 +150,7 @@ function ProductPage() {
           <div className="mt-6">
             <p className="text-xs uppercase tracking-widest text-muted-foreground">Tamanho: <span className="text-foreground">{size}</span></p>
             <div className="mt-3 flex flex-wrap gap-2">
-              {product.sizes.map((s) => (
+              {product.sizes.map((s: string) => (
                 <button key={s} onClick={() => setSize(s)} className={`h-11 min-w-11 rounded-sm border px-4 text-xs font-medium uppercase tracking-widest transition-colors ${
                   s === size ? "border-brand bg-brand text-brand-foreground" : "border-border hover:border-foreground"
                 }`}>
@@ -216,7 +215,7 @@ function ProductPage() {
               ) : null}
             </div>
             <div className="grid grid-cols-2 gap-4 md:grid-cols-4 md:gap-6">
-              {related.map((p) => (
+              {related.map((p: Product) => (
                 <ProductCard key={p.slug} product={p} />
               ))}
             </div>
