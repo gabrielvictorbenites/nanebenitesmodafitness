@@ -2,8 +2,11 @@ import { Link } from "@tanstack/react-router";
 import { Heart } from "lucide-react";
 import type { Product } from "@/lib/site-data";
 import { formatPrice } from "@/lib/site-data";
+import { useFavorites } from "@/lib/favorites";
 
 export function ProductCard({ product }: { product: Product }) {
+  const { has, toggle } = useFavorites();
+  const fav = has(product.slug);
   return (
     <Link
       to="/produto/$slug"
@@ -36,11 +39,18 @@ export function ProductCard({ product }: { product: Product }) {
         </div>
         <button
           type="button"
-          onClick={(e) => e.preventDefault()}
-          aria-label="Favoritar"
-          className="absolute right-4 top-4 inline-flex h-9 w-9 items-center justify-center rounded-full bg-background/95 text-foreground opacity-0 transition-opacity duration-300 hover:text-brand group-hover:opacity-100"
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            toggle(product.slug);
+          }}
+          aria-label={fav ? "Remover dos favoritos" : "Favoritar"}
+          aria-pressed={fav}
+          className={`absolute right-4 top-4 inline-flex h-9 w-9 items-center justify-center rounded-full bg-background/95 text-foreground transition-all duration-300 hover:text-brand ${
+            fav ? "opacity-100 text-brand" : "opacity-0 group-hover:opacity-100"
+          }`}
         >
-          <Heart className="h-4 w-4" />
+          <Heart className={`h-4 w-4 transition-transform ${fav ? "fill-current scale-110" : ""}`} />
         </button>
       </div>
       <div className="mt-4 flex flex-col gap-1">

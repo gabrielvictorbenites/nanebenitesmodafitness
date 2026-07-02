@@ -1,7 +1,8 @@
 import { Link, useRouterState } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { Menu, X } from "lucide-react";
+import { Menu, X, Heart } from "lucide-react";
 import { whatsappLink } from "@/lib/whatsapp";
+import { useFavorites } from "@/lib/favorites";
 
 const NAV = [
   { to: "/", label: "Home" },
@@ -17,6 +18,7 @@ export function Header() {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const { count } = useFavorites();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 12);
@@ -65,11 +67,23 @@ export function Header() {
         </nav>
 
         <div className="flex items-center gap-2">
+          <Link
+            to="/favoritos"
+            aria-label="Favoritos"
+            className="relative inline-flex h-10 w-10 items-center justify-center rounded-full text-foreground transition-colors hover:bg-muted"
+          >
+            <Heart className={`h-5 w-5 ${count > 0 ? "fill-brand text-brand" : ""}`} />
+            {count > 0 ? (
+              <span className="absolute -right-0.5 -top-0.5 inline-flex h-4 min-w-4 items-center justify-center rounded-full bg-gradient-brand px-1 text-[10px] font-bold text-white">
+                {count}
+              </span>
+            ) : null}
+          </Link>
           <a
             href={whatsappLink("Olá! Gostaria de conhecer as novidades da Nane Benites.")}
             target="_blank"
             rel="noreferrer"
-            className="hidden rounded-full bg-brand px-5 py-2.5 text-xs font-semibold uppercase tracking-widest text-brand-foreground transition-colors hover:bg-brand-dark md:inline-flex"
+            className="hidden rounded-full bg-gradient-brand px-5 py-2.5 text-xs font-semibold uppercase tracking-widest text-white shadow-elegant transition-transform hover:scale-105 md:inline-flex"
           >
             WhatsApp
           </a>
