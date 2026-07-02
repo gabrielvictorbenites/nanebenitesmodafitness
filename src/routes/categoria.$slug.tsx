@@ -1,7 +1,6 @@
 import { createFileRoute, notFound, Link } from "@tanstack/react-router";
-import { PageHero } from "@/components/site/PageHero";
 import { ProductCard } from "@/components/site/ProductCard";
-import { findCategory, productsByCategory, categories } from "@/lib/site-data";
+import { findCategory, productsByCategory, categories, type Product } from "@/lib/site-data";
 
 export const Route = createFileRoute("/categoria/$slug")({
   loader: ({ params }) => {
@@ -55,7 +54,7 @@ function CategoryPage() {
           <p className="py-20 text-center text-muted-foreground">Em breve novas peças nesta categoria.</p>
         ) : (
           <div className="grid grid-cols-2 gap-4 md:grid-cols-3 md:gap-6 lg:grid-cols-4">
-            {products.map((p) => (
+            {products.map((p: Product) => (
               <ProductCard key={p.slug} product={p} />
             ))}
           </div>
