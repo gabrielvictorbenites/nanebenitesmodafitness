@@ -3,7 +3,7 @@ import { ArrowRight, MapPin } from "lucide-react";
 import heroImg from "@/assets/hero.jpg";
 import collectionImg from "@/assets/collection.jpg";
 import lojaCuritiba from "@/assets/loja-curitiba.jpg.asset.json";
-import { categories, testimonials, reasons, products, site } from "@/lib/site-data";
+import { categories, products, site } from "@/lib/site-data";
 import { whatsappLink } from "@/lib/whatsapp";
 import { CategoryCard } from "@/components/site/CategoryCard";
 import { ProductCarousel } from "@/components/site/ProductCarousel";
@@ -207,56 +207,6 @@ function HomePage() {
         </div>
       </section>
 
-      {/* WHY US */}
-      <section className="border-y border-border bg-foreground py-24 text-background md:py-32">
-        <div className="container-x">
-          <div className="mx-auto max-w-2xl text-center">
-            <p className="text-[10px] font-medium uppercase tracking-[0.35em] text-background/60">
-              Por que Nane Benites
-            </p>
-            <h2 className="mt-4 font-display text-3xl font-semibold leading-tight tracking-tight md:text-5xl">
-              A experiência de uma marca <span className="italic font-light text-gradient-brand">premium.</span>
-            </h2>
-          </div>
-          <div className="mt-16 grid gap-x-8 gap-y-12 md:grid-cols-2 lg:grid-cols-3">
-            {reasons.map((r, i) => (
-              <div key={r.title} className="border-t border-background/15 pt-6">
-                <p className="text-[10px] font-medium uppercase tracking-[0.35em] text-brand">
-                  0{i + 1}
-                </p>
-                <h3 className="mt-4 font-display text-xl font-semibold text-background">{r.title}</h3>
-                <p className="mt-3 text-sm leading-relaxed text-background/70">{r.text}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* TESTIMONIALS */}
-      <section className="bg-aurora">
-       <div className="container-x py-24 md:py-32">
-        <div className="mb-14">
-          <p className="eyebrow">Depoimentos</p>
-          <h2 className="mt-3 max-w-3xl font-display text-3xl font-semibold leading-[1.1] tracking-tight md:text-5xl">
-            Mulheres que treinam com <span className="text-gradient-brand italic font-light">Nane Benites.</span>
-          </h2>
-        </div>
-        <div className="grid gap-8 md:grid-cols-3">
-          {testimonials.map((t) => (
-            <figure key={t.name} className="flex flex-col justify-between rounded-2xl border border-border bg-background/80 p-8 backdrop-blur transition-transform hover:-translate-y-1 hover:shadow-elegant">
-              <blockquote className="font-display text-lg leading-snug tracking-tight text-foreground">
-                "{t.text}"
-              </blockquote>
-              <figcaption className="mt-8">
-                <p className="text-sm font-semibold text-foreground">{t.name}</p>
-                <p className="text-xs text-muted-foreground">{t.role}</p>
-              </figcaption>
-            </figure>
-          ))}
-        </div>
-       </div>
-      </section>
-
       {/* INSTAGRAM GALLERY */}
       <section className="border-t border-border bg-gradient-soft py-24">
         <div className="container-x mb-10 flex flex-col justify-between gap-4 md:flex-row md:items-end">
@@ -277,29 +227,6 @@ function HomePage() {
               <div className="absolute inset-0 bg-foreground/0 transition-colors group-hover:bg-gradient-brand/60" />
             </a>
           ))}
-        </div>
-      </section>
-
-      {/* CTA */}
-      <section className="relative overflow-hidden bg-gradient-brand py-20 text-white md:py-28">
-        <div className="pointer-events-none absolute -left-20 top-0 h-72 w-72 rounded-full bg-white/10 blur-3xl animate-blob" />
-        <div className="pointer-events-none absolute -right-20 bottom-0 h-80 w-80 rounded-full bg-white/10 blur-3xl animate-blob" style={{ animationDelay: "8s" }} />
-        <div className="container-x flex flex-col items-center gap-8 text-center">
-          <h2 className="max-w-3xl font-display text-3xl font-semibold leading-tight tracking-tight md:text-5xl relative">
-            Pronta para vestir sua melhor versão?
-          </h2>
-          <p className="max-w-xl text-white/90 relative">
-            Fale com nossa consultoria pelo WhatsApp e descubra a peça perfeita para você.
-          </p>
-          <a
-            href={whatsappLink("Olá! Quero atendimento personalizado da Nane Benites.")}
-            target="_blank"
-            rel="noreferrer"
-            className="relative inline-flex items-center gap-3 rounded-full bg-white px-8 py-4 text-xs font-semibold uppercase tracking-[0.2em] text-foreground shadow-elegant transition-transform hover:scale-105"
-          >
-            Chamar no WhatsApp
-            <ArrowRight className="h-4 w-4" />
-          </a>
         </div>
       </section>
     </>
