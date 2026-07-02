@@ -14,6 +14,7 @@ import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as PromocoesRouteImport } from './routes/promocoes'
 import { Route as MarcasRouteImport } from './routes/marcas'
 import { Route as LancamentosRouteImport } from './routes/lancamentos'
+import { Route as FavoritosRouteImport } from './routes/favoritos'
 import { Route as ContatoRouteImport } from './routes/contato'
 import { Route as ColecoesRouteImport } from './routes/colecoes'
 import { Route as CatalogoRouteImport } from './routes/catalogo'
@@ -45,6 +46,11 @@ const MarcasRoute = MarcasRouteImport.update({
 const LancamentosRoute = LancamentosRouteImport.update({
   id: '/lancamentos',
   path: '/lancamentos',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FavoritosRoute = FavoritosRouteImport.update({
+  id: '/favoritos',
+  path: '/favoritos',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ContatoRoute = ContatoRouteImport.update({
@@ -89,6 +95,7 @@ export interface FileRoutesByFullPath {
   '/catalogo': typeof CatalogoRoute
   '/colecoes': typeof ColecoesRoute
   '/contato': typeof ContatoRoute
+  '/favoritos': typeof FavoritosRoute
   '/lancamentos': typeof LancamentosRoute
   '/marcas': typeof MarcasRoute
   '/promocoes': typeof PromocoesRoute
@@ -103,6 +110,7 @@ export interface FileRoutesByTo {
   '/catalogo': typeof CatalogoRoute
   '/colecoes': typeof ColecoesRoute
   '/contato': typeof ContatoRoute
+  '/favoritos': typeof FavoritosRoute
   '/lancamentos': typeof LancamentosRoute
   '/marcas': typeof MarcasRoute
   '/promocoes': typeof PromocoesRoute
@@ -118,6 +126,7 @@ export interface FileRoutesById {
   '/catalogo': typeof CatalogoRoute
   '/colecoes': typeof ColecoesRoute
   '/contato': typeof ContatoRoute
+  '/favoritos': typeof FavoritosRoute
   '/lancamentos': typeof LancamentosRoute
   '/marcas': typeof MarcasRoute
   '/promocoes': typeof PromocoesRoute
@@ -134,6 +143,7 @@ export interface FileRouteTypes {
     | '/catalogo'
     | '/colecoes'
     | '/contato'
+    | '/favoritos'
     | '/lancamentos'
     | '/marcas'
     | '/promocoes'
@@ -148,6 +158,7 @@ export interface FileRouteTypes {
     | '/catalogo'
     | '/colecoes'
     | '/contato'
+    | '/favoritos'
     | '/lancamentos'
     | '/marcas'
     | '/promocoes'
@@ -162,6 +173,7 @@ export interface FileRouteTypes {
     | '/catalogo'
     | '/colecoes'
     | '/contato'
+    | '/favoritos'
     | '/lancamentos'
     | '/marcas'
     | '/promocoes'
@@ -177,6 +189,7 @@ export interface RootRouteChildren {
   CatalogoRoute: typeof CatalogoRoute
   ColecoesRoute: typeof ColecoesRoute
   ContatoRoute: typeof ContatoRoute
+  FavoritosRoute: typeof FavoritosRoute
   LancamentosRoute: typeof LancamentosRoute
   MarcasRoute: typeof MarcasRoute
   PromocoesRoute: typeof PromocoesRoute
@@ -221,6 +234,13 @@ declare module '@tanstack/react-router' {
       path: '/lancamentos'
       fullPath: '/lancamentos'
       preLoaderRoute: typeof LancamentosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/favoritos': {
+      id: '/favoritos'
+      path: '/favoritos'
+      fullPath: '/favoritos'
+      preLoaderRoute: typeof FavoritosRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/contato': {
@@ -281,6 +301,7 @@ const rootRouteChildren: RootRouteChildren = {
   CatalogoRoute: CatalogoRoute,
   ColecoesRoute: ColecoesRoute,
   ContatoRoute: ContatoRoute,
+  FavoritosRoute: FavoritosRoute,
   LancamentosRoute: LancamentosRoute,
   MarcasRoute: MarcasRoute,
   PromocoesRoute: PromocoesRoute,
