@@ -78,14 +78,17 @@ export function Footer() {
           <div>
             <p className="eyebrow">Contato</p>
             <ul className="mt-5 space-y-3 text-sm text-foreground/80">
-              <li className="flex items-start gap-3">
-                <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-brand" />
-                <span>
-                  {site.address}
-                  <br />
-                  {site.city}
-                </span>
-              </li>
+              {site.addresses.map((a) => (
+                <li key={a.label} className="flex items-start gap-3">
+                  <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-brand" />
+                  <span>
+                    <span className="block text-[10px] font-semibold uppercase tracking-[0.3em] text-brand">{a.label}</span>
+                    {a.street}
+                    <br />
+                    {a.neighborhood} · {a.city}
+                  </span>
+                </li>
+              ))}
               <li className="flex items-center gap-3">
                 <Phone className="h-4 w-4 shrink-0 text-brand" />
                 <div className="flex flex-col">
@@ -115,7 +118,10 @@ export function Footer() {
 
         <div className="mt-16 flex flex-col items-center justify-between gap-4 border-t border-border pt-8 text-xs text-muted-foreground md:flex-row">
           <p>© {new Date().getFullYear()} Nane Benites Moda Fitness. Todos os direitos reservados.</p>
-          <p>CNPJ 00.000.000/0001-00</p>
+          <p>CNPJ {site.cnpj}</p>
+          <p>
+            Site desenvolvido por <span className="text-foreground">{site.creator}</span>
+          </p>
         </div>
       </div>
     </footer>

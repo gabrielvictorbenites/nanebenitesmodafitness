@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { Menu, X, Heart } from "lucide-react";
 import { whatsappLink } from "@/lib/whatsapp";
 import { useFavorites } from "@/lib/favorites";
-import logoAsset from "@/assets/logo.jpeg.asset.json";
+import logoAsset from "@/assets/logo.png.asset.json";
 
 const NAV = [
   { to: "/", label: "Home" },
@@ -41,17 +41,17 @@ export function Header() {
       }`}
     >
       <div className="container-x flex h-20 items-center justify-between gap-4">
-        <Link to="/" className="group flex items-center gap-4">
+        <Link to="/" className="group flex items-center gap-5">
           <img
             src={logoAsset.url}
             alt="Nane Benites Moda Fitness"
-            className="h-16 w-16 shrink-0 rounded-full object-cover ring-2 ring-border shadow-elegant md:h-20 md:w-20"
+            className="h-20 w-20 shrink-0 rounded-full object-cover ring-2 ring-border shadow-elegant md:h-28 md:w-28"
           />
           <div className="flex flex-col leading-none">
-            <span className="font-display text-xl font-extrabold uppercase tracking-[0.22em] text-foreground md:text-2xl">
+            <span className="font-display text-2xl font-bold tracking-[0.14em] text-foreground md:text-3xl">
               NANE BENITES
             </span>
-            <span className="mt-1.5 font-display text-[11px] font-semibold uppercase tracking-[0.42em] text-gradient-brand md:text-xs">
+            <span className="mt-2 font-display text-[11px] font-semibold uppercase tracking-[0.5em] text-gradient-brand md:text-sm">
               Moda Fitness
             </span>
           </div>

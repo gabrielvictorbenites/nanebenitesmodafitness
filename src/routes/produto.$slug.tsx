@@ -4,6 +4,7 @@ import { Heart, Share2, MessageCircle } from "lucide-react";
 import { ProductCard } from "@/components/site/ProductCard";
 import { findProduct, findCategory, products as allProducts, formatPrice, type Product } from "@/lib/site-data";
 import { whatsappLink, productWhatsappMessage } from "@/lib/whatsapp";
+import { useFavorites } from "@/lib/favorites";
 
 export const Route = createFileRoute("/produto/$slug")({
   loader: ({ params }) => {
@@ -65,7 +66,8 @@ function ProductPage() {
   const [active, setActive] = useState(0);
   const [color, setColor] = useState(product.colors[0]);
   const [size, setSize] = useState(product.sizes[0]);
-  const [fav, setFav] = useState(false);
+  const { has, toggle } = useFavorites();
+  const fav = has(product.slug);
 
   async function handleShare() {
     const url = typeof window !== "undefined" ? window.location.href : "";
@@ -171,7 +173,7 @@ function ProductPage() {
               Tenho interesse — WhatsApp
             </a>
             <div className="grid grid-cols-2 gap-3">
-              <button onClick={() => setFav((v) => !v)} className={`flex items-center justify-center gap-2 rounded-full border px-6 py-3.5 text-xs font-semibold uppercase tracking-[0.2em] transition-colors ${
+              <button onClick={() => toggle(product.slug)} className={`flex items-center justify-center gap-2 rounded-full border px-6 py-3.5 text-xs font-semibold uppercase tracking-[0.2em] transition-colors ${
                 fav ? "border-brand bg-brand/10 text-brand" : "border-border text-foreground hover:border-foreground"
               }`}>
                 <Heart className={`h-4 w-4 ${fav ? "fill-brand" : ""}`} />

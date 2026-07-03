@@ -41,14 +41,16 @@ function ContatoPage() {
             <h2 className="mt-3 font-display text-2xl font-semibold tracking-tight md:text-3xl">Como podemos ajudar?</h2>
 
             <ul className="mt-10 space-y-6 text-sm">
-              <li className="flex items-start gap-4">
-                <MapPin className="mt-1 h-5 w-5 shrink-0 text-brand" />
-                <div>
-                  <p className="text-xs uppercase tracking-widest text-muted-foreground">Endereço</p>
-                  <p className="mt-1 text-foreground">{site.address}</p>
-                  <p className="text-foreground">{site.city}</p>
-                </div>
-              </li>
+              {site.addresses.map((a) => (
+                <li key={a.label} className="flex items-start gap-4">
+                  <MapPin className="mt-1 h-5 w-5 shrink-0 text-brand" />
+                  <div>
+                    <p className="text-xs uppercase tracking-widest text-muted-foreground">Loja {a.label}</p>
+                    <p className="mt-1 text-foreground">{a.street}</p>
+                    <p className="text-foreground">{a.neighborhood} · {a.city}</p>
+                  </div>
+                </li>
+              ))}
               <li className="flex items-start gap-4">
                 <Phone className="mt-1 h-5 w-5 shrink-0 text-brand" />
                 <div>
@@ -127,8 +129,15 @@ function ContatoPage() {
       </section>
 
       <section className="border-t border-border">
-        <div className="aspect-[16/6] w-full bg-muted">
-          <iframe src={site.mapEmbed} loading="lazy" title="Mapa" className="h-full w-full border-0" />
+        <div className="grid gap-px bg-border md:grid-cols-2">
+          {site.addresses.map((a) => (
+            <div key={a.label} className="relative aspect-[16/10] w-full bg-muted">
+              <iframe src={a.mapEmbed} loading="lazy" title={`Mapa ${a.label}`} className="h-full w-full border-0" />
+              <div className="pointer-events-none absolute left-4 top-4 rounded-full bg-background/95 px-4 py-1.5 text-[10px] font-semibold uppercase tracking-[0.3em] text-foreground shadow-elegant">
+                Loja {a.label}
+              </div>
+            </div>
+          ))}
         </div>
       </section>
     </>
