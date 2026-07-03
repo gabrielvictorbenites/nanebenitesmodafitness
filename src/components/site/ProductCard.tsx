@@ -46,8 +46,8 @@ export function ProductCard({ product }: { product: Product }) {
           }}
           aria-label={fav ? "Remover dos favoritos" : "Favoritar"}
           aria-pressed={fav}
-          className={`absolute right-4 top-4 inline-flex h-9 w-9 items-center justify-center rounded-full bg-background/95 text-foreground transition-all duration-300 hover:text-brand ${
-            fav ? "opacity-100 text-brand" : "opacity-0 group-hover:opacity-100"
+          className={`absolute right-4 top-4 inline-flex h-9 w-9 items-center justify-center rounded-full bg-background/95 shadow-sm transition-all duration-300 hover:text-brand ${
+            fav ? "text-brand" : "text-foreground"
           }`}
         >
           <Heart className={`h-4 w-4 transition-transform ${fav ? "fill-current scale-110" : ""}`} />
