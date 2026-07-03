@@ -24,8 +24,28 @@ export const site = {
   email: "nanebenites@yahoo.com",
   phone: "(45) 99967-5120",
   phoneSecondary: "(41) 9707-1344",
-  address: "Av. Des. Clotário Portugal, 481 — Centro",
-  city: "Campo Largo — PR · 83601-430",
+  address: "Av. Des. Clotário Portugal, 501 — Centro",
+  city: "Campo Largo — PR",
+  cnpj: "43.288.784/0001-08",
+  creator: "Gabriel Benites",
+  addresses: [
+    {
+      label: "Campo Largo",
+      street: "Av. Des. Clotário Portugal, 501",
+      neighborhood: "Centro",
+      city: "Campo Largo — PR",
+      mapEmbed:
+        "https://www.google.com/maps?q=Av.+Des.+Clot%C3%A1rio+Portugal,+501+-+Centro,+Campo+Largo+-+PR&output=embed",
+    },
+    {
+      label: "Curitiba",
+      street: "Rua Major Heitor Guimarães, 1740",
+      neighborhood: "Campina do Siqueira",
+      city: "Curitiba — PR",
+      mapEmbed:
+        "https://www.google.com/maps?q=Rua+Major+Heitor+Guimar%C3%A3es,+1740+-+Campina+do+Siqueira,+Curitiba+-+PR&output=embed",
+    },
+  ],
   hours: "Seg a Sex: 09h–19h · Sáb: 09h–14h · Dom: fechado",
   hoursList: [
     { day: "Segunda-feira", time: "09:00 – 19:00" },
@@ -62,12 +82,11 @@ export const categories: Category[] = [
 ];
 
 export const brands = [
-  { slug: "lets-gym", name: "Let's Gym" },
   { slug: "lanca-perfume", name: "Lança Perfume" },
+  { slug: "run-more", name: "Run More" },
+  { slug: "mulher-elastica", name: "Mulher Elástica" },
   { slug: "zero-acucar", name: "Zero Açúcar" },
-  { slug: "mc", name: "M&C" },
-  { slug: "alto-giro", name: "Alto Giro" },
-  { slug: "live", name: "Live!" },
+  { slug: "lets-gym", name: "Let's Gym" },
 ] as const;
 
 export type Product = {
