@@ -88,7 +88,10 @@ export function Footer() {
               </li>
               <li className="flex items-center gap-3">
                 <Phone className="h-4 w-4 shrink-0 text-brand" />
-                <a href={`tel:${site.phone}`} className="hover:text-foreground">{site.phone}</a>
+                <div className="flex flex-col">
+                  <a href={`tel:+55${site.phone.replace(/\D/g, "")}`} className="hover:text-foreground">{site.phone}</a>
+                  <a href={`tel:+55${site.phoneSecondary.replace(/\D/g, "")}`} className="hover:text-foreground">{site.phoneSecondary}</a>
+                </div>
               </li>
               <li className="flex items-center gap-3">
                 <Mail className="h-4 w-4 shrink-0 text-brand" />

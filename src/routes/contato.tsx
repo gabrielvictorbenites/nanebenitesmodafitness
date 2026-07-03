@@ -52,8 +52,9 @@ function ContatoPage() {
               <li className="flex items-start gap-4">
                 <Phone className="mt-1 h-5 w-5 shrink-0 text-brand" />
                 <div>
-                  <p className="text-xs uppercase tracking-widest text-muted-foreground">Telefone</p>
-                  <a href={`tel:${site.phone}`} className="mt-1 block text-foreground">{site.phone}</a>
+                  <p className="text-xs uppercase tracking-widest text-muted-foreground">Telefones</p>
+                  <a href={`tel:+55${site.phone.replace(/\D/g, "")}`} className="mt-1 block text-foreground">{site.phone}</a>
+                  <a href={`tel:+55${site.phoneSecondary.replace(/\D/g, "")}`} className="block text-foreground">{site.phoneSecondary}</a>
                 </div>
               </li>
               <li className="flex items-start gap-4">
@@ -75,8 +76,15 @@ function ContatoPage() {
               <li className="flex items-start gap-4">
                 <Clock className="mt-1 h-5 w-5 shrink-0 text-brand" />
                 <div>
-                  <p className="text-xs uppercase tracking-widest text-muted-foreground">Horário</p>
-                  <p className="mt-1 text-foreground">{site.hours}</p>
+                  <p className="text-xs uppercase tracking-widest text-muted-foreground">Horário de atendimento</p>
+                  <ul className="mt-2 space-y-1 text-foreground">
+                    {site.hoursList.map((h) => (
+                      <li key={h.day} className="flex items-center justify-between gap-6 text-sm">
+                        <span className="text-foreground/80">{h.day}</span>
+                        <span className="font-medium">{h.time}</span>
+                      </li>
+                    ))}
+                  </ul>
                 </div>
               </li>
             </ul>

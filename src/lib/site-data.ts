@@ -14,18 +14,30 @@ import catAcessorios from "@/assets/cat-acessorios.jpg";
 
 export const site = {
   name: "Nane Benites",
-  tagline: "Moda Fitness Premium",
-  // Placeholder — replace with the real number in international format (55 + DDD + phone).
-  whatsapp: "5500000000000",
-  instagram: "https://instagram.com/nanebenites",
+  tagline: "Moda Fitness",
+  // WhatsApp para compras — formato internacional (55 + DDD + número).
+  whatsapp: "5545999675120",
+  instagram:
+    "https://www.instagram.com/nanebenites?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==",
+  instagramHandle: "@nanebenites",
   facebook: "https://facebook.com/nanebenites",
-  email: "contato@nanebenites.com.br",
-  phone: "(00) 0000-0000",
-  address: "Rua da Moda, 123 — Centro",
-  city: "São Paulo — SP",
-  hours: "Seg a Sáb: 09h às 19h",
+  email: "nanebenites@yahoo.com",
+  phone: "(45) 99967-5120",
+  phoneSecondary: "(41) 9707-1344",
+  address: "Av. Des. Clotário Portugal, 481 — Centro",
+  city: "Campo Largo — PR · 83601-430",
+  hours: "Seg a Sex: 09h–19h · Sáb: 09h–14h · Dom: fechado",
+  hoursList: [
+    { day: "Segunda-feira", time: "09:00 – 19:00" },
+    { day: "Terça-feira", time: "09:00 – 19:00" },
+    { day: "Quarta-feira", time: "09:00 – 19:00" },
+    { day: "Quinta-feira", time: "09:00 – 19:00" },
+    { day: "Sexta-feira", time: "09:00 – 19:00" },
+    { day: "Sábado", time: "09:00 – 14:00" },
+    { day: "Domingo", time: "Fechado" },
+  ],
   mapEmbed:
-    "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3657.036684477477!2d-46.6565!3d-23.5613!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMjPCsDMzJzQwLjciUyA0NsKwMzknMjMuNCJX!5e0!3m2!1spt-BR!2sbr!4v1700000000000",
+    "https://www.google.com/maps?q=Av.+Des.+Clot%C3%A1rio+Portugal,+481+-+Centro,+Campo+Largo+-+PR,+83601-430&output=embed",
   images: { hero: heroImg, collection: collectionImg, about: aboutImg },
 } as const;
 
