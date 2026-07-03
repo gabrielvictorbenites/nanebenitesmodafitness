@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowRight, MapPin } from "lucide-react";
+import { ArrowRight, MapPin, Instagram } from "lucide-react";
 import heroImg from "@/assets/hero.jpg";
 import collectionImg from "@/assets/collection.jpg";
 import lojaCuritiba from "@/assets/loja-curitiba.jpg.asset.json";
@@ -207,26 +207,33 @@ function HomePage() {
         </div>
       </section>
 
-      {/* INSTAGRAM GALLERY */}
+      {/* INSTAGRAM CTA */}
       <section className="border-t border-border bg-gradient-soft py-24">
-        <div className="container-x mb-10 flex flex-col justify-between gap-4 md:flex-row md:items-end">
-          <div>
-            <p className="eyebrow">@nanebenites</p>
-            <h2 className="mt-3 font-display text-3xl font-semibold tracking-tight md:text-4xl">
-              Siga no <span className="text-gradient-brand italic font-light">Instagram.</span>
-            </h2>
-          </div>
-          <a href={site.instagram} target="_blank" rel="noreferrer" className="link-underline text-sm font-medium text-foreground/80 hover:text-foreground">
-            @nanebenites →
+        <div className="container-x">
+          <a
+            href={site.instagram}
+            target="_blank"
+            rel="noreferrer"
+            className="group relative block overflow-hidden rounded-3xl bg-gradient-brand p-10 text-white shadow-elegant transition-transform hover:scale-[1.01] md:p-16"
+          >
+            <div className="pointer-events-none absolute -right-16 -top-16 h-64 w-64 rounded-full bg-white/10 blur-3xl" />
+            <div className="pointer-events-none absolute -left-10 -bottom-10 h-56 w-56 rounded-full bg-white/10 blur-3xl" />
+            <div className="relative flex flex-col items-start justify-between gap-8 md:flex-row md:items-center">
+              <div className="max-w-xl">
+                <p className="text-[11px] font-medium uppercase tracking-[0.35em] text-white/80">Instagram</p>
+                <h2 className="mt-3 font-display text-3xl font-semibold tracking-tight md:text-5xl">
+                  Siga <span className="italic font-light">@nanebenites</span>
+                </h2>
+                <p className="mt-4 max-w-md text-sm leading-relaxed text-white/85 md:text-base">
+                  Novidades, bastidores da loja e inspirações de looks fitness — tudo em primeira mão no nosso Instagram.
+                </p>
+              </div>
+              <span className="inline-flex items-center gap-3 rounded-full bg-white px-7 py-4 text-xs font-semibold uppercase tracking-[0.25em] text-foreground shadow-sm transition-transform group-hover:scale-105">
+                <Instagram className="h-4 w-4" />
+                Seguir agora
+              </span>
+            </div>
           </a>
-        </div>
-        <div className="container-x grid grid-cols-2 gap-2 md:grid-cols-6">
-          {categories.slice(0, 6).map((c) => (
-            <a key={c.slug} href={site.instagram} target="_blank" rel="noreferrer" className="group relative aspect-square overflow-hidden rounded-sm bg-background">
-              <img src={c.image} alt={c.name} loading="lazy" className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110" />
-              <div className="absolute inset-0 bg-foreground/0 transition-colors group-hover:bg-gradient-brand/60" />
-            </a>
-          ))}
         </div>
       </section>
     </>
