@@ -65,8 +65,8 @@
   --color-brand-foreground: var(--brand-foreground);
   --color-brand-purple: var(--brand-purple);
   --color-brand-purple-dark: var(--brand-purple-dark);
-  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
-  --font-display: "Montserrat", "Inter", ui-sans-serif, system-ui, sans-serif;
+ --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+ --font-display: "Playfair Display", "Cormorant Garamond", Georgia, serif;
   --shadow-elegant: 0 20px 60px -30px color-mix(in oklab, var(--brand) 25%, transparent);
   --shadow-card: 0 8px 30px -20px oklch(0 0 0 / 0.15);
 }
