@@ -24,7 +24,12 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as ProdutoSlugRouteImport } from './routes/produto.$slug'
 import { Route as CategoriaSlugRouteImport } from './routes/categoria.$slug'
+import { Route as AdminUsuariosRouteImport } from './routes/admin.usuarios'
+import { Route as AdminTemplatesRouteImport } from './routes/admin.templates'
 import { Route as AdminProdutosRouteImport } from './routes/admin.produtos'
+import { Route as AdminLeadsRouteImport } from './routes/admin.leads'
+import { Route as AdminConteudoRouteImport } from './routes/admin.conteudo'
+import { Route as AdminCamposRouteImport } from './routes/admin.campos'
 import { Route as AdminBannersRouteImport } from './routes/admin.banners'
 import { Route as ApiPublicAdminBootstrapRouteImport } from './routes/api/public/admin-bootstrap'
 
@@ -103,9 +108,34 @@ const CategoriaSlugRoute = CategoriaSlugRouteImport.update({
   path: '/categoria/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminUsuariosRoute = AdminUsuariosRouteImport.update({
+  id: '/usuarios',
+  path: '/usuarios',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminTemplatesRoute = AdminTemplatesRouteImport.update({
+  id: '/templates',
+  path: '/templates',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminProdutosRoute = AdminProdutosRouteImport.update({
   id: '/produtos',
   path: '/produtos',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminLeadsRoute = AdminLeadsRouteImport.update({
+  id: '/leads',
+  path: '/leads',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminConteudoRoute = AdminConteudoRouteImport.update({
+  id: '/conteudo',
+  path: '/conteudo',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminCamposRoute = AdminCamposRouteImport.update({
+  id: '/campos',
+  path: '/campos',
   getParentRoute: () => AdminRoute,
 } as any)
 const AdminBannersRoute = AdminBannersRouteImport.update({
@@ -133,7 +163,12 @@ export interface FileRoutesByFullPath {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/sobre': typeof SobreRoute
   '/admin/banners': typeof AdminBannersRoute
+  '/admin/campos': typeof AdminCamposRoute
+  '/admin/conteudo': typeof AdminConteudoRoute
+  '/admin/leads': typeof AdminLeadsRoute
   '/admin/produtos': typeof AdminProdutosRoute
+  '/admin/templates': typeof AdminTemplatesRoute
+  '/admin/usuarios': typeof AdminUsuariosRoute
   '/categoria/$slug': typeof CategoriaSlugRoute
   '/produto/$slug': typeof ProdutoSlugRoute
   '/admin/': typeof AdminIndexRoute
@@ -152,7 +187,12 @@ export interface FileRoutesByTo {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/sobre': typeof SobreRoute
   '/admin/banners': typeof AdminBannersRoute
+  '/admin/campos': typeof AdminCamposRoute
+  '/admin/conteudo': typeof AdminConteudoRoute
+  '/admin/leads': typeof AdminLeadsRoute
   '/admin/produtos': typeof AdminProdutosRoute
+  '/admin/templates': typeof AdminTemplatesRoute
+  '/admin/usuarios': typeof AdminUsuariosRoute
   '/categoria/$slug': typeof CategoriaSlugRoute
   '/produto/$slug': typeof ProdutoSlugRoute
   '/admin': typeof AdminIndexRoute
@@ -173,7 +213,12 @@ export interface FileRoutesById {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/sobre': typeof SobreRoute
   '/admin/banners': typeof AdminBannersRoute
+  '/admin/campos': typeof AdminCamposRoute
+  '/admin/conteudo': typeof AdminConteudoRoute
+  '/admin/leads': typeof AdminLeadsRoute
   '/admin/produtos': typeof AdminProdutosRoute
+  '/admin/templates': typeof AdminTemplatesRoute
+  '/admin/usuarios': typeof AdminUsuariosRoute
   '/categoria/$slug': typeof CategoriaSlugRoute
   '/produto/$slug': typeof ProdutoSlugRoute
   '/admin/': typeof AdminIndexRoute
@@ -195,7 +240,12 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/sobre'
     | '/admin/banners'
+    | '/admin/campos'
+    | '/admin/conteudo'
+    | '/admin/leads'
     | '/admin/produtos'
+    | '/admin/templates'
+    | '/admin/usuarios'
     | '/categoria/$slug'
     | '/produto/$slug'
     | '/admin/'
@@ -214,7 +264,12 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/sobre'
     | '/admin/banners'
+    | '/admin/campos'
+    | '/admin/conteudo'
+    | '/admin/leads'
     | '/admin/produtos'
+    | '/admin/templates'
+    | '/admin/usuarios'
     | '/categoria/$slug'
     | '/produto/$slug'
     | '/admin'
@@ -234,7 +289,12 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/sobre'
     | '/admin/banners'
+    | '/admin/campos'
+    | '/admin/conteudo'
+    | '/admin/leads'
     | '/admin/produtos'
+    | '/admin/templates'
+    | '/admin/usuarios'
     | '/categoria/$slug'
     | '/produto/$slug'
     | '/admin/'
@@ -366,11 +426,46 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CategoriaSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/usuarios': {
+      id: '/admin/usuarios'
+      path: '/usuarios'
+      fullPath: '/admin/usuarios'
+      preLoaderRoute: typeof AdminUsuariosRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/templates': {
+      id: '/admin/templates'
+      path: '/templates'
+      fullPath: '/admin/templates'
+      preLoaderRoute: typeof AdminTemplatesRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/produtos': {
       id: '/admin/produtos'
       path: '/produtos'
       fullPath: '/admin/produtos'
       preLoaderRoute: typeof AdminProdutosRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/leads': {
+      id: '/admin/leads'
+      path: '/leads'
+      fullPath: '/admin/leads'
+      preLoaderRoute: typeof AdminLeadsRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/conteudo': {
+      id: '/admin/conteudo'
+      path: '/conteudo'
+      fullPath: '/admin/conteudo'
+      preLoaderRoute: typeof AdminConteudoRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/campos': {
+      id: '/admin/campos'
+      path: '/campos'
+      fullPath: '/admin/campos'
+      preLoaderRoute: typeof AdminCamposRouteImport
       parentRoute: typeof AdminRoute
     }
     '/admin/banners': {
@@ -392,13 +487,23 @@ declare module '@tanstack/react-router' {
 
 interface AdminRouteChildren {
   AdminBannersRoute: typeof AdminBannersRoute
+  AdminCamposRoute: typeof AdminCamposRoute
+  AdminConteudoRoute: typeof AdminConteudoRoute
+  AdminLeadsRoute: typeof AdminLeadsRoute
   AdminProdutosRoute: typeof AdminProdutosRoute
+  AdminTemplatesRoute: typeof AdminTemplatesRoute
+  AdminUsuariosRoute: typeof AdminUsuariosRoute
   AdminIndexRoute: typeof AdminIndexRoute
 }
 
 const AdminRouteChildren: AdminRouteChildren = {
   AdminBannersRoute: AdminBannersRoute,
+  AdminCamposRoute: AdminCamposRoute,
+  AdminConteudoRoute: AdminConteudoRoute,
+  AdminLeadsRoute: AdminLeadsRoute,
   AdminProdutosRoute: AdminProdutosRoute,
+  AdminTemplatesRoute: AdminTemplatesRoute,
+  AdminUsuariosRoute: AdminUsuariosRoute,
   AdminIndexRoute: AdminIndexRoute,
 }
 
