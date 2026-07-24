@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useState, type FormEvent } from "react";
+import { useEffect, useMemo, useState, type FormEvent } from "react";
+import { Copy, Pencil, Trash2, Search } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useServerFn } from "@tanstack/react-start";
 import { MediaUploader } from "@/components/admin/MediaUploader";
@@ -29,6 +30,8 @@ type ProductRow = {
   sku: string | null;
   is_new: boolean;
   is_bestseller: boolean;
+  active?: boolean;
+  featured?: boolean;
 };
 
 function Thumb({ refValue }: { refValue: string | null | undefined }) {
@@ -89,6 +92,8 @@ function ProductsPage() {
   const [items, setItems] = useState<ProductRow[]>([]);
   const [loading, setLoading] = useState(true);
   const [editing, setEditing] = useState<ProductRow | "new" | null>(null);
+  const [search, setSearch] = useState("");
+  const [catFilter, setCatFilter] = useState<string>("");
 
   async function load() {
     setLoading(true);
@@ -106,47 +111,182 @@ function ProductsPage() {
     else load();
   }
 
+  async function onDuplicate(row: ProductRow) {
+    const newName = `${row.name} (cópia)`;
+    const payload = {
+      slug: `${slugify(row.name)}-${Math.random().toString(36).slice(2, 6)}`,
+      name: newName,
+      description: row.description ?? "",
+      category: row.category,
+      brand: row.brand,
+      price: Number(row.price) || 0,
+      sale_price: row.sale_price != null ? Number(row.sale_price) : null,
+      on_sale: row.on_sale,
+      colors: row.colors ?? [],
+      sizes: row.sizes ?? [],
+      image: row.image ?? "",
+      gallery: row.gallery ?? [],
+      stock: row.stock,
+      sku: generateSku(newName),
+      is_new: row.is_new,
+      is_bestseller: row.is_bestseller,
+      active: row.active ?? true,
+      featured: row.featured ?? row.is_bestseller ?? false,
+    };
+    const { error } = await supabase.from("products").insert(payload);
+    if (error) alert("Erro ao duplicar: " + error.message);
+    else load();
+  }
+
+  async function toggleField(row: ProductRow, field: "active" | "featured", value: boolean) {
+    // Optimistic update
+    setItems((prev) => prev.map((p) => (p.id === row.id ? { ...p, [field]: value } : p)));
+    const { error } = await supabase.from("products").update({ [field]: value }).eq("id", row.id);
+    if (error) {
+      alert("Erro ao atualizar: " + error.message);
+      load();
+    }
+  }
+
+  const filtered = useMemo(() => {
+    const q = search.trim().toLowerCase();
+    return items.filter((p) => {
+      if (catFilter && p.category !== catFilter) return false;
+      if (!q) return true;
+      return (
+        p.name.toLowerCase().includes(q) ||
+        (p.sku ?? "").toLowerCase().includes(q) ||
+        p.brand.toLowerCase().includes(q)
+      );
+    });
+  }, [items, search, catFilter]);
+
   return (
-    <div className="px-8 py-10">
+    <div className="mx-auto max-w-6xl p-6 md:p-10">
       <header className="flex items-center justify-between">
         <div>
-          <h1 className="font-display text-3xl font-bold text-neutral-900">Produtos</h1>
+          <h1 className="font-serif text-3xl font-bold text-neutral-900">Produtos</h1>
           <p className="mt-1 text-sm text-neutral-500">{items.length} cadastrados</p>
         </div>
         <button
           onClick={() => setEditing("new")}
-          className="h-10 rounded-lg bg-[image:linear-gradient(135deg,oklch(0.72_0.13_195),oklch(0.55_0.22_300))] px-5 text-xs font-semibold uppercase tracking-wider text-white hover:opacity-90"
+          className="h-10 rounded-lg bg-gradient-to-r from-cyan-500 to-violet-600 px-5 text-xs font-semibold uppercase tracking-wider text-white shadow hover:opacity-90"
         >
           + Novo produto
         </button>
       </header>
 
-      <div className="mt-8 divide-y divide-neutral-200 rounded-2xl border border-neutral-200 bg-white">
+      <div className="mt-6 flex flex-col gap-3 sm:flex-row">
+        <div className="relative flex-1">
+          <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-neutral-400" />
+          <input
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            placeholder="Buscar por nome, código ou marca…"
+            className="h-10 w-full rounded-lg border border-neutral-300 bg-white pl-9 pr-3 text-sm focus:border-cyan-500 focus:outline-none focus:ring-2 focus:ring-cyan-100"
+          />
+        </div>
+        <select
+          value={catFilter}
+          onChange={(e) => setCatFilter(e.target.value)}
+          className="h-10 rounded-lg border border-neutral-300 bg-white px-3 text-sm sm:w-56"
+        >
+          <option value="">Todas as categorias</option>
+          {CATEGORIES.map((c) => (
+            <option key={c.slug} value={c.slug}>{c.label}</option>
+          ))}
+        </select>
+      </div>
+
+      <div className="mt-6 overflow-hidden rounded-2xl border border-neutral-200 bg-white shadow-sm">
         {loading ? (
           <p className="p-6 text-sm text-neutral-500">Carregando…</p>
-        ) : items.length === 0 ? (
-          <p className="p-6 text-sm text-neutral-500">Nenhum produto ainda.</p>
+        ) : filtered.length === 0 ? (
+          <p className="p-6 text-sm text-neutral-500">Nenhum produto encontrado.</p>
         ) : (
-          items.map((p) => (
-            <div key={p.id} className="flex items-center gap-4 p-4">
-              <div className="h-16 w-16 shrink-0 overflow-hidden rounded-md bg-neutral-100">
-                <Thumb refValue={p.image} />
-              </div>
-              <div className="min-w-0 flex-1">
-                <p className="truncate text-sm font-medium">{p.name}</p>
-                <p className="mt-0.5 text-xs text-neutral-500">
-                  R$ {Number(p.price).toFixed(2)}
-                  {p.on_sale && p.sale_price ? ` · Promo R$ ${Number(p.sale_price).toFixed(2)}` : ""}
-                </p>
-              </div>
-              <button onClick={() => setEditing(p)} className="h-9 rounded-md border border-neutral-300 px-3 text-xs font-medium hover:bg-neutral-100">
-                Editar
-              </button>
-              <button onClick={() => onDelete(p)} className="h-9 rounded-md border border-red-200 bg-red-50 px-3 text-xs font-medium text-red-700 hover:bg-red-100">
-                Excluir
-              </button>
-            </div>
-          ))
+          <table className="w-full text-sm">
+            <thead className="bg-neutral-50 text-left text-[11px] font-semibold uppercase tracking-wider text-neutral-500">
+              <tr>
+                <th className="px-4 py-3">Código</th>
+                <th className="px-4 py-3">Produto</th>
+                <th className="px-4 py-3">Preço</th>
+                <th className="px-4 py-3 text-center">Status</th>
+                <th className="px-4 py-3 text-center">Destaque</th>
+                <th className="px-4 py-3 text-right">Ações</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-neutral-100">
+              {filtered.map((p) => (
+                <tr key={p.id} className="hover:bg-neutral-50/60">
+                  <td className="px-4 py-3 font-mono text-[11px] text-neutral-500">{p.sku || "—"}</td>
+                  <td className="px-4 py-3">
+                    <div className="flex items-center gap-3">
+                      <div className="h-10 w-10 shrink-0 overflow-hidden rounded-md bg-neutral-100">
+                        <Thumb refValue={p.image} />
+                      </div>
+                      <div className="min-w-0">
+                        <p className="truncate font-medium text-neutral-900">{p.name}</p>
+                        <p className="mt-0.5 text-[11px] text-neutral-500">
+                          {p.category || "—"} {p.brand ? `· ${p.brand}` : ""}
+                        </p>
+                      </div>
+                    </div>
+                  </td>
+                  <td className="px-4 py-3 whitespace-nowrap text-neutral-800">
+                    R$ {Number(p.price).toFixed(2).replace(".", ",")}
+                    {p.on_sale && p.sale_price ? (
+                      <span className="ml-1 text-[11px] text-cyan-700">
+                        · R$ {Number(p.sale_price).toFixed(2).replace(".", ",")}
+                      </span>
+                    ) : null}
+                  </td>
+                  <td className="px-4 py-3 text-center">
+                    <input
+                      type="checkbox"
+                      checked={p.active !== false}
+                      onChange={(e) => toggleField(p, "active", e.target.checked)}
+                      className="h-4 w-4 accent-cyan-600"
+                      aria-label="Ativo"
+                    />
+                  </td>
+                  <td className="px-4 py-3 text-center">
+                    <input
+                      type="checkbox"
+                      checked={!!(p.featured ?? p.is_bestseller)}
+                      onChange={(e) => toggleField(p, "featured", e.target.checked)}
+                      className="h-4 w-4 accent-violet-600"
+                      aria-label="Destaque"
+                    />
+                  </td>
+                  <td className="px-4 py-3">
+                    <div className="flex items-center justify-end gap-1">
+                      <button
+                        onClick={() => onDuplicate(p)}
+                        className="rounded-md p-1.5 text-neutral-500 hover:bg-neutral-100 hover:text-neutral-800"
+                        title="Duplicar"
+                      >
+                        <Copy className="h-4 w-4" />
+                      </button>
+                      <button
+                        onClick={() => setEditing(p)}
+                        className="rounded-md p-1.5 text-neutral-500 hover:bg-cyan-50 hover:text-cyan-700"
+                        title="Editar"
+                      >
+                        <Pencil className="h-4 w-4" />
+                      </button>
+                      <button
+                        onClick={() => onDelete(p)}
+                        className="rounded-md p-1.5 text-neutral-400 hover:bg-red-50 hover:text-red-600"
+                        title="Excluir"
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         )}
       </div>
 
