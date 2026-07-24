@@ -118,12 +118,12 @@ function HomePage() {
           </Link>
         </div>
         <div className="grid grid-cols-2 gap-3 md:grid-cols-3 md:gap-5 lg:grid-cols-5">
-          {categories.slice(0, 5).map((c) => (
+          {cats.slice(0, 5).map((c) => (
             <CategoryCard key={c.slug} category={c} />
           ))}
         </div>
         <div className="mt-3 grid grid-cols-2 gap-3 md:mt-5 md:grid-cols-3 md:gap-5 lg:grid-cols-5">
-          {categories.slice(5, 10).map((c) => (
+          {cats.slice(5, 10).map((c) => (
             <CategoryCard key={c.slug} category={c} />
           ))}
         </div>
