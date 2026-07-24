@@ -217,8 +217,8 @@ function ProductPage() {
               ) : null}
             </div>
             <div className="grid grid-cols-2 gap-4 md:grid-cols-4 md:gap-6">
-              {related.map((p: Product) => (
-                <ProductCard key={p.slug} product={p} />
+              {related.map((rp: Product) => (
+                <ProductCard key={rp.slug} product={rp} />
               ))}
             </div>
           </div>
