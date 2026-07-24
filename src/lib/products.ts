@@ -1,6 +1,6 @@
 import { supabase } from "@/integrations/supabase/client";
 import type { Product } from "@/lib/site-data";
-import { resolveImage } from "@/lib/product-image";
+import { resolveImageAsync } from "@/lib/product-image";
 
 type Row = {
   id: string;
@@ -25,11 +25,15 @@ type Row = {
 
 export type DbProduct = Product & { id: string; imageRef: string; galleryRefs: string[] };
 
-function toProduct(row: Row): DbProduct {
+async function toProduct(row: Row): Promise<DbProduct> {
   const price = Number(row.price);
   const salePriceRaw = row.sale_price == null ? null : Number(row.sale_price);
   const imageRef = row.image ?? "";
   const galleryRefs = row.gallery ?? [];
+  const [image, gallery] = await Promise.all([
+    resolveImageAsync(imageRef),
+    Promise.all(galleryRefs.map(resolveImageAsync)),
+  ]);
   return {
     id: row.id,
     slug: row.slug,
@@ -41,10 +45,10 @@ function toProduct(row: Row): DbProduct {
     colors: row.colors ?? [],
     sizes: row.sizes ?? [],
     description: row.description ?? "",
-    image: resolveImage(imageRef),
+    image,
     imageRef,
     galleryRefs,
-    gallery: galleryRefs.map(resolveImage),
+    gallery,
     isNew: row.is_new,
     isSale: row.on_sale,
     isBestseller: row.is_bestseller,
@@ -60,7 +64,7 @@ export async function fetchProducts(): Promise<DbProduct[]> {
     .order("sort_order", { ascending: true })
     .order("created_at", { ascending: false });
   if (error) throw error;
-  return (data as Row[]).map(toProduct);
+  return Promise.all((data as Row[]).map(toProduct));
 }
 
 export async function fetchProductBySlug(slug: string): Promise<DbProduct | null> {
@@ -70,5 +74,5 @@ export async function fetchProductBySlug(slug: string): Promise<DbProduct | null
     .eq("slug", slug)
     .maybeSingle();
   if (error) throw error;
-  return data ? toProduct(data as Row) : null;
+  return data ? await toProduct(data as Row) : null;
 }
