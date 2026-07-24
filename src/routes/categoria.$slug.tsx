@@ -3,6 +3,8 @@ import { useEffect, useState } from "react";
 import { ProductCard } from "@/components/site/ProductCard";
 import { findCategory, categories } from "@/lib/site-data";
 import { fetchProducts, type DbProduct } from "@/lib/products";
+import { fetchCategoryBanners } from "@/lib/banners";
+import { resolveImageAsync } from "@/lib/product-image";
 
 export const Route = createFileRoute("/categoria/$slug")({
   loader: ({ params }) => {
@@ -40,23 +42,35 @@ function CategoryPage() {
   const { category } = Route.useLoaderData();
   const [products, setProducts] = useState<DbProduct[]>([]);
   const [loading, setLoading] = useState(true);
+  const [bannerImg, setBannerImg] = useState<string>(category.image);
+  const [tagline, setTagline] = useState<string>("");
   useEffect(() => {
     let alive = true;
     fetchProducts()
       .then((rows) => alive && setProducts(rows.filter((p) => p.category === category.slug)))
       .finally(() => alive && setLoading(false));
+    (async () => {
+      const map = await fetchCategoryBanners();
+      const entry = map[category.slug];
+      if (!alive || !entry) return;
+      if (entry.imageRef) {
+        const url = await resolveImageAsync(entry.imageRef);
+        if (alive) setBannerImg(url);
+      }
+      if (entry.tagline) setTagline(entry.tagline);
+    })();
     return () => { alive = false; };
   }, [category.slug]);
 
   return (
     <>
       <section className="relative h-[50vh] min-h-[380px] w-full overflow-hidden bg-foreground text-background">
-        <img src={category.image} alt={category.name} className="absolute inset-0 h-full w-full object-cover" />
+        <img src={bannerImg} alt={category.name} className="absolute inset-0 h-full w-full object-cover" />
         <div className="absolute inset-0 bg-gradient-to-t from-foreground/80 via-foreground/40 to-foreground/20" />
         <div className="container-x relative z-10 flex h-full flex-col justify-end pb-12">
           <p className="text-[10px] font-medium uppercase tracking-[0.35em] text-background/70">Categoria</p>
           <h1 className="mt-3 font-display text-5xl font-semibold leading-tight tracking-tight md:text-7xl">{category.name}</h1>
-          <p className="mt-4 max-w-2xl text-base text-background/80">{category.description}</p>
+          <p className="mt-4 max-w-2xl text-base text-background/80">{tagline || category.description}</p>
         </div>
       </section>
 
