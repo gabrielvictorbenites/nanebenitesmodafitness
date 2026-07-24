@@ -1,4 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { useEffect, useState } from "react";
 import { ArrowRight, MapPin, Instagram } from "lucide-react";
 import heroImg from "@/assets/hero.jpg";
 import collectionImg from "@/assets/collection.jpg";
@@ -8,12 +9,29 @@ import { whatsappLink } from "@/lib/whatsapp";
 import { CategoryCard } from "@/components/site/CategoryCard";
 import { ScrollZoomIntro } from "@/components/site/ScrollZoomIntro";
 import { FeaturedProducts } from "@/components/site/FeaturedProducts";
+import { fetchCategoryBanners } from "@/lib/banners";
+import { resolveImageAsync } from "@/lib/product-image";
 
 export const Route = createFileRoute("/")({
   component: HomePage,
 });
 
 function HomePage() {
+  const [catOverrides, setCatOverrides] = useState<Record<string, string>>({});
+  useEffect(() => {
+    let alive = true;
+    (async () => {
+      const map = await fetchCategoryBanners();
+      const entries = await Promise.all(
+        Object.entries(map)
+          .filter(([, v]) => v.imageRef)
+          .map(async ([slug, v]) => [slug, await resolveImageAsync(v.imageRef)] as const),
+      );
+      if (alive) setCatOverrides(Object.fromEntries(entries));
+    })();
+    return () => { alive = false; };
+  }, []);
+  const cats = categories.map((c) => (catOverrides[c.slug] ? { ...c, image: catOverrides[c.slug] } : c));
   return (
     <>
       {/* HERO */}
