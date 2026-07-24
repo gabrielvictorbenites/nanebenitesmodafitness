@@ -3,10 +3,9 @@ import { ArrowRight, MapPin, Instagram } from "lucide-react";
 import heroImg from "@/assets/hero.jpg";
 import collectionImg from "@/assets/collection.jpg";
 import lojaCuritiba from "@/assets/loja-curitiba.jpg.asset.json";
-import { categories, products, site } from "@/lib/site-data";
+import { categories, site } from "@/lib/site-data";
 import { whatsappLink } from "@/lib/whatsapp";
 import { CategoryCard } from "@/components/site/CategoryCard";
-import { ProductCarousel } from "@/components/site/ProductCarousel";
 import { ScrollZoomIntro } from "@/components/site/ScrollZoomIntro";
 
 export const Route = createFileRoute("/")({
@@ -14,8 +13,6 @@ export const Route = createFileRoute("/")({
 });
 
 function HomePage() {
-  const featured = products.filter((p) => p.isBestseller || p.isNew).slice(0, 8);
-
   return (
     <>
       {/* HERO */}
