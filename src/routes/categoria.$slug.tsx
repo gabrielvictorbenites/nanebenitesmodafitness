@@ -1,12 +1,14 @@
 import { createFileRoute, notFound, Link } from "@tanstack/react-router";
+import { useEffect, useState } from "react";
 import { ProductCard } from "@/components/site/ProductCard";
-import { findCategory, productsByCategory, categories, type Product } from "@/lib/site-data";
+import { findCategory, categories } from "@/lib/site-data";
+import { fetchProducts, type DbProduct } from "@/lib/products";
 
 export const Route = createFileRoute("/categoria/$slug")({
   loader: ({ params }) => {
     const cat = findCategory(params.slug);
     if (!cat) throw notFound();
-    return { category: cat, products: productsByCategory(params.slug) };
+    return { category: cat };
   },
   head: ({ loaderData }) => {
     if (!loaderData) return { meta: [{ title: "Categoria não encontrada" }, { name: "robots", content: "noindex" }] };
@@ -35,7 +37,16 @@ export const Route = createFileRoute("/categoria/$slug")({
 });
 
 function CategoryPage() {
-  const { category, products } = Route.useLoaderData();
+  const { category } = Route.useLoaderData();
+  const [products, setProducts] = useState<DbProduct[]>([]);
+  const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    let alive = true;
+    fetchProducts()
+      .then((rows) => alive && setProducts(rows.filter((p) => p.category === category.slug)))
+      .finally(() => alive && setLoading(false));
+    return () => { alive = false; };
+  }, [category.slug]);
 
   return (
     <>
@@ -50,11 +61,13 @@ function CategoryPage() {
       </section>
 
       <section className="container-x py-16 md:py-24">
-        {products.length === 0 ? (
+        {loading ? (
+          <p className="py-20 text-center text-muted-foreground">Carregando…</p>
+        ) : products.length === 0 ? (
           <p className="py-20 text-center text-muted-foreground">Em breve novas peças nesta categoria.</p>
         ) : (
           <div className="grid grid-cols-2 gap-4 md:grid-cols-3 md:gap-6 lg:grid-cols-4">
-            {products.map((p: Product) => (
+            {products.map((p) => (
               <ProductCard key={p.slug} product={p} />
             ))}
           </div>
