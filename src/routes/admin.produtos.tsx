@@ -1,6 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState, type FormEvent } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import { useServerFn } from "@tanstack/react-start";
+import { MediaUploader } from "@/components/admin/MediaUploader";
+import { generateProductDescription } from "@/lib/ai.functions";
 
 export const Route = createFileRoute("/admin/produtos")({
   ssr: false,
@@ -125,10 +128,16 @@ function ProductsPage() {
 type FormState = {
   name: string; slug: string; description: string; category: string; brand: string;
   price: string; on_sale: boolean; sale_price: string; sizes: string[]; colors: string[];
-  imageRef: string; stock: string; sku: string; is_new: boolean; is_bestseller: boolean;
+  media: string[]; coverIndex: number; stock: string; sku: string; is_new: boolean; is_bestseller: boolean;
 };
 
 function ProductForm({ initial, onClose, onSaved }: { initial: ProductRow | null; onClose: () => void; onSaved: () => void }) {
+  const initialGallery = (() => {
+    const g = initial?.gallery ?? [];
+    const list = g.length > 0 ? g : initial?.image ? [initial.image] : [];
+    const cover = initial?.image && list.includes(initial.image) ? list.indexOf(initial.image) : 0;
+    return { list, cover };
+  })();
   const [state, setState] = useState<FormState>(() => ({
     name: initial?.name ?? "",
     slug: initial?.slug ?? "",
@@ -140,29 +149,45 @@ function ProductForm({ initial, onClose, onSaved }: { initial: ProductRow | null
     sale_price: initial?.sale_price != null ? String(initial.sale_price) : "",
     sizes: initial?.sizes ?? [],
     colors: initial?.colors ?? [],
-    imageRef: initial?.image ?? "",
+    media: initialGallery.list,
+    coverIndex: initialGallery.cover,
     stock: initial ? String(initial.stock) : "0",
     sku: initial?.sku ?? "",
     is_new: initial?.is_new ?? false,
     is_bestseller: initial?.is_bestseller ?? false,
   }));
   const [saving, setSaving] = useState(false);
-  const [uploading, setUploading] = useState(false);
   const [err, setErr] = useState<string | null>(null);
+  const [aiLoading, setAiLoading] = useState(false);
+  const genDescription = useServerFn(generateProductDescription);
 
   function set<K extends keyof FormState>(k: K, v: FormState[K]) {
     setState((s) => ({ ...s, [k]: v }));
   }
 
-  async function onUpload(file: File) {
-    setUploading(true);
+  async function onGenerateAI() {
+    if (!state.name.trim()) {
+      setErr("Informe o nome do produto antes de gerar a descrição.");
+      return;
+    }
     setErr(null);
-    const ext = file.name.split(".").pop() ?? "jpg";
-    const path = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${ext}`;
-    const { error } = await supabase.storage.from("product-images").upload(path, file, { upsert: false });
-    setUploading(false);
-    if (error) { setErr("Falha no upload: " + error.message); return; }
-    set("imageRef", `storage:${path}`);
+    setAiLoading(true);
+    try {
+      const res = await genDescription({
+        data: {
+          name: state.name,
+          category: state.category,
+          brand: state.brand,
+          sizes: state.sizes,
+          colors: state.colors,
+        },
+      });
+      if (res.description) set("description", res.description);
+    } catch (e) {
+      setErr(e instanceof Error ? e.message : "Erro ao gerar descrição");
+    } finally {
+      setAiLoading(false);
+    }
   }
 
   async function onSubmit(e: FormEvent) {
@@ -170,6 +195,7 @@ function ProductForm({ initial, onClose, onSaved }: { initial: ProductRow | null
     setErr(null);
     setSaving(true);
     const slug = state.slug.trim() || slugify(state.name);
+    const cover = state.media[state.coverIndex] ?? state.media[0] ?? "";
     const payload = {
       name: state.name.trim(), slug,
       description: state.description.trim() || undefined,
@@ -178,8 +204,8 @@ function ProductForm({ initial, onClose, onSaved }: { initial: ProductRow | null
       on_sale: state.on_sale,
       sale_price: state.on_sale && state.sale_price ? Number(state.sale_price) : undefined,
       sizes: state.sizes, colors: state.colors,
-      image: state.imageRef || undefined,
-      gallery: state.imageRef ? [state.imageRef] : [],
+      image: cover || undefined,
+      gallery: state.media,
       stock: Number(state.stock) || 0,
       sku: state.sku.trim() || undefined,
       is_new: state.is_new, is_bestseller: state.is_bestseller,
@@ -212,11 +238,21 @@ function ProductForm({ initial, onClose, onSaved }: { initial: ProductRow | null
         </div>
 
         <div className="mt-4">
-          <label className="text-xs font-medium text-neutral-600">Descrição</label>
+          <div className="flex items-center justify-between">
+            <label className="text-xs font-medium text-neutral-600">Descrição</label>
+            <button
+              type="button"
+              onClick={onGenerateAI}
+              disabled={aiLoading}
+              className="rounded-lg bg-[image:linear-gradient(135deg,oklch(0.72_0.13_195),oklch(0.55_0.22_300))] px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wider text-white disabled:opacity-60"
+            >
+              {aiLoading ? "Gerando…" : "✨ Gerar com IA"}
+            </button>
+          </div>
           <textarea
             value={state.description}
             onChange={(e) => set("description", e.target.value)}
-            rows={3}
+            rows={5}
             className="mt-1 w-full rounded-lg border border-neutral-300 p-3 text-sm focus:border-neutral-900 focus:outline-none"
           />
         </div>
@@ -248,18 +284,12 @@ function ProductForm({ initial, onClose, onSaved }: { initial: ProductRow | null
         </div>
 
         <div className="mt-6">
-          <label className="text-xs font-medium text-neutral-600">Foto do produto</label>
-          <div className="mt-2 flex items-center gap-4">
-            <div className="h-24 w-24 overflow-hidden rounded-lg bg-neutral-100">
-              {state.imageRef ? <img src={resolveImg(state.imageRef)} alt="" className="h-full w-full object-cover" /> : null}
-            </div>
-            <input
-              type="file" accept="image/*"
-              onChange={(e) => { const f = e.target.files?.[0]; if (f) onUpload(f); }}
-              className="text-sm"
-            />
-            {uploading ? <span className="text-xs text-neutral-500">Enviando…</span> : null}
-          </div>
+          <MediaUploader
+            values={state.media}
+            onChange={(v) => set("media", v)}
+            coverIndex={state.coverIndex}
+            onCoverChange={(i) => set("coverIndex", i)}
+          />
         </div>
 
         {err ? <p className="mt-4 text-xs text-red-600">{err}</p> : null}
@@ -267,7 +297,7 @@ function ProductForm({ initial, onClose, onSaved }: { initial: ProductRow | null
         <div className="mt-6 flex justify-end gap-2">
           <button type="button" onClick={onClose} className="h-10 rounded-lg border border-neutral-300 px-4 text-sm font-medium">Cancelar</button>
           <button
-            type="submit" disabled={saving || uploading}
+            type="submit" disabled={saving}
             className="h-10 rounded-lg bg-[image:linear-gradient(135deg,oklch(0.72_0.13_195),oklch(0.55_0.22_300))] px-5 text-sm font-semibold text-white disabled:opacity-60"
           >
             {saving ? "Salvando…" : "Salvar"}
