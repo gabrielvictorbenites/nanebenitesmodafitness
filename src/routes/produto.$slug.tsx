@@ -64,15 +64,16 @@ function ProductPage() {
     );
   }
 
-  const category = findCategory(product.category);
-  const gallery = product.gallery && product.gallery.length > 0 ? product.gallery : [product.image];
-  const fav = has(product.slug);
+  const p = product;
+  const category = findCategory(p.category);
+  const gallery = p.gallery && p.gallery.length > 0 ? p.gallery : [p.image];
+  const fav = has(p.slug);
 
   async function handleShare() {
     const url = typeof window !== "undefined" ? window.location.href : "";
     if (typeof navigator !== "undefined" && (navigator as Navigator).share) {
       try {
-        await (navigator as Navigator).share({ title: product.name, text: product.description, url });
+        await (navigator as Navigator).share({ title: p.name, text: p.description, url });
       } catch {
         /* cancelled */
       }
