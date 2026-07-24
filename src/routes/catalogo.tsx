@@ -1,9 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Search } from "lucide-react";
 import { PageHero } from "@/components/site/PageHero";
 import { ProductCard } from "@/components/site/ProductCard";
-import { categories, brands, products } from "@/lib/site-data";
+import { categories, brands } from "@/lib/site-data";
+import { fetchProducts, type DbProduct } from "@/lib/products";
 
 export const Route = createFileRoute("/catalogo")({
   head: () => ({
@@ -24,6 +25,18 @@ function CatalogoPage() {
   const [cat, setCat] = useState<string>("todos");
   const [brand, setBrand] = useState<string>("todos");
   const [sort, setSort] = useState<"recentes" | "vendidos" | "menor" | "maior">("recentes");
+  const [products, setProducts] = useState<DbProduct[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    let alive = true;
+    fetchProducts()
+      .then((rows) => alive && setProducts(rows))
+      .finally(() => alive && setLoading(false));
+    return () => {
+      alive = false;
+    };
+  }, []);
 
   const filtered = useMemo(() => {
     let list = [...products];
@@ -38,7 +51,7 @@ function CatalogoPage() {
     if (sort === "vendidos") list.sort((a, b) => Number(!!b.isBestseller) - Number(!!a.isBestseller));
     if (sort === "recentes") list.sort((a, b) => Number(!!b.isNew) - Number(!!a.isNew));
     return list;
-  }, [q, cat, brand, sort]);
+  }, [q, cat, brand, sort, products]);
 
   return (
     <>
@@ -83,7 +96,9 @@ function CatalogoPage() {
           {filtered.length} {filtered.length === 1 ? "peça" : "peças"} encontradas
         </p>
 
-        {filtered.length === 0 ? (
+        {loading ? (
+          <p className="py-20 text-center text-muted-foreground">Carregando peças…</p>
+        ) : filtered.length === 0 ? (
           <p className="py-20 text-center text-muted-foreground">Nenhum produto encontrado com esses filtros.</p>
         ) : (
           <div className="grid grid-cols-2 gap-4 md:grid-cols-3 md:gap-6 lg:grid-cols-4">
