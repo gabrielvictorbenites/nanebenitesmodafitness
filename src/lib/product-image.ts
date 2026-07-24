@@ -27,20 +27,34 @@ const PLACEHOLDER =
   "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 3 4'><rect width='3' height='4' fill='%23f2f2f2'/></svg>";
 
 /**
- * Resolve a stored image reference into a usable src.
- * - "local:<key>"        → static asset bundled with the site (seed products).
- * - "storage:<path>"     → object in the Supabase "product-images" bucket.
- * - "http(s)://..." or absolute path → returned as-is.
+ * Synchronous resolver used by admin/loading placeholders.
+ * Storage refs return a placeholder here — use `resolveImageAsync` for signed URLs.
  */
 export function resolveImage(ref: string | null | undefined): string {
   if (!ref) return PLACEHOLDER;
   if (ref.startsWith("local:")) {
     return LOCAL_ASSETS[ref.slice(6)] ?? PLACEHOLDER;
   }
+  if (ref.startsWith("storage:")) return PLACEHOLDER;
+  return ref;
+}
+
+/**
+ * Async resolver. Storage refs are resolved to time-limited signed URLs
+ * because the bucket is private (public buckets are blocked in this workspace).
+ */
+export async function resolveImageAsync(ref: string | null | undefined): Promise<string> {
+  if (!ref) return PLACEHOLDER;
+  if (ref.startsWith("local:")) {
+    return LOCAL_ASSETS[ref.slice(6)] ?? PLACEHOLDER;
+  }
   if (ref.startsWith("storage:")) {
     const path = ref.slice(8);
-    const { data } = supabase.storage.from("product-images").getPublicUrl(path);
-    return data.publicUrl;
+    const { data, error } = await supabase.storage
+      .from("product-images")
+      .createSignedUrl(path, 60 * 60 * 24 * 7); // 7 days
+    if (error || !data) return PLACEHOLDER;
+    return data.signedUrl;
   }
   return ref;
 }
