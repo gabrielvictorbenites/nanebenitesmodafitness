@@ -1,7 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { useEffect, useState } from "react";
 import { PageHero } from "@/components/site/PageHero";
 import { ProductCard } from "@/components/site/ProductCard";
-import { products } from "@/lib/site-data";
+import { fetchProducts, type DbProduct } from "@/lib/products";
 
 export const Route = createFileRoute("/promocoes")({
   head: () => ({
@@ -18,12 +19,22 @@ export const Route = createFileRoute("/promocoes")({
 });
 
 function PromocoesPage() {
-  const items = products.filter((p) => p.isSale);
+  const [items, setItems] = useState<DbProduct[]>([]);
+  const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    let alive = true;
+    fetchProducts()
+      .then((rows) => alive && setItems(rows.filter((p) => p.isSale)))
+      .finally(() => alive && setLoading(false));
+    return () => { alive = false; };
+  }, []);
   return (
     <>
       <PageHero eyebrow="Promoções" title="Peças selecionadas em oferta." description="Curadoria com condições especiais por tempo limitado." />
       <section className="container-x py-16 md:py-24">
-        {items.length === 0 ? (
+        {loading ? (
+          <p className="py-20 text-center text-muted-foreground">Carregando…</p>
+        ) : items.length === 0 ? (
           <p className="py-20 text-center text-muted-foreground">Nenhuma promoção ativa no momento.</p>
         ) : (
           <div className="grid grid-cols-2 gap-4 md:grid-cols-3 md:gap-6 lg:grid-cols-4">
