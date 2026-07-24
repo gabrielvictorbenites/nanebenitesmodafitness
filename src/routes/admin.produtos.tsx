@@ -163,7 +163,7 @@ function ProductForm({ initial, onClose, onSaved }: { initial: ProductRow | null
     name: initial?.name ?? "",
     slug: initial?.slug ?? "",
     description: initial?.description ?? "",
-    category: initial?.category ?? "leggings",
+    category: initial?.category ?? "",
     brand: initial?.brand ?? "",
     price: initial ? String(initial.price) : "",
     on_sale: initial?.on_sale ?? false,
