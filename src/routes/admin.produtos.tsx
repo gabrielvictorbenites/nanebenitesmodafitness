@@ -4,6 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useServerFn } from "@tanstack/react-start";
 import { MediaUploader } from "@/components/admin/MediaUploader";
 import { generateProductDescription } from "@/lib/ai.functions";
+import { resolveImageAsync } from "@/lib/product-image";
 
 export const Route = createFileRoute("/admin/produtos")({
   ssr: false,
@@ -30,13 +31,27 @@ type ProductRow = {
   is_bestseller: boolean;
 };
 
-function resolveImg(ref: string | null | undefined): string {
-  if (!ref) return "";
-  if (ref.startsWith("storage:")) {
-    const { data } = supabase.storage.from("product-images").getPublicUrl(ref.slice(8));
-    return data.publicUrl;
-  }
-  return ref;
+function Thumb({ refValue }: { refValue: string | null | undefined }) {
+  const [url, setUrl] = useState<string>("");
+  useEffect(() => {
+    let alive = true;
+    resolveImageAsync(refValue).then((u) => { if (alive) setUrl(u); });
+    return () => { alive = false; };
+  }, [refValue]);
+  if (!url) return null;
+  return <img src={url} alt="" className="h-full w-full object-cover" />;
+}
+
+function generateSku(name: string): string {
+  const prefix = (name || "prod")
+    .toUpperCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^A-Z0-9]+/g, "")
+    .slice(0, 6) || "PROD";
+  const rand = Math.random().toString(36).slice(2, 6).toUpperCase();
+  const ts = Date.now().toString(36).slice(-4).toUpperCase();
+  return `${prefix}-${ts}${rand}`;
 }
 
 function slugify(s: string): string {
@@ -115,7 +130,7 @@ function ProductsPage() {
           items.map((p) => (
             <div key={p.id} className="flex items-center gap-4 p-4">
               <div className="h-16 w-16 shrink-0 overflow-hidden rounded-md bg-neutral-100">
-                {p.image ? <img src={resolveImg(p.image)} alt="" className="h-full w-full object-cover" /> : null}
+                <Thumb refValue={p.image} />
               </div>
               <div className="min-w-0 flex-1">
                 <p className="truncate text-sm font-medium">{p.name}</p>
@@ -149,7 +164,7 @@ function ProductsPage() {
 type FormState = {
   name: string; slug: string; description: string; category: string; brand: string;
   price: string; on_sale: boolean; sale_price: string; sizes: string[]; colors: string[];
-  media: string[]; coverIndex: number; stock: string; sku: string; is_new: boolean; is_bestseller: boolean;
+  media: string[]; coverIndex: number; stock: string; is_new: boolean; is_bestseller: boolean;
 };
 
 function ProductForm({ initial, onClose, onSaved }: { initial: ProductRow | null; onClose: () => void; onSaved: () => void }) {
@@ -173,7 +188,6 @@ function ProductForm({ initial, onClose, onSaved }: { initial: ProductRow | null
     media: initialGallery.list,
     coverIndex: initialGallery.cover,
     stock: initial ? String(initial.stock) : "0",
-    sku: initial?.sku ?? "",
     is_new: initial?.is_new ?? false,
     is_bestseller: initial?.is_bestseller ?? false,
   }));
@@ -217,6 +231,7 @@ function ProductForm({ initial, onClose, onSaved }: { initial: ProductRow | null
     setSaving(true);
     const slug = state.slug.trim() || slugify(state.name);
     const cover = state.media[state.coverIndex] ?? state.media[0] ?? "";
+    const sku = initial?.sku && initial.sku.trim() ? initial.sku : generateSku(state.name);
     const payload = {
       name: state.name.trim(), slug,
       description: state.description.trim() || undefined,
@@ -228,7 +243,7 @@ function ProductForm({ initial, onClose, onSaved }: { initial: ProductRow | null
       image: cover || undefined,
       gallery: state.media,
       stock: Number(state.stock) || 0,
-      sku: state.sku.trim() || undefined,
+      sku,
       is_new: state.is_new, is_bestseller: state.is_bestseller,
     };
     const q = initial
@@ -260,7 +275,6 @@ function ProductForm({ initial, onClose, onSaved }: { initial: ProductRow | null
           />
           <Field label="Marca" value={state.brand} onChange={(v) => set("brand", v)} required />
           <Field label="Preço" value={state.price} onChange={(v) => set("price", v)} type="number" required />
-          <Field label="SKU" value={state.sku} onChange={(v) => set("sku", v)} />
           <Field label="Estoque" value={state.stock} onChange={(v) => set("stock", v)} type="number" />
         </div>
 
