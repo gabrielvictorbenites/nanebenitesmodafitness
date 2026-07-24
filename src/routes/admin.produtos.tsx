@@ -49,26 +49,26 @@ function slugify(s: string): string {
     .slice(0, 80);
 }
 
-const CATEGORIES = [
-  "Leggings",
-  "Shorts",
-  "Shorts saia",
-  "Tops",
-  "Regatas",
-  "Camisetas",
-  "Conjuntos",
-  "Body",
-  "Moletons",
-  "Casacos de zíper",
-  "Tênis",
-  "Chinelos",
-  "Bolsas de treino",
-  "Mochilas",
-  "Garrafas",
-  "Meias",
-  "Faixas de cabelo",
-  "Bonés",
-] as const;
+const CATEGORIES: { slug: string; label: string }[] = [
+  { slug: "leggings", label: "Leggings" },
+  { slug: "shorts", label: "Shorts" },
+  { slug: "shorts-saia", label: "Shorts saia" },
+  { slug: "tops", label: "Tops" },
+  { slug: "regatas", label: "Regatas" },
+  { slug: "camisetas", label: "Camisetas" },
+  { slug: "conjuntos", label: "Conjuntos" },
+  { slug: "body", label: "Body" },
+  { slug: "moletons", label: "Moletons" },
+  { slug: "casacos-de-ziper", label: "Casacos de zíper" },
+  { slug: "tenis", label: "Tênis" },
+  { slug: "chinelos", label: "Chinelos" },
+  { slug: "bolsas-de-treino", label: "Bolsas de treino" },
+  { slug: "mochilas", label: "Mochilas" },
+  { slug: "garrafas", label: "Garrafas" },
+  { slug: "meias", label: "Meias" },
+  { slug: "faixas-de-cabelo", label: "Faixas de cabelo" },
+  { slug: "bones", label: "Bonés" },
+];
 
 function ProductsPage() {
   const [items, setItems] = useState<ProductRow[]>([]);
@@ -352,7 +352,7 @@ function Field({
 
 function SelectField({
   label, value, onChange, options, required,
-}: { label: string; value: string; onChange: (v: string) => void; options: readonly string[]; required?: boolean }) {
+}: { label: string; value: string; onChange: (v: string) => void; options: { slug: string; label: string }[]; required?: boolean }) {
   return (
     <div>
       <label className="text-xs font-medium text-neutral-600">{label}</label>
@@ -364,7 +364,7 @@ function SelectField({
       >
         <option value="" disabled>Selecione…</option>
         {options.map((o) => (
-          <option key={o} value={o}>{o}</option>
+          <option key={o.slug} value={o.slug}>{o.label}</option>
         ))}
       </select>
     </div>
