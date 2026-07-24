@@ -148,10 +148,6 @@ function HeroCard({
   onSaved: () => void;
 }) {
   const [title, setTitle] = useState(banner.title);
-  const [subtitle, setSubtitle] = useState(banner.subtitle);
-  const [eyebrow, setEyebrow] = useState(banner.eyebrow);
-  const [ctaLabel, setCtaLabel] = useState(banner.cta_label);
-  const [ctaHref, setCtaHref] = useState(banner.cta_href);
   const [sortOrder, setSortOrder] = useState(banner.sort_order);
   const [active, setActive] = useState(banner.active);
   const [imageRef, setImageRef] = useState(banner.image_url);
@@ -167,10 +163,10 @@ function HeroCard({
       await saveHeroBanner({
         id: banner.id,
         title,
-        subtitle,
-        eyebrow,
-        cta_label: ctaLabel,
-        cta_href: ctaHref,
+        subtitle: banner.subtitle,
+        eyebrow: banner.eyebrow,
+        cta_label: banner.cta_label,
+        cta_href: banner.cta_href,
         sort_order: Number(sortOrder) || 0,
         active,
         image_url: imageRef,
@@ -192,11 +188,9 @@ function HeroCard({
           <span className="text-[11px] font-semibold uppercase tracking-[0.2em] text-neutral-500">
             Banner #{index}
           </span>
-          {title ? (
-            <span className="text-sm font-medium text-neutral-800">{title}</span>
-          ) : (
-            <span className="text-sm italic text-neutral-400">sem título</span>
-          )}
+          <span className="rounded bg-neutral-100 px-2 py-0.5 font-mono text-[10px] text-neutral-500">
+            slide rotativo
+          </span>
         </div>
         <div className="flex items-center gap-3">
           <label className="inline-flex cursor-pointer items-center gap-2 text-xs font-medium text-neutral-700">
@@ -220,7 +214,7 @@ function HeroCard({
 
       <div className="grid gap-6 p-5 md:grid-cols-[280px_1fr]">
         <div>
-          <div className="aspect-[16/10] w-full overflow-hidden rounded-lg bg-neutral-100">
+          <div className="aspect-[4/3] w-full overflow-hidden rounded-lg bg-neutral-100">
             {imageRef ? (
               <AsyncImg refValue={imageRef} />
             ) : (
@@ -231,33 +225,14 @@ function HeroCard({
           </div>
           <UploadButton value={imageRef} onChange={setImageRef} />
           <p className="mt-2 text-center text-[11px] text-neutral-400">
-            Proporção 16:10 – recomendado 1600x1000px (JPG/PNG/WebP)
+            Proporção 4:3 – recomendado 1600x1200px
           </p>
         </div>
 
         <div className="grid gap-4">
-          <Field label="Eyebrow (linha superior)">
-            <input value={eyebrow} onChange={(e) => setEyebrow(e.target.value)} className={inputCls} />
-          </Field>
-          <Field label="Título">
+          <Field label="Texto de destaque (opcional)">
             <input value={title} onChange={(e) => setTitle(e.target.value)} className={inputCls} />
           </Field>
-          <Field label="Subtítulo">
-            <textarea
-              value={subtitle}
-              onChange={(e) => setSubtitle(e.target.value)}
-              rows={2}
-              className={inputCls}
-            />
-          </Field>
-          <div className="grid gap-4 md:grid-cols-2">
-            <Field label="Texto do botão">
-              <input value={ctaLabel} onChange={(e) => setCtaLabel(e.target.value)} className={inputCls} />
-            </Field>
-            <Field label="Link do botão (/catalogo, https://…)">
-              <input value={ctaHref} onChange={(e) => setCtaHref(e.target.value)} className={inputCls} />
-            </Field>
-          </div>
           <Field label="Ordem" className="max-w-[140px]">
             <input
               type="number"
@@ -266,6 +241,9 @@ function HeroCard({
               className={inputCls}
             />
           </Field>
+          <p className="text-xs text-neutral-500">
+            Este banner rotaciona no topo da home. A imagem que você salvar aqui aparece automaticamente no site.
+          </p>
         </div>
       </div>
 
