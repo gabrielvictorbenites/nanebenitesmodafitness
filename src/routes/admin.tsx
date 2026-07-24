@@ -1,72 +1,20 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Outlet } from "@tanstack/react-router";
 import { useEffect, useState, type FormEvent } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import { useAdminAuth } from "@/lib/admin-auth";
+import { AdminSidebar } from "@/components/admin/AdminSidebar";
 
 export const Route = createFileRoute("/admin")({
   ssr: false,
   head: () => ({ meta: [{ title: "Admin — Nane Benites" }, { name: "robots", content: "noindex,nofollow" }] }),
-  component: AdminApp,
+  component: AdminLayout,
 });
 
-type ProductRow = {
-  id: string;
-  slug: string;
-  name: string;
-  description: string | null;
-  category: string;
-  brand: string;
-  price: number | string;
-  sale_price: number | string | null;
-  on_sale: boolean;
-  colors: string[] | null;
-  sizes: string[] | null;
-  image: string | null;
-  gallery: string[] | null;
-  stock: number;
-  sku: string | null;
-  is_new: boolean;
-  is_bestseller: boolean;
-};
-
-function resolveImg(ref: string | null | undefined): string {
-  if (!ref) return "";
-  if (ref.startsWith("storage:")) {
-    const { data } = supabase.storage.from("product-images").getPublicUrl(ref.slice(8));
-    return data.publicUrl;
-  }
-  if (ref.startsWith("local:") || ref.startsWith("http")) return ref;
-  return ref;
-}
-
-function slugify(s: string): string {
-  return s
-    .toLowerCase()
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-+|-+$/g, "")
-    .slice(0, 80);
-}
-
-function AdminApp() {
-  const [session, setSession] = useState<{ userId: string } | null>(null);
-  const [checking, setChecking] = useState(true);
-  const [bootstrapping, setBootstrapping] = useState(false);
+function AdminLayout() {
+  const { checking, userId, email, isAdmin, signOut } = useAdminAuth();
+  const [bootstrapping, setBootstrapping] = useState(true);
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data }) => {
-      setSession(data.session ? { userId: data.session.user.id } : null);
-      setChecking(false);
-    });
-    const { data: sub } = supabase.auth.onAuthStateChange((_e, s) => {
-      setSession(s ? { userId: s.user.id } : null);
-    });
-    return () => sub.subscription.unsubscribe();
-  }, []);
-
-  useEffect(() => {
-    // Ensure the admin user + role exist. Idempotent.
-    setBootstrapping(true);
     fetch("/api/public/admin-bootstrap", { method: "POST" })
       .catch(() => {})
       .finally(() => setBootstrapping(false));
@@ -76,9 +24,37 @@ function AdminApp() {
     return <div className="grid min-h-screen place-items-center bg-neutral-50 text-sm text-neutral-500">Carregando…</div>;
   }
 
+  if (!userId) {
+    return (
+      <div className="min-h-screen bg-neutral-50 font-sans text-neutral-900">
+        <Login />
+      </div>
+    );
+  }
+
+  if (!isAdmin) {
+    return (
+      <div className="grid min-h-screen place-items-center bg-neutral-50 px-4 text-center font-sans">
+        <div className="max-w-sm">
+          <h1 className="font-display text-2xl font-bold text-neutral-900">Acesso restrito</h1>
+          <p className="mt-2 text-sm text-neutral-500">Sua conta não tem permissão de administrador.</p>
+          <button
+            onClick={signOut}
+            className="mt-6 h-10 rounded-lg border border-neutral-300 bg-white px-4 text-xs font-medium text-neutral-700 hover:bg-neutral-100"
+          >
+            Sair
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-neutral-50 font-sans text-neutral-900">
-      {session ? <Dashboard onSignOut={() => supabase.auth.signOut()} /> : <Login />}
+      <AdminSidebar email={email} onSignOut={signOut} />
+      <main className="ml-64 min-h-screen">
+        <Outlet />
+      </main>
     </div>
   );
 }
@@ -132,8 +108,10 @@ function Login() {
   );
 }
 
-function Dashboard({ onSignOut }: { onSignOut: () => void }) {
-  const [items, setItems] = useState<ProductRow[]>([]);
+// (Product dashboard moved to src/routes/admin.produtos.tsx)
+
+function _UnusedDashboard() {
+  const [items, setItems] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [editing, setEditing] = useState<ProductRow | "new" | null>(null);
 
