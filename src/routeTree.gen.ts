@@ -18,6 +18,7 @@ import { Route as FavoritosRouteImport } from './routes/favoritos'
 import { Route as ContatoRouteImport } from './routes/contato'
 import { Route as ColecoesRouteImport } from './routes/colecoes'
 import { Route as CatalogoRouteImport } from './routes/catalogo'
+import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AcessoriosRouteImport } from './routes/acessorios'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ProdutoSlugRouteImport } from './routes/produto.$slug'
@@ -69,6 +70,11 @@ const CatalogoRoute = CatalogoRouteImport.update({
   path: '/catalogo',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminRoute = AdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AcessoriosRoute = AcessoriosRouteImport.update({
   id: '/acessorios',
   path: '/acessorios',
@@ -98,6 +104,7 @@ const ApiPublicAdminBootstrapRoute = ApiPublicAdminBootstrapRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/acessorios': typeof AcessoriosRoute
+  '/admin': typeof AdminRoute
   '/catalogo': typeof CatalogoRoute
   '/colecoes': typeof ColecoesRoute
   '/contato': typeof ContatoRoute
@@ -114,6 +121,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/acessorios': typeof AcessoriosRoute
+  '/admin': typeof AdminRoute
   '/catalogo': typeof CatalogoRoute
   '/colecoes': typeof ColecoesRoute
   '/contato': typeof ContatoRoute
@@ -131,6 +139,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/acessorios': typeof AcessoriosRoute
+  '/admin': typeof AdminRoute
   '/catalogo': typeof CatalogoRoute
   '/colecoes': typeof ColecoesRoute
   '/contato': typeof ContatoRoute
@@ -149,6 +158,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/acessorios'
+    | '/admin'
     | '/catalogo'
     | '/colecoes'
     | '/contato'
@@ -165,6 +175,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/acessorios'
+    | '/admin'
     | '/catalogo'
     | '/colecoes'
     | '/contato'
@@ -181,6 +192,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/acessorios'
+    | '/admin'
     | '/catalogo'
     | '/colecoes'
     | '/contato'
@@ -198,6 +210,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AcessoriosRoute: typeof AcessoriosRoute
+  AdminRoute: typeof AdminRoute
   CatalogoRoute: typeof CatalogoRoute
   ColecoesRoute: typeof ColecoesRoute
   ContatoRoute: typeof ContatoRoute
@@ -277,6 +290,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CatalogoRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/acessorios': {
       id: '/acessorios'
       path: '/acessorios'
@@ -318,6 +338,7 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AcessoriosRoute: AcessoriosRoute,
+  AdminRoute: AdminRoute,
   CatalogoRoute: CatalogoRoute,
   ColecoesRoute: ColecoesRoute,
   ContatoRoute: ContatoRoute,
