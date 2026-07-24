@@ -24,6 +24,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as ProdutoSlugRouteImport } from './routes/produto.$slug'
 import { Route as CategoriaSlugRouteImport } from './routes/categoria.$slug'
+import { Route as AdminProdutosRouteImport } from './routes/admin.produtos'
 import { Route as ApiPublicAdminBootstrapRouteImport } from './routes/api/public/admin-bootstrap'
 
 const SobreRoute = SobreRouteImport.update({
@@ -101,6 +102,11 @@ const CategoriaSlugRoute = CategoriaSlugRouteImport.update({
   path: '/categoria/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminProdutosRoute = AdminProdutosRouteImport.update({
+  id: '/produtos',
+  path: '/produtos',
+  getParentRoute: () => AdminRoute,
+} as any)
 const ApiPublicAdminBootstrapRoute = ApiPublicAdminBootstrapRouteImport.update({
   id: '/api/public/admin-bootstrap',
   path: '/api/public/admin-bootstrap',
@@ -120,6 +126,7 @@ export interface FileRoutesByFullPath {
   '/promocoes': typeof PromocoesRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/sobre': typeof SobreRoute
+  '/admin/produtos': typeof AdminProdutosRoute
   '/categoria/$slug': typeof CategoriaSlugRoute
   '/produto/$slug': typeof ProdutoSlugRoute
   '/admin/': typeof AdminIndexRoute
@@ -137,6 +144,7 @@ export interface FileRoutesByTo {
   '/promocoes': typeof PromocoesRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/sobre': typeof SobreRoute
+  '/admin/produtos': typeof AdminProdutosRoute
   '/categoria/$slug': typeof CategoriaSlugRoute
   '/produto/$slug': typeof ProdutoSlugRoute
   '/admin': typeof AdminIndexRoute
@@ -156,6 +164,7 @@ export interface FileRoutesById {
   '/promocoes': typeof PromocoesRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/sobre': typeof SobreRoute
+  '/admin/produtos': typeof AdminProdutosRoute
   '/categoria/$slug': typeof CategoriaSlugRoute
   '/produto/$slug': typeof ProdutoSlugRoute
   '/admin/': typeof AdminIndexRoute
@@ -176,6 +185,7 @@ export interface FileRouteTypes {
     | '/promocoes'
     | '/sitemap.xml'
     | '/sobre'
+    | '/admin/produtos'
     | '/categoria/$slug'
     | '/produto/$slug'
     | '/admin/'
@@ -193,6 +203,7 @@ export interface FileRouteTypes {
     | '/promocoes'
     | '/sitemap.xml'
     | '/sobre'
+    | '/admin/produtos'
     | '/categoria/$slug'
     | '/produto/$slug'
     | '/admin'
@@ -211,6 +222,7 @@ export interface FileRouteTypes {
     | '/promocoes'
     | '/sitemap.xml'
     | '/sobre'
+    | '/admin/produtos'
     | '/categoria/$slug'
     | '/produto/$slug'
     | '/admin/'
@@ -342,6 +354,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CategoriaSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/produtos': {
+      id: '/admin/produtos'
+      path: '/produtos'
+      fullPath: '/admin/produtos'
+      preLoaderRoute: typeof AdminProdutosRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/api/public/admin-bootstrap': {
       id: '/api/public/admin-bootstrap'
       path: '/api/public/admin-bootstrap'
@@ -353,10 +372,12 @@ declare module '@tanstack/react-router' {
 }
 
 interface AdminRouteChildren {
+  AdminProdutosRoute: typeof AdminProdutosRoute
   AdminIndexRoute: typeof AdminIndexRoute
 }
 
 const AdminRouteChildren: AdminRouteChildren = {
+  AdminProdutosRoute: AdminProdutosRoute,
   AdminIndexRoute: AdminIndexRoute,
 }
 
