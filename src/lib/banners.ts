@@ -80,16 +80,17 @@ export async function saveCategoryBanner(slug: string, banner: CategoryBanner) {
     .select("id")
     .eq("key", CATEGORY_BANNERS_KEY)
     .maybeSingle();
+  const contentJson = JSON.parse(JSON.stringify(next));
   if (existing?.id) {
     const { error } = await supabase
       .from("site_content")
-      .update({ content: next as unknown as Record<string, unknown> })
+      .update({ content: contentJson })
       .eq("id", existing.id);
     if (error) throw error;
   } else {
     const { error } = await supabase
       .from("site_content")
-      .insert({ key: CATEGORY_BANNERS_KEY, content: next as unknown as Record<string, unknown> });
+      .insert({ key: CATEGORY_BANNERS_KEY, content: contentJson });
     if (error) throw error;
   }
 }
