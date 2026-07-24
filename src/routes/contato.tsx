@@ -135,7 +135,7 @@ function ContatoPage() {
             <div key={a.label} className="relative aspect-[16/10] w-full bg-muted">
               <iframe src={a.mapEmbed} loading="lazy" title={`Mapa ${a.label}`} className="h-full w-full border-0" />
               <div className="pointer-events-none absolute left-4 top-4 rounded-full bg-background/95 px-4 py-1.5 text-[10px] font-semibold uppercase tracking-[0.3em] text-foreground shadow-elegant">
-                Loja {a.label}
+                {a.label}
               </div>
             </div>
           ))}
