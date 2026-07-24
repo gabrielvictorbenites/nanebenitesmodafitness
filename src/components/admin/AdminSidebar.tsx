@@ -12,7 +12,14 @@ import {
 } from "lucide-react";
 import lotus from "@/assets/lotus.png.asset.json";
 
-const NAV = [
+type NavItem = {
+  to: string;
+  label: string;
+  icon: typeof LayoutDashboard;
+  exact?: boolean;
+};
+
+const NAV: NavItem[] = [
   { to: "/admin", label: "Dashboard", icon: LayoutDashboard, exact: true },
   { to: "/admin/produtos", label: "Produtos", icon: Package },
   { to: "/admin/banners", label: "Banners", icon: ImageIcon },
@@ -21,7 +28,7 @@ const NAV = [
   { to: "/admin/campos", label: "Campos", icon: Tag },
   { to: "/admin/templates", label: "Templates WhatsApp", icon: MessageCircle },
   { to: "/admin/usuarios", label: "Usuários", icon: UserCircle },
-] as const;
+];
 
 export function AdminSidebar({ email, onSignOut }: { email: string | null; onSignOut: () => void }) {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
@@ -45,9 +52,9 @@ export function AdminSidebar({ email, onSignOut }: { email: string | null; onSig
           const active = isActive(item.to, item.exact);
           const Icon = item.icon;
           return (
-            <Link
+          <Link
               key={item.to}
-              to={item.to}
+              to={item.to as any}
               className={`flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors ${
                 active
                   ? "bg-[image:linear-gradient(135deg,oklch(0.72_0.13_195/0.15),oklch(0.55_0.22_300/0.15))] text-neutral-900"
