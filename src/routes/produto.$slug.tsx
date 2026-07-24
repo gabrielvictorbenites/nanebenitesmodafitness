@@ -1,79 +1,79 @@
-import { createFileRoute, notFound, Link } from "@tanstack/react-router";
-import { useState } from "react";
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { useEffect, useState } from "react";
 import { Heart, Share2, MessageCircle } from "lucide-react";
 import { ProductCard } from "@/components/site/ProductCard";
-import { findProduct, findCategory, products as allProducts, formatPrice, type Product } from "@/lib/site-data";
+import { findCategory, formatPrice, type Product } from "@/lib/site-data";
 import { whatsappLink, productWhatsappMessage } from "@/lib/whatsapp";
 import { useFavorites } from "@/lib/favorites";
+import { fetchProductBySlug, fetchProducts, type DbProduct } from "@/lib/products";
 
 export const Route = createFileRoute("/produto/$slug")({
-  loader: ({ params }) => {
-    const p = findProduct(params.slug);
-    if (!p) throw notFound();
-    const cat = findCategory(p.category);
-    const related = allProducts.filter((x) => x.category === p.category && x.slug !== p.slug).slice(0, 4);
-    return { product: p, category: cat, related };
-  },
-  head: ({ loaderData }) => {
-    if (!loaderData) return { meta: [{ title: "Produto não encontrado" }, { name: "robots", content: "noindex" }] };
-    const p = loaderData.product;
-    return {
-      meta: [
-        { title: `${p.name} — Nane Benites` },
-        { name: "description", content: p.description },
-        { property: "og:title", content: `${p.name} — Nane Benites` },
-        { property: "og:description", content: p.description },
-        { property: "og:type", content: "product" },
-        { property: "og:url", content: `/produto/${p.slug}` },
-        { property: "og:image", content: p.image },
-      ],
-      links: [{ rel: "canonical", href: `/produto/${p.slug}` }],
-      scripts: [
-        {
-          type: "application/ld+json",
-          children: JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "Product",
-            name: p.name,
-            description: p.description,
-            sku: p.sku,
-            brand: { "@type": "Brand", name: p.brand },
-            offers: {
-              "@type": "Offer",
-              priceCurrency: "BRL",
-              price: p.salePrice ?? p.price,
-              availability: p.stock > 0 ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
-            },
-          }),
-        },
-      ],
-    };
-  },
+  head: ({ params }) => ({
+    meta: [
+      { title: `${params.slug} — Nane Benites` },
+      { property: "og:title", content: `${params.slug} — Nane Benites` },
+    ],
+    links: [{ rel: "canonical", href: `/produto/${params.slug}` }],
+  }),
   component: ProductPage,
-  notFoundComponent: () => (
-    <div className="container-x py-32 text-center">
-      <p className="eyebrow">404</p>
-      <h1 className="mt-3 font-display text-4xl font-semibold">Produto não encontrado</h1>
-      <Link to="/catalogo" className="mt-6 inline-block link-underline text-sm">Ver catálogo</Link>
-    </div>
-  ),
   errorComponent: () => <div className="container-x py-32 text-center">Erro ao carregar produto.</div>,
 });
 
 function ProductPage() {
-  const { product, category, related } = Route.useLoaderData();
-  const gallery = product.gallery && product.gallery.length > 0 ? product.gallery : [product.image];
+  const { slug } = Route.useParams();
+  const [product, setProduct] = useState<DbProduct | null>(null);
+  const [related, setRelated] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
   const [active, setActive] = useState(0);
-  const [color, setColor] = useState(product.colors[0]);
-  const [size, setSize] = useState(product.sizes[0]);
+  const [color, setColor] = useState<string>("");
+  const [size, setSize] = useState<string>("");
   const { has, toggle } = useFavorites();
-  const fav = has(product.slug);
+
+  useEffect(() => {
+    let alive = true;
+    setLoading(true);
+    (async () => {
+      const p = await fetchProductBySlug(slug);
+      if (!alive) return;
+      setProduct(p);
+      if (p) {
+        const all = await fetchProducts();
+        if (!alive) return;
+        setRelated(all.filter((x) => x.category === p.category && x.slug !== p.slug).slice(0, 4));
+        setColor(p.colors[0] ?? "");
+        setSize(p.sizes[0] ?? "");
+        setActive(0);
+      }
+      if (alive) setLoading(false);
+    })();
+    return () => {
+      alive = false;
+    };
+  }, [slug]);
+
+  if (loading) {
+    return <div className="container-x py-32 text-center text-muted-foreground">Carregando…</div>;
+  }
+  if (!product) {
+    return (
+      <div className="container-x py-32 text-center">
+        <p className="eyebrow">404</p>
+        <h1 className="mt-3 font-display text-4xl font-semibold">Produto não encontrado</h1>
+        <Link to="/catalogo" className="mt-6 inline-block link-underline text-sm">Ver catálogo</Link>
+      </div>
+    );
+  }
+
+  const p = product;
+  const category = findCategory(p.category);
+  const gallery = p.gallery && p.gallery.length > 0 ? p.gallery : [p.image];
+  const fav = has(p.slug);
 
   async function handleShare() {
     const url = typeof window !== "undefined" ? window.location.href : "";
     if (typeof navigator !== "undefined" && (navigator as Navigator).share) {
       try {
-        await (navigator as Navigator).share({ title: product.name, text: product.description, url });
+        await (navigator as Navigator).share({ title: p.name, text: p.description, url });
       } catch {
         /* cancelled */
       }
@@ -217,8 +217,8 @@ function ProductPage() {
               ) : null}
             </div>
             <div className="grid grid-cols-2 gap-4 md:grid-cols-4 md:gap-6">
-              {related.map((p: Product) => (
-                <ProductCard key={p.slug} product={p} />
+              {related.map((rp: Product) => (
+                <ProductCard key={rp.slug} product={rp} />
               ))}
             </div>
           </div>
