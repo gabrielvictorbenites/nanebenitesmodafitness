@@ -49,6 +49,27 @@ function slugify(s: string): string {
     .slice(0, 80);
 }
 
+const CATEGORIES = [
+  "Leggings",
+  "Shorts",
+  "Shorts saia",
+  "Tops",
+  "Regatas",
+  "Camisetas",
+  "Conjuntos",
+  "Body",
+  "Moletons",
+  "Casacos de zíper",
+  "Tênis",
+  "Chinelos",
+  "Bolsas de treino",
+  "Mochilas",
+  "Garrafas",
+  "Meias",
+  "Faixas de cabelo",
+  "Bonés",
+] as const;
+
 function ProductsPage() {
   const [items, setItems] = useState<ProductRow[]>([]);
   const [loading, setLoading] = useState(true);
@@ -325,6 +346,27 @@ function Field({
         placeholder={placeholder} required={required}
         className="mt-1 h-10 w-full rounded-lg border border-neutral-300 px-3 text-sm focus:border-neutral-900 focus:outline-none"
       />
+    </div>
+  );
+}
+
+function SelectField({
+  label, value, onChange, options, required,
+}: { label: string; value: string; onChange: (v: string) => void; options: readonly string[]; required?: boolean }) {
+  return (
+    <div>
+      <label className="text-xs font-medium text-neutral-600">{label}</label>
+      <select
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        required={required}
+        className="mt-1 h-10 w-full rounded-lg border border-neutral-300 bg-white px-3 text-sm focus:border-neutral-900 focus:outline-none"
+      >
+        <option value="" disabled>Selecione…</option>
+        {options.map((o) => (
+          <option key={o} value={o}>{o}</option>
+        ))}
+      </select>
     </div>
   );
 }
