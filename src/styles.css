@@ -74,7 +74,7 @@
 :root {
   /* Nane Benites — turquoise / purple / white premium palette */
   --radius: 0.25rem;
-  --background: oklch(1 0 0);
+  --background: oklch(0.972 0.014 305);
   --foreground: oklch(0.18 0 0);          /* #1D1D1D */
   --surface: oklch(0.98 0.012 200);       /* soft turquoise mist */
   --card: oklch(1 0 0);
