@@ -230,7 +230,13 @@ function ProductForm({ initial, onClose, onSaved }: { initial: ProductRow | null
         <div className="mt-6 grid grid-cols-1 gap-4 md:grid-cols-2">
           <Field label="Nome" value={state.name} onChange={(v) => set("name", v)} required />
           <Field label="Slug (URL)" value={state.slug} onChange={(v) => set("slug", v)} placeholder="deixe vazio para gerar" />
-          <Field label="Categoria" value={state.category} onChange={(v) => set("category", v)} required />
+          <SelectField
+            label="Categoria"
+            value={state.category}
+            onChange={(v) => set("category", v)}
+            options={CATEGORIES}
+            required
+          />
           <Field label="Marca" value={state.brand} onChange={(v) => set("brand", v)} required />
           <Field label="Preço" value={state.price} onChange={(v) => set("price", v)} type="number" required />
           <Field label="SKU" value={state.sku} onChange={(v) => set("sku", v)} />
