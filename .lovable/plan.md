@@ -1,74 +1,76 @@
-# Nane Benites Moda Fitness — Plano de Construção
+# Painel Admin Completo — Opção A
 
-Projeto grande. Proponho entregar em **3 fases** para você já ver resultado rápido e validar antes de investir nas partes pesadas (admin, métricas).
+Reconstrução do `/admin` como um mini-Shopify da Nane Benites, migrando o site público para ler tudo do banco. Trabalho grande — dividido em 4 fases sequenciais, cada uma entregando algo funcional.
 
----
+## Arquitetura
 
-## Stack (ajustada ao ambiente Lovable)
+- Rotas TanStack: `src/routes/admin/*` (layout `_layout` com sidebar + auth gate) — mantém a rota `admin.tsx` atual como redirect legado para não quebrar login existente.
+- Auth: reaproveita Supabase Auth já configurado + `user_roles` + `has_role('admin')`.
+- Storage: bucket `product-media` (novo, substitui semanticamente `product-images`, mantém o antigo para não quebrar imports).
+- IA de descrições: `createServerFn` chamando Lovable AI Gateway (google/gemini-2.5-flash) — sem custo extra.
 
-Sua lista pede Next.js, mas o template Lovable usa **TanStack Start + React 19 + TypeScript + Tailwind v4 + Shadcn UI + Framer Motion**, que entrega o mesmo resultado (SSR, SEO, performance) e é o suportado aqui. Backend/auth/storage via **Lovable Cloud** (Supabase gerenciado — sem configuração manual).
+## Fase 1 — Fundação de dados + Layout do Admin
 
----
+**Migrações (uma única):**
+- `site_content` — chave/valor JSON por seção (`home_hero`, `sobre`, `contato`, `footer`, `stores`, `social`). Editável pelo admin, lido pelo site.
+- `banners` — banners rotativos do hero da home (imagem, título, subtítulo, CTA, link, ordem, ativo, período).
+- `leads` — contatos capturados (nome, telefone, email, mensagem, origem, status, `created_at`).
+- `custom_fields` — campos dinâmicos por tipo (`brand`, `category`, `collection`) com label, slug, ordem, ativo.
+- `whatsapp_templates` — mensagens padrão (chave, texto com placeholders `{produto}`, `{preço}`).
+- `product_media` — múltiplas mídias por produto (produto_id, url, tipo, ordem, capa). Migração popula com `image`/`gallery` atuais.
+- Coluna `featured boolean` em `products` (o "destaque" real, separado de `is_bestseller`).
+- Seed de `site_content` com os textos hoje hardcoded em `site-data.ts`.
 
-## Design System (aplicado globalmente antes de qualquer tela)
+**Layout Admin (`src/routes/admin/_layout.tsx`):**
+- Sidebar fixa esquerda com ícones: Dashboard, Produtos, Novo Produto, Banners, Leads, Conteúdo, Campos, Templates WhatsApp, Usuários.
+- Header com logo + user menu (sair).
+- Identidade: serifada Playfair preta + acentos gradiente turquesa/roxo.
+- Gate: `beforeLoad` verifica sessão + role admin via `has_role`.
 
-- Paleta em tokens semânticos (`src/styles.css`, oklch): vermelho `#B11226` como `--primary`, branco, `#F7F7F7` de apoio, texto `#1D1D1D`, cinza `#6B6B6B`.
-- Tipografia: **Montserrat** (display) + **Inter** (corpo), via `<link>` no root.
-- Variantes de botão premium (hover escurecido, radius suave, shadow discreto).
-- Animações Framer Motion: fade, scroll reveal, hover elegante.
+**Entregas visíveis:** login funcional, sidebar navegável, todas as páginas com placeholders.
 
----
+## Fase 2 — Produtos avançados + Mídia + IA
 
-## Fase 1 — Site público (vitrine premium)
+- `/admin/produtos` — listagem com busca, filtros (marca, categoria, ativo, destaque, promoção), ordenação, paginação. Toggle rápido "Destaque" / "Ativo" na linha.
+- `/admin/produtos/novo` e `/admin/produtos/$id/editar` — formulário completo:
+  - `MediaUploader`: múltiplas imagens, drag-drop pra reordenar, marcar capa, remover.
+  - Campos dinâmicos: marca e categoria vindos de `custom_fields` (dropdown editável).
+  - Preço, promoção, tamanhos, cores (chips).
+  - Botão **"Gerar descrição com IA"** — server fn que envia nome+marca+categoria pro Lovable AI e retorna texto pronto.
+  - SEO: slug editável (auto-gerado do nome), meta title/description opcionais.
+- Ajuste do site público: rota `/produto/$slug` passa a ler de `product_media` (galeria real).
 
-Objetivo: entregar um site institucional lindo, responsivo, com conversão via WhatsApp. **Sem admin ainda, sem banco** — conteúdo (categorias, produtos de exemplo, depoimentos) fica em arquivos TypeScript editáveis.
+## Fase 3 — Conteúdo, Banners, Campos, WhatsApp
 
-Rotas:
-- `/` Home (hero fullscreen, categorias em grid, "Por que escolher", depoimentos, galeria Instagram, footer)
-- `/sobre`
-- `/catalogo` (grid + busca + filtros client-side sobre os dados mock)
-- `/colecoes`, `/lancamentos`, `/promocoes`, `/marcas`
-- `/categoria/$slug` (leggings, tops, shorts, macacões, conjuntos, camisetas, jaquetas, tênis, bolsas, acessórios)
-- `/produto/$slug` (galeria, variações, botão WhatsApp com mensagem pré-preenchida)
-- `/contato` (formulário, mapa, redes)
+- `/admin/banners` — CRUD dos banners do hero da home (upload, período de exibição, ordem). Site público passa a renderizar carrossel do hero a partir daqui.
+- `/admin/conteudo` — editor das seções institucionais:
+  - Home: título hero, subtítulo, textos das seções.
+  - Sobre: história, imagens.
+  - Contato: endereços, horários, telefones.
+  - Footer: textos.
+  - Refatoração do site: `Header`, `Footer`, `/sobre`, `/contato`, `index.tsx` passam a ler de `site_content` (com fallback pros valores atuais).
+- `/admin/campos` — CRUD de marcas, categorias, coleções. Filtros do catálogo público passam a vir daqui.
+- `/admin/templates` — CRUD de mensagens WhatsApp com placeholders. Botões "Chamar no WhatsApp" do site usam o template `default_product` (com `{produto}` e `{preço}` substituídos).
 
-SEO: `head()` por rota com title/description/OG únicos, sitemap.xml, robots.txt, URLs amigáveis, JSON-LD Product nas páginas de produto.
+## Fase 4 — Leads, Usuários, Dashboard
 
-Botão WhatsApp flutuante em todo o site. **Preciso do seu número de WhatsApp** para configurar os links (posso deixar um placeholder e você troca depois).
+- Formulário `/contato` do site passa a inserir em `leads` (via server fn pública, com rate-limit por IP).
+- `/admin/leads` — lista com filtros (status, período), detalhe, marcar como respondido, **exportar CSV**.
+- `/admin/usuarios` — listar admins, adicionar novo admin por email (server fn com `supabaseAdmin` — cria user + role), remover role. Não permite se auto-remover.
+- `/admin/dashboard` (home do painel) — cards de métrica:
+  - Total de produtos, produtos ativos, em promoção, em destaque.
+  - Leads dos últimos 7/30 dias.
+  - Últimos 5 leads e últimos 5 produtos editados.
+  - Gráfico simples de leads por dia (recharts).
 
----
+## O que NÃO entra
 
-## Fase 2 — Backend + Admin
+- Carrinho / checkout (WhatsApp continua sendo o canal).
+- Multi-idioma.
+- Sistema de pedidos/estoque avançado (estoque continua sendo o número atual).
+- Trocar `/produto/$slug` por `/produto/$id` — mantenho `$slug` para não quebrar links já compartilhados.
+- Alterações no site público além do descrito (fundo, logo, header e destaques recém-ajustados ficam como estão).
 
-Ativa Lovable Cloud e cria:
-- Tabelas: `products`, `categories`, `brands`, `banners`, `testimonials`, `whatsapp_clicks`, `messages`, `admin_users` (via `user_roles` + `has_role`), `settings`.
-- Storage para imagens de produtos/banners.
-- Auth email/senha só para admin, rota `/admin/*` protegida (não indexada — meta robots noindex + robots.txt disallow).
-- Painel estilo Shopify: sidebar + dashboard, CRUD de produtos/categorias/marcas/banners/depoimentos/promoções/lançamentos, editor de textos da Home/Sobre/Footer.
-- Site público passa a ler do banco em vez dos mocks.
+## Ordem de execução
 
----
-
-## Fase 3 — Métricas, favoritos, relatórios
-
-- Tracking de cliques WhatsApp e visualizações de produto → dashboard com gráficos (recharts): mais acessados, mensagens, categorias mais visitadas, gráfico mensal/semanal/anual, estoque, lucro estimado, ticket médio.
-- Favoritos (localStorage no público; opcional login cliente depois).
-- Exportação Excel/CSV/PDF dos relatórios.
-- Cupons.
-
----
-
-## Detalhes técnicos
-
-- Imagens hero e categorias: geradas com o gerador de imagens (mulher fitness, estética premium, tons neutros com toque vermelho) — evita stock genérico.
-- Framer Motion para transições, `loading="lazy"` nas imagens, preload do LCP.
-- Componentes Shadcn customizados com as variantes do design system — nada de `text-white`/`bg-black` hardcoded.
-- Responsivo mobile-first.
-
----
-
-## O que preciso de você antes de começar
-
-1. **Número de WhatsApp** para os botões (posso usar `+55 00 00000-0000` como placeholder).
-2. Confirmação: **começamos pela Fase 1** (site público bonito, dados mockados, pronto pra mostrar) e depois avançamos? Ou você quer que eu ative Lovable Cloud e faça Fases 1+2 juntas desde já?
-3. Logo da marca: você tem uma imagem/arquivo? Se não, gero uma marca tipográfica elegante ("NANE BENITES" em Montserrat, com "moda fitness" abaixo).
+Executo fase por fase, cada uma com sua(s) migração(ões) aprovada(s) antes do código. Ao final de cada fase, você já pode usar o que foi entregue enquanto sigo a próxima. Confirma?
