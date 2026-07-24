@@ -49,6 +49,27 @@ function slugify(s: string): string {
     .slice(0, 80);
 }
 
+const CATEGORIES = [
+  "Leggings",
+  "Shorts",
+  "Shorts saia",
+  "Tops",
+  "Regatas",
+  "Camisetas",
+  "Conjuntos",
+  "Body",
+  "Moletons",
+  "Casacos de zíper",
+  "Tênis",
+  "Chinelos",
+  "Bolsas de treino",
+  "Mochilas",
+  "Garrafas",
+  "Meias",
+  "Faixas de cabelo",
+  "Bonés",
+] as const;
+
 function ProductsPage() {
   const [items, setItems] = useState<ProductRow[]>([]);
   const [loading, setLoading] = useState(true);
@@ -142,7 +163,7 @@ function ProductForm({ initial, onClose, onSaved }: { initial: ProductRow | null
     name: initial?.name ?? "",
     slug: initial?.slug ?? "",
     description: initial?.description ?? "",
-    category: initial?.category ?? "leggings",
+    category: initial?.category ?? "",
     brand: initial?.brand ?? "",
     price: initial ? String(initial.price) : "",
     on_sale: initial?.on_sale ?? false,
@@ -230,7 +251,13 @@ function ProductForm({ initial, onClose, onSaved }: { initial: ProductRow | null
         <div className="mt-6 grid grid-cols-1 gap-4 md:grid-cols-2">
           <Field label="Nome" value={state.name} onChange={(v) => set("name", v)} required />
           <Field label="Slug (URL)" value={state.slug} onChange={(v) => set("slug", v)} placeholder="deixe vazio para gerar" />
-          <Field label="Categoria" value={state.category} onChange={(v) => set("category", v)} required />
+          <SelectField
+            label="Categoria"
+            value={state.category}
+            onChange={(v) => set("category", v)}
+            options={CATEGORIES}
+            required
+          />
           <Field label="Marca" value={state.brand} onChange={(v) => set("brand", v)} required />
           <Field label="Preço" value={state.price} onChange={(v) => set("price", v)} type="number" required />
           <Field label="SKU" value={state.sku} onChange={(v) => set("sku", v)} />
@@ -319,6 +346,27 @@ function Field({
         placeholder={placeholder} required={required}
         className="mt-1 h-10 w-full rounded-lg border border-neutral-300 px-3 text-sm focus:border-neutral-900 focus:outline-none"
       />
+    </div>
+  );
+}
+
+function SelectField({
+  label, value, onChange, options, required,
+}: { label: string; value: string; onChange: (v: string) => void; options: readonly string[]; required?: boolean }) {
+  return (
+    <div>
+      <label className="text-xs font-medium text-neutral-600">{label}</label>
+      <select
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        required={required}
+        className="mt-1 h-10 w-full rounded-lg border border-neutral-300 bg-white px-3 text-sm focus:border-neutral-900 focus:outline-none"
+      >
+        <option value="" disabled>Selecione…</option>
+        {options.map((o) => (
+          <option key={o} value={o}>{o}</option>
+        ))}
+      </select>
     </div>
   );
 }
