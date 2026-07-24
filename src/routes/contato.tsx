@@ -45,9 +45,10 @@ function ContatoPage() {
                 <li key={a.label} className="flex items-start gap-4">
                   <MapPin className="mt-1 h-5 w-5 shrink-0 text-brand" />
                   <div>
-                    <p className="text-xs uppercase tracking-widest text-muted-foreground">Loja {a.label}</p>
+                    <p className="text-xs uppercase tracking-widest text-muted-foreground">{a.label}</p>
                     <p className="mt-1 text-foreground">{a.street}</p>
                     <p className="text-foreground">{a.neighborhood} · {a.city}</p>
+                    <p className="mt-1 text-xs text-muted-foreground">Seg a Sex · 09h às 19h · Sáb · 09h às 14h</p>
                   </div>
                 </li>
               ))}
