@@ -8,10 +8,8 @@ import logoAsset from "@/assets/logo.png.asset.json";
 const NAV = [
   { to: "/", label: "Home" },
   { to: "/sobre", label: "Sobre" },
-  { to: "/catalogo", label: "Catálogo" },
   { to: "/colecoes", label: "Coleções" },
   { to: "/lancamentos", label: "Lançamentos" },
-  { to: "/acessorios", label: "Acessórios" },
   { to: "/contato", label: "Contato" },
 ] as const;
 

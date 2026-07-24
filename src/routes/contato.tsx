@@ -45,9 +45,10 @@ function ContatoPage() {
                 <li key={a.label} className="flex items-start gap-4">
                   <MapPin className="mt-1 h-5 w-5 shrink-0 text-brand" />
                   <div>
-                    <p className="text-xs uppercase tracking-widest text-muted-foreground">Loja {a.label}</p>
+                    <p className="text-xs uppercase tracking-widest text-muted-foreground">{a.label}</p>
                     <p className="mt-1 text-foreground">{a.street}</p>
                     <p className="text-foreground">{a.neighborhood} · {a.city}</p>
+                    <p className="mt-1 text-xs text-muted-foreground">Seg a Sex · 09h às 19h · Sáb · 09h às 14h</p>
                   </div>
                 </li>
               ))}
@@ -134,7 +135,7 @@ function ContatoPage() {
             <div key={a.label} className="relative aspect-[16/10] w-full bg-muted">
               <iframe src={a.mapEmbed} loading="lazy" title={`Mapa ${a.label}`} className="h-full w-full border-0" />
               <div className="pointer-events-none absolute left-4 top-4 rounded-full bg-background/95 px-4 py-1.5 text-[10px] font-semibold uppercase tracking-[0.3em] text-foreground shadow-elegant">
-                Loja {a.label}
+                {a.label}
               </div>
             </div>
           ))}

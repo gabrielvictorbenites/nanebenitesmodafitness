@@ -42,11 +42,8 @@ export function Footer() {
               {[
                 ["/", "Home"],
                 ["/sobre", "Sobre"],
-                ["/catalogo", "Catálogo"],
                 ["/colecoes", "Coleções"],
                 ["/lancamentos", "Lançamentos"],
-                ["/promocoes", "Promoções"],
-                ["/marcas", "Marcas"],
                 ["/contato", "Contato"],
               ].map(([to, label]) => (
                 <li key={to}>

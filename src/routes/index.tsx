@@ -3,10 +3,9 @@ import { ArrowRight, MapPin, Instagram } from "lucide-react";
 import heroImg from "@/assets/hero.jpg";
 import collectionImg from "@/assets/collection.jpg";
 import lojaCuritiba from "@/assets/loja-curitiba.jpg.asset.json";
-import { categories, products, site } from "@/lib/site-data";
+import { categories, site } from "@/lib/site-data";
 import { whatsappLink } from "@/lib/whatsapp";
 import { CategoryCard } from "@/components/site/CategoryCard";
-import { ProductCarousel } from "@/components/site/ProductCarousel";
 import { ScrollZoomIntro } from "@/components/site/ScrollZoomIntro";
 
 export const Route = createFileRoute("/")({
@@ -14,8 +13,6 @@ export const Route = createFileRoute("/")({
 });
 
 function HomePage() {
-  const featured = products.filter((p) => p.isBestseller || p.isNew).slice(0, 8);
-
   return (
     <>
       {/* HERO */}
@@ -135,22 +132,6 @@ function HomePage() {
         </div>
       </section>
 
-      {/* FEATURED PRODUCTS — DRAG CAROUSEL */}
-      <section className="container-x py-24 md:py-32">
-        <div className="mb-14 flex flex-col justify-between gap-6 md:flex-row md:items-end">
-          <div>
-            <p className="eyebrow">Destaques</p>
-            <h2 className="mt-3 font-display text-3xl font-semibold tracking-tight md:text-5xl">
-              O que está <span className="text-gradient-brand italic font-light">em alta.</span>
-            </h2>
-          </div>
-          <Link to="/lancamentos" className="link-underline text-sm font-medium text-foreground/80 hover:text-foreground">
-            Ver lançamentos →
-          </Link>
-        </div>
-        <ProductCarousel products={featured} />
-      </section>
-
       {/* SCROLL ZOOM INTRO — foto interna da loja de Campo Largo */}
       <ScrollZoomIntro />
 
@@ -170,13 +151,13 @@ function HomePage() {
             <div className="mt-8 grid gap-4 sm:grid-cols-2">
               <div className="rounded-2xl border border-border bg-background p-5">
                 <p className="text-[10px] font-semibold uppercase tracking-[0.25em] text-brand">Curitiba</p>
-                <p className="mt-2 text-sm font-medium">Loja Conceito</p>
-                <p className="mt-1 text-xs text-muted-foreground">Seg a Sáb · 09h às 19h</p>
+                <p className="mt-2 text-xs text-muted-foreground">Seg a Sex · 09h às 19h</p>
+                <p className="text-xs text-muted-foreground">Sáb · 09h às 14h</p>
               </div>
               <div className="rounded-2xl border border-border bg-background p-5">
                 <p className="text-[10px] font-semibold uppercase tracking-[0.25em] text-brand-purple">Campo Largo</p>
-                <p className="mt-2 text-sm font-medium">Loja Boutique</p>
-                <p className="mt-1 text-xs text-muted-foreground">Seg a Sáb · 09h às 19h</p>
+                <p className="mt-2 text-xs text-muted-foreground">Seg a Sex · 09h às 19h</p>
+                <p className="text-xs text-muted-foreground">Sáb · 09h às 14h</p>
               </div>
             </div>
             <div className="mt-10">
