@@ -141,7 +141,8 @@ function ProductsPage() {
   async function toggleField(row: ProductRow, field: "active" | "featured", value: boolean) {
     // Optimistic update
     setItems((prev) => prev.map((p) => (p.id === row.id ? { ...p, [field]: value } : p)));
-    const { error } = await supabase.from("products").update({ [field]: value }).eq("id", row.id);
+    const patch = { [field]: value } as { active?: boolean; featured?: boolean };
+    const { error } = await supabase.from("products").update(patch).eq("id", row.id);
     if (error) {
       alert("Erro ao atualizar: " + error.message);
       load();
