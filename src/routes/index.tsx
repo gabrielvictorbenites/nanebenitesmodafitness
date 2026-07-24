@@ -7,6 +7,7 @@ import { categories, site } from "@/lib/site-data";
 import { whatsappLink } from "@/lib/whatsapp";
 import { CategoryCard } from "@/components/site/CategoryCard";
 import { ScrollZoomIntro } from "@/components/site/ScrollZoomIntro";
+import { FeaturedProducts } from "@/components/site/FeaturedProducts";
 
 export const Route = createFileRoute("/")({
   component: HomePage,
@@ -80,6 +81,9 @@ function HomePage() {
           ))}
         </div>
       </section>
+
+      {/* DESTAQUES */}
+      <FeaturedProducts />
 
       {/* CATEGORIAS */}
       <section className="bg-aurora">
