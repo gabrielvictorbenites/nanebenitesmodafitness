@@ -14,13 +14,182 @@ export type Database = {
   }
   public: {
     Tables: {
+      banners: {
+        Row: {
+          active: boolean
+          created_at: string
+          cta_href: string
+          cta_label: string
+          ends_at: string | null
+          eyebrow: string
+          id: string
+          image_url: string
+          sort_order: number
+          starts_at: string | null
+          subtitle: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          active?: boolean
+          created_at?: string
+          cta_href?: string
+          cta_label?: string
+          ends_at?: string | null
+          eyebrow?: string
+          id?: string
+          image_url?: string
+          sort_order?: number
+          starts_at?: string | null
+          subtitle?: string
+          title?: string
+          updated_at?: string
+        }
+        Update: {
+          active?: boolean
+          created_at?: string
+          cta_href?: string
+          cta_label?: string
+          ends_at?: string | null
+          eyebrow?: string
+          id?: string
+          image_url?: string
+          sort_order?: number
+          starts_at?: string | null
+          subtitle?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      custom_fields: {
+        Row: {
+          active: boolean
+          created_at: string
+          field_type: string
+          id: string
+          label: string
+          metadata: Json
+          slug: string
+          sort_order: number
+          updated_at: string
+        }
+        Insert: {
+          active?: boolean
+          created_at?: string
+          field_type: string
+          id?: string
+          label: string
+          metadata?: Json
+          slug: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Update: {
+          active?: boolean
+          created_at?: string
+          field_type?: string
+          id?: string
+          label?: string
+          metadata?: Json
+          slug?: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      leads: {
+        Row: {
+          created_at: string
+          email: string
+          id: string
+          message: string
+          metadata: Json
+          name: string
+          phone: string
+          source: string
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          email?: string
+          id?: string
+          message?: string
+          metadata?: Json
+          name: string
+          phone?: string
+          source?: string
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          id?: string
+          message?: string
+          metadata?: Json
+          name?: string
+          phone?: string
+          source?: string
+          status?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      product_media: {
+        Row: {
+          alt: string
+          created_at: string
+          id: string
+          is_cover: boolean
+          media_type: string
+          product_id: string
+          sort_order: number
+          updated_at: string
+          url: string
+        }
+        Insert: {
+          alt?: string
+          created_at?: string
+          id?: string
+          is_cover?: boolean
+          media_type?: string
+          product_id: string
+          sort_order?: number
+          updated_at?: string
+          url: string
+        }
+        Update: {
+          alt?: string
+          created_at?: string
+          id?: string
+          is_cover?: boolean
+          media_type?: string
+          product_id?: string
+          sort_order?: number
+          updated_at?: string
+          url?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "product_media_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       products: {
         Row: {
+          active: boolean
           brand: string
           category: string
           colors: string[]
           created_at: string
           description: string
+          featured: boolean
           gallery: string[]
           id: string
           image: string
@@ -38,11 +207,13 @@ export type Database = {
           updated_at: string
         }
         Insert: {
+          active?: boolean
           brand?: string
           category?: string
           colors?: string[]
           created_at?: string
           description?: string
+          featured?: boolean
           gallery?: string[]
           id?: string
           image?: string
@@ -60,11 +231,13 @@ export type Database = {
           updated_at?: string
         }
         Update: {
+          active?: boolean
           brand?: string
           category?: string
           colors?: string[]
           created_at?: string
           description?: string
+          featured?: boolean
           gallery?: string[]
           id?: string
           image?: string
@@ -79,6 +252,30 @@ export type Database = {
           slug?: string
           sort_order?: number
           stock?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      site_content: {
+        Row: {
+          content: Json
+          created_at: string
+          id: string
+          key: string
+          updated_at: string
+        }
+        Insert: {
+          content?: Json
+          created_at?: string
+          id?: string
+          key: string
+          updated_at?: string
+        }
+        Update: {
+          content?: Json
+          created_at?: string
+          id?: string
+          key?: string
           updated_at?: string
         }
         Relationships: []
@@ -101,6 +298,36 @@ export type Database = {
           id?: string
           role?: Database["public"]["Enums"]["app_role"]
           user_id?: string
+        }
+        Relationships: []
+      }
+      whatsapp_templates: {
+        Row: {
+          body: string
+          created_at: string
+          description: string
+          id: string
+          key: string
+          label: string
+          updated_at: string
+        }
+        Insert: {
+          body?: string
+          created_at?: string
+          description?: string
+          id?: string
+          key: string
+          label: string
+          updated_at?: string
+        }
+        Update: {
+          body?: string
+          created_at?: string
+          description?: string
+          id?: string
+          key?: string
+          label?: string
+          updated_at?: string
         }
         Relationships: []
       }
