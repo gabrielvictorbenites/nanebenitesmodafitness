@@ -9,6 +9,7 @@ import {
   Tag,
   UserCircle,
   LogOut,
+  ImagePlus,
 } from "lucide-react";
 import lotus from "@/assets/lotus.png.asset.json";
 
@@ -23,6 +24,7 @@ const NAV: NavItem[] = [
   { to: "/admin", label: "Dashboard", icon: LayoutDashboard, exact: true },
   { to: "/admin/produtos", label: "Produtos", icon: Package },
   { to: "/admin/banners", label: "Banners", icon: ImageIcon },
+  { to: "/admin/imagens", label: "Imagens do site", icon: ImagePlus },
   { to: "/admin/leads", label: "Leads", icon: Users },
   { to: "/admin/conteudo", label: "Conteúdo", icon: FileText },
   { to: "/admin/campos", label: "Campos", icon: Tag },

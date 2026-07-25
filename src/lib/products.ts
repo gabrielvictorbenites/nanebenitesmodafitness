@@ -21,9 +21,11 @@ type Row = {
   stock: number;
   sku: string | null;
   sort_order: number | null;
+  featured?: boolean | null;
+  active?: boolean | null;
 };
 
-export type DbProduct = Product & { id: string; imageRef: string; galleryRefs: string[] };
+export type DbProduct = Product & { id: string; imageRef: string; galleryRefs: string[]; featured: boolean; active: boolean };
 
 async function toProduct(row: Row): Promise<DbProduct> {
   const price = Number(row.price);
@@ -54,6 +56,8 @@ async function toProduct(row: Row): Promise<DbProduct> {
     isBestseller: row.is_bestseller,
     stock: row.stock,
     sku: row.sku ?? "",
+    featured: !!row.featured,
+    active: row.active !== false,
   };
 }
 

@@ -53,7 +53,7 @@ function HomePage() {
               <span className="h-px w-10 bg-gradient-brand" />
               Coleção 2026
             </p>
-            <h1 className="font-display text-5xl font-semibold leading-[0.95] tracking-tight md:text-7xl lg:text-[5.5rem]">
+            <h1 className="font-display text-4xl font-semibold leading-[0.95] tracking-tight md:text-5xl lg:text-6xl">
               Vista sua<br />
               <span className="italic font-light text-gradient-brand">melhor versão.</span>
             </h1>
@@ -84,17 +84,18 @@ function HomePage() {
         </div>
       </section>
 
-      {/* STRIP */}
+      {/* STRIP — marcas parceiras */}
       <section className="overflow-hidden border-y border-border bg-gradient-brand text-white">
-        <div className="flex animate-marquee gap-16 whitespace-nowrap py-4 text-[11px] font-semibold uppercase tracking-[0.3em]">
+        <div className="flex animate-marquee gap-16 whitespace-nowrap py-4 text-[12px] font-semibold uppercase tracking-[0.35em]">
           {Array.from({ length: 2 }).map((_, k) => (
             <div key={k} className="flex shrink-0 items-center gap-16">
-              <span>◆ Frete para todo Brasil</span>
-              <span>◆ Marcas selecionadas</span>
-              <span>◆ Atendimento personalizado</span>
-              <span>◆ Peças exclusivas</span>
-              <span>◆ Loja física em Curitiba e Campo Largo</span>
-              <span>◆ Consultoria via WhatsApp</span>
+              <span>◆ Lança Perfume</span>
+              <span>◆ Run More</span>
+              <span>◆ Mulher Elástica</span>
+              <span>◆ Zero Açúcar</span>
+              <span>◆ Let's Gym</span>
+              <span>◆ Alto Giro</span>
+              <span>◆ Live!</span>
             </div>
           ))}
         </div>
@@ -178,7 +179,7 @@ function HomePage() {
               </div>
               <div className="rounded-2xl border border-border bg-background p-5">
                 <p className="text-[10px] font-semibold uppercase tracking-[0.25em] text-brand-purple">Campo Largo</p>
-                <p className="mt-2 text-xs text-muted-foreground">Seg a Sex · 09h às 19h</p>
+                <p className="mt-2 text-xs text-muted-foreground">Seg a Sex · 09h às 18h</p>
                 <p className="text-xs text-muted-foreground">Sáb · 09h às 14h</p>
               </div>
             </div>

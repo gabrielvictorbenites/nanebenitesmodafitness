@@ -1,8 +1,11 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { useEffect, useState } from "react";
 import collectionImg from "@/assets/collection.jpg";
 import lojaCampoLargo from "@/assets/loja-campo-largo.jpg.asset.json";
 import lojaCuritiba from "@/assets/loja-curitiba.jpg.asset.json";
 import { PageHero } from "@/components/site/PageHero";
+import { fetchSiteImages } from "@/lib/site-images";
+import { resolveImageAsync } from "@/lib/product-image";
 
 export const Route = createFileRoute("/sobre")({
   head: () => ({
@@ -18,40 +21,58 @@ export const Route = createFileRoute("/sobre")({
   component: SobrePage,
 });
 
-const values = [
-  { title: "Qualidade", text: "Não abrimos mão da excelência em cada peça que entra na curadoria." },
-  { title: "Elegância", text: "Estilo é atemporal. Nossas peças combinam moda e performance com sofisticação." },
-  { title: "Autenticidade", text: "Uma marca feita por mulher, para mulheres reais que treinam de verdade." },
-  { title: "Cuidado", text: "Do primeiro contato à entrega — cada detalhe é pensado para você." },
-];
-
 function SobrePage() {
+  const defaults: Record<string, string> = {
+    sobre_top: lojaCampoLargo.url,
+    sobre_bottom_1: lojaCuritiba.url,
+    sobre_bottom_2: collectionImg,
+  };
+  const [imgs, setImgs] = useState<Record<string, string>>(defaults);
+  useEffect(() => {
+    let alive = true;
+    (async () => {
+      try {
+        const map = await fetchSiteImages();
+        const resolved: Record<string, string> = { ...defaults };
+        await Promise.all(
+          Object.entries(map).map(async ([k, ref]) => {
+            if (ref) resolved[k] = await resolveImageAsync(ref);
+          }),
+        );
+        if (alive) setImgs(resolved);
+      } catch {}
+    })();
+    return () => {
+      alive = false;
+    };
+  }, []);
+
   return (
     <>
       <PageHero
-        eyebrow="Sobre"
-        title="Uma loja feita para a mulher que se move com propósito."
-        description="A Nane Benites é uma loja de moda fitness feminina em Campo Largo — PR. Nasceu do desejo de oferecer uma curadoria cuidadosa, atendimento próximo e peças que realmente honram a mulher que os escolhe."
+        eyebrow="Sobre a Empresa"
+        title="Nane Benites Moda Fitness: onde estilo e conforto se encontram."
+        description="Fundada em 2020, em Campo Largo, a Nane Benites nasceu com o propósito de oferecer moda casual e fitness feminina — reunindo as melhores marcas em um só espaço, com um olhar atento à qualidade, ao conforto e ao estilo."
       />
 
       <section className="container-x grid gap-16 py-24 md:grid-cols-2 md:py-32">
         <div className="relative aspect-[4/5] overflow-hidden rounded-sm shadow-elegant">
-          <img src={lojaCampoLargo.url} alt="Interior da loja Nane Benites em Campo Largo" loading="lazy" className="h-full w-full object-cover" />
+          <img src={imgs.sobre_top} alt="Interior da loja Nane Benites em Campo Largo" loading="lazy" className="h-full w-full object-cover" />
         </div>
         <div className="flex flex-col justify-center">
           <p className="eyebrow">Nossa história</p>
           <h2 className="mt-3 font-display text-3xl font-semibold leading-tight tracking-tight md:text-4xl">
-            De uma paixão pessoal a uma loja de referência.
+            A união de duas trajetórias que se transformou em marca.
           </h2>
           <div className="mt-6 space-y-5 text-base leading-relaxed text-muted-foreground">
             <p>
-              Tudo começou com uma insatisfação: era muito difícil encontrar peças fitness que unissem qualidade de tecido, modelagem impecável e estética verdadeiramente premium — sem ter que gastar uma fortuna importando.
+              A Nane Benites Moda Fitness nasceu em 2020 da união da experiência de <strong className="text-foreground">Eliane Benites</strong>, com mais de 20 anos no setor de vendas e no comando de uma loja de artigos esportivos em Cascavel — PR, e de <strong className="text-foreground">José Henrique Espaki</strong>, administrador com mais de 30 anos de atuação nas áreas financeira e administrativa.
             </p>
             <p>
-              A Nane transformou essa lacuna em oportunidade. Hoje, na nossa loja em Campo Largo — PR, oferecemos uma curadoria única das melhores marcas nacionais e internacionais, com consultoria personalizada e um padrão de cuidado que se tornou nossa assinatura.
+              Fundada em Campo Largo, a marca surgiu com o propósito de oferecer moda casual e fitness feminina, reunindo as melhores marcas em um só espaço. Com um olhar atento à qualidade, ao conforto e ao estilo, a empresa busca se consolidar como referência no segmento.
             </p>
             <p>
-              A loja cresceu, mas nossa essência permanece a mesma: peças que fazem você se sentir a sua melhor versão — dentro e fora do treino.
+              Hoje, com lojas em Curitiba e Campo Largo, seguimos com o mesmo compromisso do primeiro dia: entregar peças que fazem a mulher se sentir a sua melhor versão — dentro e fora do treino.
             </p>
           </div>
         </div>
@@ -60,9 +81,9 @@ function SobrePage() {
       <section className="border-y border-border bg-[color:var(--surface)] py-24">
         <div className="container-x grid gap-12 md:grid-cols-3">
           {[
-            { title: "Missão", text: "Vestir a mulher moderna com peças que unem performance, conforto e sofisticação — elevando a experiência do treino a um ritual de autocuidado." },
-            { title: "Visão", text: "Ser referência em moda fitness feminina no Paraná, reconhecida pela curadoria, atendimento humano e experiência de loja inesquecível." },
-            { title: "Valores", text: "Qualidade sem concessões, elegância atemporal, autenticidade em cada relação e cuidado em cada detalhe." },
+            { title: "A união de experiências", text: "Eliane trouxe sua expertise em vendas e no mercado esportivo, enquanto José contribuiu com seu conhecimento na gestão administrativa e financeira." },
+            { title: "Fundação e propósito", text: "Criada em 2020 em Campo Largo, a Nane Benites nasceu com foco na moda casual e fitness feminina, sempre prezando pela qualidade e pela variedade." },
+            { title: "Compromisso com as clientes", text: "Trabalhamos com marcas renomadas, selecionadas para proporcionar conforto, autoestima, praticidade e estilo, buscando ser referência no setor de moda fitness." },
           ].map((v) => (
             <div key={v.title} className="border-t border-foreground pt-6">
               <p className="text-[10px] font-medium uppercase tracking-[0.35em] text-brand">{v.title}</p>
@@ -72,33 +93,17 @@ function SobrePage() {
         </div>
       </section>
 
-      <section className="container-x py-24 md:py-32">
-        <div className="mb-14 text-center">
-          <p className="eyebrow">Nossos valores</p>
-          <h2 className="mt-3 font-display text-3xl font-semibold tracking-tight md:text-4xl">O que nos guia.</h2>
-        </div>
-        <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
-          {values.map((v, i) => (
-            <div key={v.title} className="border-t border-border pt-6">
-              <p className="text-[10px] font-medium uppercase tracking-[0.35em] text-brand">0{i + 1}</p>
-              <h3 className="mt-4 font-display text-xl font-semibold">{v.title}</h3>
-              <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{v.text}</p>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      <section className="container-x pb-24">
+      <section className="container-x py-24">
         <div className="grid gap-6 md:grid-cols-2">
           <div className="relative aspect-[4/3] overflow-hidden rounded-sm shadow-elegant">
-            <img src={lojaCuritiba.url} alt="Fachada da loja em Curitiba" loading="lazy" className="h-full w-full object-cover" />
+            <img src={imgs.sobre_bottom_1} alt="Loja Nane Benites" loading="lazy" className="h-full w-full object-cover" />
             <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-foreground/70 to-transparent p-5">
-              <p className="text-[10px] font-semibold uppercase tracking-[0.3em] text-white/80">Curitiba</p>
-              <p className="mt-1 font-display text-lg font-semibold text-white">Nossa fachada</p>
+              <p className="text-[10px] font-semibold uppercase tracking-[0.3em] text-white/80">Nossas lojas</p>
+              <p className="mt-1 font-display text-lg font-semibold text-white">Curitiba · Campo Largo</p>
             </div>
           </div>
           <div className="relative aspect-[4/3] overflow-hidden rounded-sm shadow-elegant">
-            <img src={collectionImg} alt="Coleção Nane Benites" loading="lazy" className="h-full w-full object-cover" />
+            <img src={imgs.sobre_bottom_2} alt="Coleção Nane Benites" loading="lazy" className="h-full w-full object-cover" />
           </div>
         </div>
       </section>

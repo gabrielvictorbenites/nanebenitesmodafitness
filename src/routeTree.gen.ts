@@ -28,6 +28,7 @@ import { Route as AdminUsuariosRouteImport } from './routes/admin.usuarios'
 import { Route as AdminTemplatesRouteImport } from './routes/admin.templates'
 import { Route as AdminProdutosRouteImport } from './routes/admin.produtos'
 import { Route as AdminLeadsRouteImport } from './routes/admin.leads'
+import { Route as AdminImagensRouteImport } from './routes/admin.imagens'
 import { Route as AdminConteudoRouteImport } from './routes/admin.conteudo'
 import { Route as AdminCamposRouteImport } from './routes/admin.campos'
 import { Route as AdminBannersRouteImport } from './routes/admin.banners'
@@ -128,6 +129,11 @@ const AdminLeadsRoute = AdminLeadsRouteImport.update({
   path: '/leads',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminImagensRoute = AdminImagensRouteImport.update({
+  id: '/imagens',
+  path: '/imagens',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminConteudoRoute = AdminConteudoRouteImport.update({
   id: '/conteudo',
   path: '/conteudo',
@@ -165,6 +171,7 @@ export interface FileRoutesByFullPath {
   '/admin/banners': typeof AdminBannersRoute
   '/admin/campos': typeof AdminCamposRoute
   '/admin/conteudo': typeof AdminConteudoRoute
+  '/admin/imagens': typeof AdminImagensRoute
   '/admin/leads': typeof AdminLeadsRoute
   '/admin/produtos': typeof AdminProdutosRoute
   '/admin/templates': typeof AdminTemplatesRoute
@@ -189,6 +196,7 @@ export interface FileRoutesByTo {
   '/admin/banners': typeof AdminBannersRoute
   '/admin/campos': typeof AdminCamposRoute
   '/admin/conteudo': typeof AdminConteudoRoute
+  '/admin/imagens': typeof AdminImagensRoute
   '/admin/leads': typeof AdminLeadsRoute
   '/admin/produtos': typeof AdminProdutosRoute
   '/admin/templates': typeof AdminTemplatesRoute
@@ -215,6 +223,7 @@ export interface FileRoutesById {
   '/admin/banners': typeof AdminBannersRoute
   '/admin/campos': typeof AdminCamposRoute
   '/admin/conteudo': typeof AdminConteudoRoute
+  '/admin/imagens': typeof AdminImagensRoute
   '/admin/leads': typeof AdminLeadsRoute
   '/admin/produtos': typeof AdminProdutosRoute
   '/admin/templates': typeof AdminTemplatesRoute
@@ -242,6 +251,7 @@ export interface FileRouteTypes {
     | '/admin/banners'
     | '/admin/campos'
     | '/admin/conteudo'
+    | '/admin/imagens'
     | '/admin/leads'
     | '/admin/produtos'
     | '/admin/templates'
@@ -266,6 +276,7 @@ export interface FileRouteTypes {
     | '/admin/banners'
     | '/admin/campos'
     | '/admin/conteudo'
+    | '/admin/imagens'
     | '/admin/leads'
     | '/admin/produtos'
     | '/admin/templates'
@@ -291,6 +302,7 @@ export interface FileRouteTypes {
     | '/admin/banners'
     | '/admin/campos'
     | '/admin/conteudo'
+    | '/admin/imagens'
     | '/admin/leads'
     | '/admin/produtos'
     | '/admin/templates'
@@ -454,6 +466,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminLeadsRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/imagens': {
+      id: '/admin/imagens'
+      path: '/imagens'
+      fullPath: '/admin/imagens'
+      preLoaderRoute: typeof AdminImagensRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/conteudo': {
       id: '/admin/conteudo'
       path: '/conteudo'
@@ -489,6 +508,7 @@ interface AdminRouteChildren {
   AdminBannersRoute: typeof AdminBannersRoute
   AdminCamposRoute: typeof AdminCamposRoute
   AdminConteudoRoute: typeof AdminConteudoRoute
+  AdminImagensRoute: typeof AdminImagensRoute
   AdminLeadsRoute: typeof AdminLeadsRoute
   AdminProdutosRoute: typeof AdminProdutosRoute
   AdminTemplatesRoute: typeof AdminTemplatesRoute
@@ -500,6 +520,7 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminBannersRoute: AdminBannersRoute,
   AdminCamposRoute: AdminCamposRoute,
   AdminConteudoRoute: AdminConteudoRoute,
+  AdminImagensRoute: AdminImagensRoute,
   AdminLeadsRoute: AdminLeadsRoute,
   AdminProdutosRoute: AdminProdutosRoute,
   AdminTemplatesRoute: AdminTemplatesRoute,
