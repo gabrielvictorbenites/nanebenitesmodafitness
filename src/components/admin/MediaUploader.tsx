@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
+import { Upload } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 
 function resolveImg(ref: string): string {
@@ -23,6 +24,8 @@ export function MediaUploader({
 }) {
   const [uploading, setUploading] = useState(false);
   const [err, setErr] = useState<string | null>(null);
+  const [dragOver, setDragOver] = useState(false);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   async function upload(files: FileList) {
     setUploading(true);
@@ -65,21 +68,51 @@ export function MediaUploader({
 
   return (
     <div>
-      <div className="flex items-center justify-between">
-        <label className="text-xs font-medium text-neutral-600">Galeria de mídias</label>
-        <label className="cursor-pointer rounded-lg border border-neutral-300 px-3 py-1.5 text-xs font-medium hover:bg-neutral-100">
-          {uploading ? "Enviando…" : "+ Adicionar fotos"}
-          <input
-            type="file"
-            accept="image/*"
-            multiple
-            className="hidden"
-            onChange={(e) => {
-              if (e.target.files?.length) upload(e.target.files);
-              e.target.value = "";
-            }}
-          />
-        </label>
+      <p className="text-[11px] font-semibold uppercase tracking-wider text-neutral-500">Mídias</p>
+
+      <div
+        onDragOver={(e) => { e.preventDefault(); setDragOver(true); }}
+        onDragLeave={() => setDragOver(false)}
+        onDrop={(e) => {
+          e.preventDefault();
+          setDragOver(false);
+          if (e.dataTransfer.files?.length) upload(e.dataTransfer.files);
+        }}
+        className={`mt-2 rounded-xl border-2 border-dashed p-8 text-center transition ${
+          dragOver ? "border-cyan-500 bg-cyan-50/40" : "border-neutral-300 bg-[#faf6ef]"
+        }`}
+      >
+        <div className="mx-auto flex h-10 w-10 items-center justify-center rounded-full bg-white shadow-sm">
+          <Upload className="h-4 w-4 text-neutral-700" />
+        </div>
+        <p className="mt-3 text-sm text-neutral-700">
+          Arraste imagens aqui ou
+        </p>
+        <div className="mt-4 flex flex-wrap items-center justify-center gap-3">
+          <button
+            type="button"
+            onClick={() => inputRef.current?.click()}
+            disabled={uploading}
+            className="rounded-md bg-[#b0491f] px-5 py-2 text-[11px] font-semibold uppercase tracking-wider text-white shadow-sm hover:opacity-90 disabled:opacity-60"
+          >
+            {uploading ? "Enviando…" : "Selecionar imagens"}
+          </button>
+        </div>
+        <p className="mt-3 text-[11px] leading-relaxed text-neutral-500">
+          Primeira imagem vira a capa. Arraste para reordenar.<br />
+          Imagens: proporção 1:1 (quadrada) — recomendado 1200×1200px. JPG, PNG ou WebP.
+        </p>
+        <input
+          ref={inputRef}
+          type="file"
+          accept="image/*"
+          multiple
+          className="hidden"
+          onChange={(e) => {
+            if (e.target.files?.length) upload(e.target.files);
+            e.target.value = "";
+          }}
+        />
       </div>
 
       {err ? <p className="mt-2 text-xs text-red-600">{err}</p> : null}
