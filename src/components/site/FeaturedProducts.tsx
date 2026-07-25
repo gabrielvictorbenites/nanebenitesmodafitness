@@ -13,7 +13,11 @@ export function FeaturedProducts() {
     fetchProducts()
       .then((all) => {
         if (!alive) return;
-        setItems(all.filter((p) => p.isBestseller).slice(0, 8));
+        const active = all.filter((p) => p.active);
+        const featured = active.filter((p) => p.featured);
+        // Fallback for legacy data: use bestsellers if nothing is explicitly featured yet
+        const list = featured.length > 0 ? featured : active.filter((p) => p.isBestseller);
+        setItems(list.slice(0, 8));
       })
       .catch(() => {})
       .finally(() => alive && setLoading(false));

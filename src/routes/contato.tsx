@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
-import { Instagram, Facebook, MapPin, Phone, Mail, Clock, MessageCircle } from "lucide-react";
+import { Instagram, Facebook, MapPin, Phone, Mail, MessageCircle } from "lucide-react";
 import { PageHero } from "@/components/site/PageHero";
 import { site } from "@/lib/site-data";
 import { whatsappLink } from "@/lib/whatsapp";
@@ -48,7 +48,14 @@ function ContatoPage() {
                     <p className="text-xs uppercase tracking-widest text-muted-foreground">{a.label}</p>
                     <p className="mt-1 text-foreground">{a.street}</p>
                     <p className="text-foreground">{a.neighborhood} · {a.city}</p>
-                    <p className="mt-1 text-xs text-muted-foreground">Seg a Sex · 09h às 19h · Sáb · 09h às 14h</p>
+                    <ul className="mt-2 space-y-0.5 text-xs text-muted-foreground">
+                      {a.hoursList.map((h) => (
+                        <li key={h.day} className="flex items-center justify-between gap-4">
+                          <span>{h.day}</span>
+                          <span className="font-medium text-foreground">{h.time}</span>
+                        </li>
+                      ))}
+                    </ul>
                   </div>
                 </li>
               ))}
@@ -74,20 +81,6 @@ function ContatoPage() {
                 <div>
                   <p className="text-xs uppercase tracking-widest text-muted-foreground">Email</p>
                   <a href={`mailto:${site.email}`} className="mt-1 block text-foreground">{site.email}</a>
-                </div>
-              </li>
-              <li className="flex items-start gap-4">
-                <Clock className="mt-1 h-5 w-5 shrink-0 text-brand" />
-                <div>
-                  <p className="text-xs uppercase tracking-widest text-muted-foreground">Horário de atendimento</p>
-                  <ul className="mt-2 space-y-1 text-foreground">
-                    {site.hoursList.map((h) => (
-                      <li key={h.day} className="flex items-center justify-between gap-6 text-sm">
-                        <span className="text-foreground/80">{h.day}</span>
-                        <span className="font-medium">{h.time}</span>
-                      </li>
-                    ))}
-                  </ul>
                 </div>
               </li>
             </ul>

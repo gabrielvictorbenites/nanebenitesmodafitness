@@ -36,6 +36,11 @@ export const site = {
       city: "Campo Largo — PR",
       mapEmbed:
         "https://www.google.com/maps?q=Av.+Des.+Clot%C3%A1rio+Portugal,+501+-+Centro,+Campo+Largo+-+PR&output=embed",
+      hoursList: [
+        { day: "Segunda a Sexta", time: "09:00 – 18:00" },
+        { day: "Sábado", time: "09:00 – 14:00" },
+        { day: "Domingo", time: "Fechado" },
+      ],
     },
     {
       label: "Curitiba",
@@ -44,9 +49,14 @@ export const site = {
       city: "Curitiba — PR",
       mapEmbed:
         "https://www.google.com/maps?q=Rua+Major+Heitor+Guimar%C3%A3es,+1740+-+Campina+do+Siqueira,+Curitiba+-+PR&output=embed",
+      hoursList: [
+        { day: "Segunda a Sexta", time: "09:00 – 19:00" },
+        { day: "Sábado", time: "09:00 – 14:00" },
+        { day: "Domingo", time: "Fechado" },
+      ],
     },
   ],
-  hours: "Seg a Sex: 09h–19h · Sáb: 09h–14h · Dom: fechado",
+  hours: "Curitiba: Seg-Sex 09h–19h · Campo Largo: Seg-Sex 09h–18h · Sáb 09h–14h",
   hoursList: [
     { day: "Segunda-feira", time: "09:00 – 19:00" },
     { day: "Terça-feira", time: "09:00 – 19:00" },
