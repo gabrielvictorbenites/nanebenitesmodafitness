@@ -12,6 +12,24 @@ export type SiteImageSlot = {
 // Fixed catalog of image slots that admins can override from /admin/imagens
 export const SITE_IMAGE_SLOTS: SiteImageSlot[] = [
   {
+    key: "home_hero",
+    label: "Home — Banner principal (hero)",
+    description: "Imagem grande no topo da Home, atrás do título 'Vista sua melhor versão'.",
+    page: "/",
+  },
+  {
+    key: "home_collection",
+    label: "Home — Nova Coleção (bloco duplo)",
+    description: "Imagem à esquerda do bloco 'Peças que traduzem a mulher que treina com propósito'.",
+    page: "/",
+  },
+  {
+    key: "home_loja_curitiba",
+    label: "Home — Nossa loja (Curitiba)",
+    description: "Foto vertical à direita do bloco 'Venha nos visitar' na Home.",
+    page: "/",
+  },
+  {
     key: "sobre_top",
     label: "Sobre — Foto principal (topo)",
     description: "Imagem grande no topo da página Sobre, ao lado do texto 'Nossa história'.",
