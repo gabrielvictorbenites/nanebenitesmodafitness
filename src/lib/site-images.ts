@@ -1,4 +1,8 @@
 import { supabase } from "@/integrations/supabase/client";
+import heroImg from "@/assets/hero.jpg";
+import collectionImg from "@/assets/collection.jpg";
+import lojaCuritiba from "@/assets/loja-curitiba.jpg.asset.json";
+import lojaCampoLargo from "@/assets/loja-campo-largo.jpg.asset.json";
 
 export const SITE_IMAGES_KEY = "site_images";
 
@@ -7,6 +11,7 @@ export type SiteImageSlot = {
   label: string;
   description: string;
   page: string;
+  fallback: string;
 };
 
 // Fixed catalog of image slots that admins can override from /admin/imagens
@@ -16,36 +21,42 @@ export const SITE_IMAGE_SLOTS: SiteImageSlot[] = [
     label: "Home — Banner principal (hero)",
     description: "Imagem grande no topo da Home, atrás do título 'Vista sua melhor versão'.",
     page: "/",
+    fallback: heroImg,
   },
   {
     key: "home_collection",
     label: "Home — Nova Coleção (bloco duplo)",
     description: "Imagem à esquerda do bloco 'Peças que traduzem a mulher que treina com propósito'.",
     page: "/",
+    fallback: collectionImg,
   },
   {
     key: "home_loja_curitiba",
     label: "Home — Nossa loja (Curitiba)",
     description: "Foto vertical à direita do bloco 'Venha nos visitar' na Home.",
     page: "/",
+    fallback: lojaCuritiba.url,
   },
   {
     key: "sobre_top",
     label: "Sobre — Foto principal (topo)",
     description: "Imagem grande no topo da página Sobre, ao lado do texto 'Nossa história'.",
     page: "/sobre",
+    fallback: lojaCampoLargo.url,
   },
   {
     key: "sobre_bottom_1",
     label: "Sobre — Rodapé (esquerda)",
     description: "Primeira imagem no bloco inferior da página Sobre (fachada Curitiba).",
     page: "/sobre",
+    fallback: lojaCuritiba.url,
   },
   {
     key: "sobre_bottom_2",
     label: "Sobre — Rodapé (direita)",
     description: "Segunda imagem no bloco inferior da página Sobre.",
     page: "/sobre",
+    fallback: collectionImg,
   },
 ];
 
