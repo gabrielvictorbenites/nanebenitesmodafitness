@@ -80,16 +80,16 @@ function SlotRow({
     let alive = true;
     setRef(currentRef);
     if (!currentRef) {
-      setPreview("");
+      setPreview(slot.fallback ?? "");
       return;
     }
     resolveImageAsync(currentRef).then((url) => {
-      if (alive) setPreview(url);
+      if (alive) setPreview(url || slot.fallback || "");
     });
     return () => {
       alive = false;
     };
-  }, [currentRef]);
+  }, [currentRef, slot.fallback]);
 
   async function onFile(file: File) {
     setErr(null);
@@ -139,6 +139,9 @@ function SlotRow({
         </p>
         <h3 className="mt-1 font-serif text-lg font-bold text-neutral-900">{slot.label}</h3>
         <p className="mt-1 text-sm text-neutral-600">{slot.description}</p>
+        <p className="mt-2 text-[11px] text-neutral-500">
+          {currentRef ? "Imagem personalizada ativa no site." : "Mostrando a imagem padrão que aparece hoje no site. Envie uma nova para substituir."}
+        </p>
 
         <div className="mt-4 flex flex-wrap items-center gap-3">
           <label className="inline-flex cursor-pointer items-center gap-2 rounded-md border border-neutral-300 bg-white px-4 py-2 text-xs font-medium text-neutral-800 shadow-sm hover:bg-neutral-50">
@@ -157,7 +160,7 @@ function SlotRow({
           <button
             type="button"
             onClick={onSave}
-            disabled={!ref || saving}
+            disabled={!ref || saving || ref === currentRef}
             className="inline-flex items-center gap-2 rounded-md bg-gradient-to-r from-cyan-500 to-violet-500 px-5 py-2 text-xs font-semibold uppercase tracking-wider text-white shadow-sm disabled:opacity-50"
           >
             {saving ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : saved ? <Check className="h-3.5 w-3.5" /> : null}
