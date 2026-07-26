@@ -11,6 +11,7 @@ import { ScrollZoomIntro } from "@/components/site/ScrollZoomIntro";
 import { FeaturedProducts } from "@/components/site/FeaturedProducts";
 import { fetchCategoryBanners } from "@/lib/banners";
 import { resolveImageAsync } from "@/lib/product-image";
+import { fetchSiteImages } from "@/lib/site-images";
 
 export const Route = createFileRoute("/")({
   component: HomePage,
@@ -18,6 +19,11 @@ export const Route = createFileRoute("/")({
 
 function HomePage() {
   const [catOverrides, setCatOverrides] = useState<Record<string, string>>({});
+  const [imgs, setImgs] = useState<{ hero: string; collection: string; lojaCuritiba: string }>({
+    hero: heroImg,
+    collection: collectionImg,
+    lojaCuritiba: lojaCuritiba.url,
+  });
   useEffect(() => {
     let alive = true;
     (async () => {
@@ -29,15 +35,29 @@ function HomePage() {
       );
       if (alive) setCatOverrides(Object.fromEntries(entries));
     })();
+    (async () => {
+      const m = await fetchSiteImages();
+      const [hero, collection, loja] = await Promise.all([
+        m.home_hero ? resolveImageAsync(m.home_hero) : Promise.resolve(""),
+        m.home_collection ? resolveImageAsync(m.home_collection) : Promise.resolve(""),
+        m.home_loja_curitiba ? resolveImageAsync(m.home_loja_curitiba) : Promise.resolve(""),
+      ]);
+      if (!alive) return;
+      setImgs((prev) => ({
+        hero: hero || prev.hero,
+        collection: collection || prev.collection,
+        lojaCuritiba: loja || prev.lojaCuritiba,
+      }));
+    })();
     return () => { alive = false; };
   }, []);
   const cats = categories.map((c) => (catOverrides[c.slug] ? { ...c, image: catOverrides[c.slug] } : c));
   return (
     <>
       {/* HERO */}
-      <section className="relative h-[92vh] min-h-[640px] w-full overflow-hidden bg-foreground text-background">
+      <section className="relative h-[72vh] min-h-[520px] max-h-[780px] w-full overflow-hidden bg-foreground text-background">
         <img
-          src={heroImg}
+          src={imgs.hero}
           alt="Mulher em roupa fitness premium Nane Benites"
           width={1600}
           height={1920}
@@ -135,7 +155,7 @@ function HomePage() {
       <section className="bg-gradient-soft">
         <div className="container-x grid gap-12 py-24 md:grid-cols-2 md:gap-16 md:py-32">
           <div className="relative aspect-[4/5] overflow-hidden rounded-sm">
-            <img src={collectionImg} alt="Coleção Nane Benites" loading="lazy" className="h-full w-full object-cover" />
+            <img src={imgs.collection} alt="Coleção Nane Benites" loading="lazy" className="h-full w-full object-cover" />
           </div>
           <div className="flex flex-col justify-center">
             <p className="eyebrow">Nova Coleção</p>
@@ -197,7 +217,7 @@ function HomePage() {
             <div className="pointer-events-none absolute -inset-6 rounded-3xl bg-gradient-brand opacity-30 blur-2xl" />
             <div className="relative aspect-[3/4] overflow-hidden rounded-3xl shadow-elegant">
               <img
-                src={lojaCuritiba.url}
+                src={imgs.lojaCuritiba}
                 alt="Fachada da loja Nane Benites em Curitiba"
                 loading="lazy"
                 className="h-full w-full object-cover transition-transform duration-[1200ms] hover:scale-105"
