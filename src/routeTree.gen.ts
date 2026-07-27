@@ -17,6 +17,7 @@ import { Route as LancamentosRouteImport } from './routes/lancamentos'
 import { Route as FavoritosRouteImport } from './routes/favoritos'
 import { Route as ContatoRouteImport } from './routes/contato'
 import { Route as ColecoesRouteImport } from './routes/colecoes'
+import { Route as CategoriasRouteImport } from './routes/categorias'
 import { Route as CatalogoRouteImport } from './routes/catalogo'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AcessoriosRouteImport } from './routes/acessorios'
@@ -72,6 +73,11 @@ const ContatoRoute = ContatoRouteImport.update({
 const ColecoesRoute = ColecoesRouteImport.update({
   id: '/colecoes',
   path: '/colecoes',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CategoriasRoute = CategoriasRouteImport.update({
+  id: '/categorias',
+  path: '/categorias',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CatalogoRoute = CatalogoRouteImport.update({
@@ -160,6 +166,7 @@ export interface FileRoutesByFullPath {
   '/acessorios': typeof AcessoriosRoute
   '/admin': typeof AdminRouteWithChildren
   '/catalogo': typeof CatalogoRoute
+  '/categorias': typeof CategoriasRoute
   '/colecoes': typeof ColecoesRoute
   '/contato': typeof ContatoRoute
   '/favoritos': typeof FavoritosRoute
@@ -185,6 +192,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/acessorios': typeof AcessoriosRoute
   '/catalogo': typeof CatalogoRoute
+  '/categorias': typeof CategoriasRoute
   '/colecoes': typeof ColecoesRoute
   '/contato': typeof ContatoRoute
   '/favoritos': typeof FavoritosRoute
@@ -212,6 +220,7 @@ export interface FileRoutesById {
   '/acessorios': typeof AcessoriosRoute
   '/admin': typeof AdminRouteWithChildren
   '/catalogo': typeof CatalogoRoute
+  '/categorias': typeof CategoriasRoute
   '/colecoes': typeof ColecoesRoute
   '/contato': typeof ContatoRoute
   '/favoritos': typeof FavoritosRoute
@@ -240,6 +249,7 @@ export interface FileRouteTypes {
     | '/acessorios'
     | '/admin'
     | '/catalogo'
+    | '/categorias'
     | '/colecoes'
     | '/contato'
     | '/favoritos'
@@ -265,6 +275,7 @@ export interface FileRouteTypes {
     | '/'
     | '/acessorios'
     | '/catalogo'
+    | '/categorias'
     | '/colecoes'
     | '/contato'
     | '/favoritos'
@@ -291,6 +302,7 @@ export interface FileRouteTypes {
     | '/acessorios'
     | '/admin'
     | '/catalogo'
+    | '/categorias'
     | '/colecoes'
     | '/contato'
     | '/favoritos'
@@ -318,6 +330,7 @@ export interface RootRouteChildren {
   AcessoriosRoute: typeof AcessoriosRoute
   AdminRoute: typeof AdminRouteWithChildren
   CatalogoRoute: typeof CatalogoRoute
+  CategoriasRoute: typeof CategoriasRoute
   ColecoesRoute: typeof ColecoesRoute
   ContatoRoute: typeof ContatoRoute
   FavoritosRoute: typeof FavoritosRoute
@@ -387,6 +400,13 @@ declare module '@tanstack/react-router' {
       path: '/colecoes'
       fullPath: '/colecoes'
       preLoaderRoute: typeof ColecoesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/categorias': {
+      id: '/categorias'
+      path: '/categorias'
+      fullPath: '/categorias'
+      preLoaderRoute: typeof CategoriasRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/catalogo': {
@@ -535,6 +555,7 @@ const rootRouteChildren: RootRouteChildren = {
   AcessoriosRoute: AcessoriosRoute,
   AdminRoute: AdminRouteWithChildren,
   CatalogoRoute: CatalogoRoute,
+  CategoriasRoute: CategoriasRoute,
   ColecoesRoute: ColecoesRoute,
   ContatoRoute: ContatoRoute,
   FavoritosRoute: FavoritosRoute,
