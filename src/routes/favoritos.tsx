@@ -1,7 +1,8 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Heart, Trash2 } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
 import { useFavorites } from "@/lib/favorites";
-import { products } from "@/lib/site-data";
+import { fetchProducts } from "@/lib/products";
 import { ProductCard } from "@/components/site/ProductCard";
 import { whatsappLink } from "@/lib/whatsapp";
 
@@ -17,6 +18,10 @@ export const Route = createFileRoute("/favoritos")({
 
 function FavoritesPage() {
   const { items, clear } = useFavorites();
+  const { data: products = [] } = useQuery({
+    queryKey: ["products", "all"],
+    queryFn: fetchProducts,
+  });
   const favProducts = products.filter((p) => items.includes(p.slug));
 
   return (
