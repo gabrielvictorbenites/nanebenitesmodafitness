@@ -39,7 +39,7 @@ export function Header() {
           : "bg-background/0"
       }`}
     >
-      <div className="container-x flex h-20 items-center justify-between gap-4">
+      <div className="container-x flex h-28 items-center justify-between gap-4 md:h-32">
         <Link to="/" className="group flex items-center">
           <img
             src={logoAsset.url}
