@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { Menu, X, Heart } from "lucide-react";
 import { whatsappLink } from "@/lib/whatsapp";
 import { useFavorites } from "@/lib/favorites";
-import logoAsset from "@/assets/logo-nane.png.asset.json";
+import logoAsset from "@/assets/logo-nane-v2.png.asset.json";
 
 const NAV = [
   { to: "/", label: "Home" },
@@ -39,12 +39,12 @@ export function Header() {
           : "bg-background/0"
       }`}
     >
-      <div className="container-x flex h-20 items-center justify-between gap-4">
+      <div className="container-x flex h-28 items-center justify-between gap-4 md:h-32">
         <Link to="/" className="group flex items-center">
           <img
             src={logoAsset.url}
             alt="Nane Benites Moda Fitness"
-            className="h-14 w-auto shrink-0 object-contain md:h-16"
+            className="h-20 w-auto shrink-0 object-contain md:h-28"
           />
         </Link>
 
