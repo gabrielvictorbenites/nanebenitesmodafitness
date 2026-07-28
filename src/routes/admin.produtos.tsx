@@ -6,6 +6,7 @@ import { useServerFn } from "@tanstack/react-start";
 import { MediaUploader } from "@/components/admin/MediaUploader";
 import { generateProductDescription } from "@/lib/ai.functions";
 import { resolveImageAsync } from "@/lib/product-image";
+import { brands } from "@/lib/site-data";
 
 export const Route = createFileRoute("/admin/produtos")({
   ssr: false,
@@ -414,7 +415,13 @@ function ProductForm({ initial, onClose, onSaved }: { initial: ProductRow | null
             options={CATEGORIES}
             required
           />
-          <Field label="Marca" value={state.brand} onChange={(v) => set("brand", v)} required />
+          <SelectField
+            label="Marca"
+            value={state.brand}
+            onChange={(v) => set("brand", v)}
+            options={brands.map((b) => ({ slug: b.name, label: b.name }))}
+            required
+          />
           <Field label="Preço" value={state.price} onChange={(v) => set("price", v)} type="number" required />
           <Field label="Estoque" value={state.stock} onChange={(v) => set("stock", v)} type="number" />
         </div>
