@@ -33,7 +33,6 @@ import { Route as AdminImagensRouteImport } from './routes/admin.imagens'
 import { Route as AdminConteudoRouteImport } from './routes/admin.conteudo'
 import { Route as AdminCamposRouteImport } from './routes/admin.campos'
 import { Route as AdminBannersRouteImport } from './routes/admin.banners'
-import { Route as ApiPublicAdminBootstrapRouteImport } from './routes/api/public/admin-bootstrap'
 
 const SobreRoute = SobreRouteImport.update({
   id: '/sobre',
@@ -155,11 +154,6 @@ const AdminBannersRoute = AdminBannersRouteImport.update({
   path: '/banners',
   getParentRoute: () => AdminRoute,
 } as any)
-const ApiPublicAdminBootstrapRoute = ApiPublicAdminBootstrapRouteImport.update({
-  id: '/api/public/admin-bootstrap',
-  path: '/api/public/admin-bootstrap',
-  getParentRoute: () => rootRouteImport,
-} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -186,7 +180,6 @@ export interface FileRoutesByFullPath {
   '/categoria/$slug': typeof CategoriaSlugRoute
   '/produto/$slug': typeof ProdutoSlugRoute
   '/admin/': typeof AdminIndexRoute
-  '/api/public/admin-bootstrap': typeof ApiPublicAdminBootstrapRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -212,7 +205,6 @@ export interface FileRoutesByTo {
   '/categoria/$slug': typeof CategoriaSlugRoute
   '/produto/$slug': typeof ProdutoSlugRoute
   '/admin': typeof AdminIndexRoute
-  '/api/public/admin-bootstrap': typeof ApiPublicAdminBootstrapRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -240,7 +232,6 @@ export interface FileRoutesById {
   '/categoria/$slug': typeof CategoriaSlugRoute
   '/produto/$slug': typeof ProdutoSlugRoute
   '/admin/': typeof AdminIndexRoute
-  '/api/public/admin-bootstrap': typeof ApiPublicAdminBootstrapRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -269,7 +260,6 @@ export interface FileRouteTypes {
     | '/categoria/$slug'
     | '/produto/$slug'
     | '/admin/'
-    | '/api/public/admin-bootstrap'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -295,7 +285,6 @@ export interface FileRouteTypes {
     | '/categoria/$slug'
     | '/produto/$slug'
     | '/admin'
-    | '/api/public/admin-bootstrap'
   id:
     | '__root__'
     | '/'
@@ -322,7 +311,6 @@ export interface FileRouteTypes {
     | '/categoria/$slug'
     | '/produto/$slug'
     | '/admin/'
-    | '/api/public/admin-bootstrap'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -341,7 +329,6 @@ export interface RootRouteChildren {
   SobreRoute: typeof SobreRoute
   CategoriaSlugRoute: typeof CategoriaSlugRoute
   ProdutoSlugRoute: typeof ProdutoSlugRoute
-  ApiPublicAdminBootstrapRoute: typeof ApiPublicAdminBootstrapRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -514,13 +501,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminBannersRouteImport
       parentRoute: typeof AdminRoute
     }
-    '/api/public/admin-bootstrap': {
-      id: '/api/public/admin-bootstrap'
-      path: '/api/public/admin-bootstrap'
-      fullPath: '/api/public/admin-bootstrap'
-      preLoaderRoute: typeof ApiPublicAdminBootstrapRouteImport
-      parentRoute: typeof rootRouteImport
-    }
   }
 }
 
@@ -566,7 +546,6 @@ const rootRouteChildren: RootRouteChildren = {
   SobreRoute: SobreRoute,
   CategoriaSlugRoute: CategoriaSlugRoute,
   ProdutoSlugRoute: ProdutoSlugRoute,
-  ApiPublicAdminBootstrapRoute: ApiPublicAdminBootstrapRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

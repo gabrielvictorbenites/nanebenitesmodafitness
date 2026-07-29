@@ -1,5 +1,5 @@
 import { createFileRoute, Outlet } from "@tanstack/react-router";
-import { useEffect, useState, type FormEvent } from "react";
+import { useState, type FormEvent } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAdminAuth } from "@/lib/admin-auth";
 import { AdminSidebar } from "@/components/admin/AdminSidebar";
@@ -12,15 +12,8 @@ export const Route = createFileRoute("/admin")({
 
 function AdminLayout() {
   const { checking, userId, email, isAdmin, signOut } = useAdminAuth();
-  const [bootstrapping, setBootstrapping] = useState(true);
 
-  useEffect(() => {
-    fetch("/api/public/admin-bootstrap", { method: "POST" })
-      .catch(() => {})
-      .finally(() => setBootstrapping(false));
-  }, []);
-
-  if (checking || bootstrapping) {
+  if (checking) {
     return <div className="grid min-h-screen place-items-center bg-neutral-50 text-sm text-neutral-500">Carregando…</div>;
   }
 
@@ -60,7 +53,7 @@ function AdminLayout() {
 }
 
 function Login() {
-  const [email, setEmail] = useState("nanebenites@yahoo.com");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [err, setErr] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
