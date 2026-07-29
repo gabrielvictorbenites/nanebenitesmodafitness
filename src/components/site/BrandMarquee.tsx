@@ -55,14 +55,14 @@ export function BrandMarquee({ brands, title = "Marcas parceiras" }: BrandMarque
           {items.map((brand, index) => (
             <div
               key={`${brand.name}-${index}`}
-              className="flex h-24 w-48 shrink-0 items-center justify-center rounded-xl bg-white p-4 shadow-sm transition-shadow duration-300 hover:shadow-md md:h-28 md:w-60 md:p-5"
+              className="flex h-20 w-44 shrink-0 items-center justify-center px-4 transition-transform duration-300 md:h-24 md:w-56 md:px-5"
               title={brand.name}
             >
               <img
                 src={brand.src}
                 alt={brand.name}
                 loading="lazy"
-                className="max-h-full max-w-full object-contain opacity-90 grayscale transition-all duration-500 ease-out hover:opacity-100 hover:grayscale-0 hover:scale-105"
+                className="max-h-full max-w-full object-contain opacity-80 grayscale transition-all duration-500 ease-out hover:scale-105 hover:opacity-100 hover:grayscale-0"
               />
             </div>
           ))}
