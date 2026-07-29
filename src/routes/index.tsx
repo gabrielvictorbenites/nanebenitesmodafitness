@@ -13,6 +13,7 @@ import { BrandMarquee } from "@/components/site/BrandMarquee";
 import { fetchCategoryBanners } from "@/lib/banners";
 import { resolveImageAsync } from "@/lib/product-image";
 import { fetchSiteImages } from "@/lib/site-images";
+import { buildDefaults as buildTextDefaults, fetchSiteTexts, type SiteTextsMap } from "@/lib/site-content";
 import brandRunMore from "@/assets/brands/run-more.png";
 import brandZeroAcucar from "@/assets/brands/zero-acucar.png";
 import brandLetsGym from "@/assets/brands/lets-gym.png";
@@ -37,6 +38,7 @@ export const Route = createFileRoute("/")({
 
 function HomePage() {
   const [catOverrides, setCatOverrides] = useState<Record<string, string>>({});
+  const [t, setT] = useState<SiteTextsMap>(() => buildTextDefaults());
   const [imgs, setImgs] = useState<{ hero: string; collection: string; lojaCuritiba: string }>({
     hero: heroImg,
     collection: collectionImg,
@@ -67,6 +69,12 @@ function HomePage() {
         lojaCuritiba: loja || prev.lojaCuritiba,
       }));
     })();
+    (async () => {
+      try {
+        const texts = await fetchSiteTexts();
+        if (alive) setT(texts);
+      } catch {}
+    })();
     return () => { alive = false; };
   }, []);
   const cats = categories.map((c) => (catOverrides[c.slug] ? { ...c, image: catOverrides[c.slug] } : c));
@@ -89,21 +97,21 @@ function HomePage() {
           <div className="max-w-2xl animate-fade-in">
             <p className="mb-6 flex items-center gap-3 text-[11px] font-medium uppercase tracking-[0.35em] text-background/70">
               <span className="h-px w-10 bg-gradient-brand" />
-              Coleção 2026
+              {t.home_hero_eyebrow}
             </p>
             <h1 className="font-display text-4xl font-semibold leading-[0.95] tracking-tight md:text-5xl lg:text-6xl">
-              Vista sua<br />
-              <span className="italic font-light text-gradient-brand">melhor versão.</span>
+              {t.home_hero_title_line1}<br />
+              <span className="italic font-light text-gradient-brand">{t.home_hero_title_line2}</span>
             </h1>
             <p className="mt-8 max-w-xl text-base leading-relaxed text-background/80 md:text-lg">
-              Moda fitness premium para mulheres que treinam com estilo. Curadoria exclusiva das melhores marcas em peças que unem performance, conforto e sofisticação.
+              {t.home_hero_description}
             </p>
             <div className="mt-10 flex flex-wrap items-center gap-3">
               <Link
                 to="/catalogo"
                 className="group inline-flex items-center gap-3 rounded-full bg-gradient-brand px-7 py-4 text-xs font-semibold uppercase tracking-[0.2em] text-white shadow-elegant transition-transform hover:scale-105"
               >
-                Ver Catálogo
+                {t.home_hero_cta_label}
                 <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
               </Link>
               <a
