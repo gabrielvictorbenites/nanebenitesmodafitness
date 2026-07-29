@@ -22,13 +22,13 @@ export function BrandMarquee({ brands, title = "Marcas parceiras" }: BrandMarque
   const items = [...brands, ...brands];
 
   return (
-    <section className="overflow-hidden border-y border-border bg-white/80 backdrop-blur-sm">
+    <section className="overflow-hidden border-y border-border bg-white/85 backdrop-blur-sm">
       <div className="container-x pt-8 pb-3 text-center">
         <p className="eyebrow text-foreground/55">{title}</p>
       </div>
 
       <div
-        className="group relative flex items-center py-7"
+        className="group relative flex items-center py-8 md:py-10"
         onMouseEnter={() => {
           if (trackRef.current) {
             trackRef.current.style.animationPlayState = "paused";
@@ -41,12 +41,12 @@ export function BrandMarquee({ brands, title = "Marcas parceiras" }: BrandMarque
         }}
       >
         {/* Soft edge fades for a premium seamless look */}
-        <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-16 bg-gradient-to-r from-white/90 to-transparent md:w-24" />
-        <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-16 bg-gradient-to-l from-white/90 to-transparent md:w-24" />
+        <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-16 bg-gradient-to-r from-[#F8F6FB] to-transparent md:w-28" />
+        <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-16 bg-gradient-to-l from-[#F8F6FB] to-transparent md:w-28" />
 
         <div
           ref={trackRef}
-          className="flex shrink-0 items-center gap-10 md:gap-14 animate-marquee"
+          className="flex shrink-0 items-center gap-12 md:gap-16 animate-marquee"
           style={{
             opacity: isMounted ? 1 : 0,
             transition: "opacity 0.5s ease",
@@ -55,14 +55,14 @@ export function BrandMarquee({ brands, title = "Marcas parceiras" }: BrandMarque
           {items.map((brand, index) => (
             <div
               key={`${brand.name}-${index}`}
-              className="flex h-20 w-40 shrink-0 items-center justify-center px-4 md:h-24 md:w-52 md:px-5"
+              className="flex h-24 w-48 shrink-0 items-center justify-center px-5 md:h-28 md:w-60 md:px-6"
               title={brand.name}
             >
               <img
                 src={brand.src}
                 alt={brand.name}
                 loading="lazy"
-                className="max-h-full max-w-full object-contain opacity-80 grayscale transition-all duration-500 ease-out hover:opacity-100 hover:grayscale-0 hover:scale-105"
+                className="max-h-full max-w-full object-contain opacity-90 grayscale transition-all duration-500 ease-out hover:opacity-100 hover:grayscale-0 hover:scale-110"
               />
             </div>
           ))}
