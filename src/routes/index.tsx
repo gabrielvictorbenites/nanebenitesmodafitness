@@ -13,13 +13,13 @@ import { BrandMarquee } from "@/components/site/BrandMarquee";
 import { fetchCategoryBanners } from "@/lib/banners";
 import { resolveImageAsync } from "@/lib/product-image";
 import { fetchSiteImages } from "@/lib/site-images";
-import brandRunMore from "@/assets/brands/run-more.png.asset.json";
-import brandZeroAcucar from "@/assets/brands/zero-acucar.png.asset.json";
-import brandLetsGym from "@/assets/brands/lets-gym.png.asset.json";
-import brandLancaPerfume from "@/assets/brands/lanca-perfume.png.asset.json";
-import brandMovimentoCia from "@/assets/brands/movimento-cia.png.asset.json";
-import brandMulherElastica from "@/assets/brands/mulher-elastica.png.asset.json";
-import brandLive from "@/assets/brands/live.png.asset.json";
+import brandRunMore from "@/assets/brands/run-more.png";
+import brandZeroAcucar from "@/assets/brands/zero-acucar.png";
+import brandLetsGym from "@/assets/brands/lets-gym.png";
+import brandLancaPerfume from "@/assets/brands/lanca-perfume.png";
+import brandMovimentoCia from "@/assets/brands/movimento-cia.png";
+import brandMulherElastica from "@/assets/brands/mulher-elastica.png";
+import brandLive from "@/assets/brands/live.png";
 
 const brandLogos = [
   { name: "Run More", src: brandRunMore.url },
