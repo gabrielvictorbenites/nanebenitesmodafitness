@@ -12,6 +12,23 @@ import { FeaturedProducts } from "@/components/site/FeaturedProducts";
 import { fetchCategoryBanners } from "@/lib/banners";
 import { resolveImageAsync } from "@/lib/product-image";
 import { fetchSiteImages } from "@/lib/site-images";
+import brandRunMore from "@/assets/brands/run-more.png.asset.json";
+import brandZeroAcucar from "@/assets/brands/zero-acucar.png.asset.json";
+import brandLetsGym from "@/assets/brands/lets-gym.png.asset.json";
+import brandLancaPerfume from "@/assets/brands/lanca-perfume.png.asset.json";
+import brandMovimentoCia from "@/assets/brands/movimento-cia.png.asset.json";
+import brandMulherElastica from "@/assets/brands/mulher-elastica.png.asset.json";
+import brandLive from "@/assets/brands/live.png.asset.json";
+
+const brandLogos: { name: string; src: string }[] = [
+  { name: "Run More", src: brandRunMore.url },
+  { name: "Zero Açúcar", src: brandZeroAcucar.url },
+  { name: "Let's Gym", src: brandLetsGym.url },
+  { name: "Lança Perfume", src: brandLancaPerfume.url },
+  { name: "Movimento & Companhia", src: brandMovimentoCia.url },
+  { name: "Mulher Elástica", src: brandMulherElastica.url },
+  { name: "Live", src: brandLive.url },
+];
 
 export const Route = createFileRoute("/")({
   component: HomePage,
@@ -105,17 +122,23 @@ function HomePage() {
       </section>
 
       {/* STRIP — marcas parceiras */}
-      <section className="overflow-hidden border-y border-border bg-gradient-brand text-white">
-        <div className="flex animate-marquee gap-16 whitespace-nowrap py-4 text-[12px] font-semibold uppercase tracking-[0.35em]">
+      <section className="overflow-hidden border-y border-border bg-white/70 backdrop-blur">
+        <div className="container-x pt-6 pb-2 text-center">
+          <p className="eyebrow text-foreground/60">Marcas parceiras</p>
+        </div>
+        <div className="flex animate-marquee gap-16 whitespace-nowrap py-6">
           {Array.from({ length: 2 }).map((_, k) => (
-            <div key={k} className="flex shrink-0 items-center gap-16">
-              <span>◆ Run More</span>
-              <span>◆ Zero Açúcar</span>
-              <span>◆ Let's Gym</span>
-              <span>◆ Lança Perfume</span>
-              <span>◆ Movimento & Companhia</span>
-              <span>◆ Mulher Elástica</span>
-              <span>◆ Live</span>
+            <div key={k} className="flex shrink-0 items-center gap-16 px-8">
+              {brandLogos.map((b) => (
+                <img
+                  key={`${k}-${b.name}`}
+                  src={b.src}
+                  alt={b.name}
+                  title={b.name}
+                  className="h-10 w-auto max-w-[140px] object-contain opacity-70 grayscale transition duration-300 hover:opacity-100 hover:grayscale-0 md:h-12"
+                  loading="lazy"
+                />
+              ))}
             </div>
           ))}
         </div>
