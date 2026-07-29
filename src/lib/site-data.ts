@@ -92,11 +92,13 @@ export const categories: Category[] = [
 ];
 
 export const brands = [
-  { slug: "lanca-perfume", name: "Lança Perfume" },
   { slug: "run-more", name: "Run More" },
-  { slug: "mulher-elastica", name: "Mulher Elástica" },
   { slug: "zero-acucar", name: "Zero Açúcar" },
   { slug: "lets-gym", name: "Let's Gym" },
+  { slug: "lanca-perfume", name: "Lança Perfume" },
+  { slug: "movimento-e-companhia", name: "Movimento & Companhia" },
+  { slug: "mulher-elastica", name: "Mulher Elástica" },
+  { slug: "live", name: "Live" },
 ] as const;
 
 export type Product = {
