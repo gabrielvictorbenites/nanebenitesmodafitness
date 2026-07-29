@@ -9,6 +9,7 @@ import { whatsappLink } from "@/lib/whatsapp";
 import { CategoryCard } from "@/components/site/CategoryCard";
 import { ScrollZoomIntro } from "@/components/site/ScrollZoomIntro";
 import { FeaturedProducts } from "@/components/site/FeaturedProducts";
+import { BrandMarquee } from "@/components/site/BrandMarquee";
 import { fetchCategoryBanners } from "@/lib/banners";
 import { resolveImageAsync } from "@/lib/product-image";
 import { fetchSiteImages } from "@/lib/site-images";
@@ -20,7 +21,7 @@ import brandMovimentoCia from "@/assets/brands/movimento-cia.png.asset.json";
 import brandMulherElastica from "@/assets/brands/mulher-elastica.png.asset.json";
 import brandLive from "@/assets/brands/live.png.asset.json";
 
-const brandLogos: { name: string; src: string }[] = [
+const brandLogos = [
   { name: "Run More", src: brandRunMore.url },
   { name: "Zero Açúcar", src: brandZeroAcucar.url },
   { name: "Let's Gym", src: brandLetsGym.url },

@@ -18,8 +18,8 @@ export function BrandMarquee({ brands, title = "Marcas parceiras" }: BrandMarque
     setIsMounted(true);
   }, []);
 
-  // Duplicate the list enough times to guarantee a seamless loop on every viewport.
-  const items = [...brands, ...brands, ...brands, ...brands];
+  // Duplicate the list once to guarantee a seamless loop on every viewport.
+  const items = [...brands, ...brands];
 
   return (
     <section className="overflow-hidden border-y border-border bg-white/80 backdrop-blur-sm">
