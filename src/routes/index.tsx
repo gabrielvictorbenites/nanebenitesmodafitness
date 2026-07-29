@@ -12,6 +12,23 @@ import { FeaturedProducts } from "@/components/site/FeaturedProducts";
 import { fetchCategoryBanners } from "@/lib/banners";
 import { resolveImageAsync } from "@/lib/product-image";
 import { fetchSiteImages } from "@/lib/site-images";
+import brandRunMore from "@/assets/brands/run-more.png.asset.json";
+import brandZeroAcucar from "@/assets/brands/zero-acucar.png.asset.json";
+import brandLetsGym from "@/assets/brands/lets-gym.png.asset.json";
+import brandLancaPerfume from "@/assets/brands/lanca-perfume.png.asset.json";
+import brandMovimentoCia from "@/assets/brands/movimento-cia.png.asset.json";
+import brandMulherElastica from "@/assets/brands/mulher-elastica.png.asset.json";
+import brandLive from "@/assets/brands/live.png.asset.json";
+
+const brandLogos: { name: string; src: string }[] = [
+  { name: "Run More", src: brandRunMore.url },
+  { name: "Zero Açúcar", src: brandZeroAcucar.url },
+  { name: "Let's Gym", src: brandLetsGym.url },
+  { name: "Lança Perfume", src: brandLancaPerfume.url },
+  { name: "Movimento & Companhia", src: brandMovimentoCia.url },
+  { name: "Mulher Elástica", src: brandMulherElastica.url },
+  { name: "Live", src: brandLive.url },
+];
 
 export const Route = createFileRoute("/")({
   component: HomePage,
