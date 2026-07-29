@@ -62,7 +62,7 @@ export function BrandMarquee({ brands, title = "Marcas parceiras" }: BrandMarque
                 src={brand.src}
                 alt={brand.name}
                 loading="lazy"
-                className="max-h-full max-w-full object-contain opacity-80 grayscale transition-all duration-500 ease-out hover:scale-105 hover:opacity-100 hover:grayscale-0"
+                className="max-h-full max-w-full object-contain grayscale transition-all duration-500 ease-out hover:scale-105 hover:grayscale-0"
               />
             </div>
           ))}
