@@ -105,17 +105,23 @@ function HomePage() {
       </section>
 
       {/* STRIP — marcas parceiras */}
-      <section className="overflow-hidden border-y border-border bg-gradient-brand text-white">
-        <div className="flex animate-marquee gap-16 whitespace-nowrap py-4 text-[12px] font-semibold uppercase tracking-[0.35em]">
+      <section className="overflow-hidden border-y border-border bg-white/70 backdrop-blur">
+        <div className="container-x pt-6 pb-2 text-center">
+          <p className="eyebrow text-foreground/60">Marcas parceiras</p>
+        </div>
+        <div className="flex animate-marquee gap-16 whitespace-nowrap py-6">
           {Array.from({ length: 2 }).map((_, k) => (
-            <div key={k} className="flex shrink-0 items-center gap-16">
-              <span>◆ Run More</span>
-              <span>◆ Zero Açúcar</span>
-              <span>◆ Let's Gym</span>
-              <span>◆ Lança Perfume</span>
-              <span>◆ Movimento & Companhia</span>
-              <span>◆ Mulher Elástica</span>
-              <span>◆ Live</span>
+            <div key={k} className="flex shrink-0 items-center gap-16 px-8">
+              {brandLogos.map((b) => (
+                <img
+                  key={`${k}-${b.name}`}
+                  src={b.src}
+                  alt={b.name}
+                  title={b.name}
+                  className="h-10 w-auto max-w-[140px] object-contain opacity-70 grayscale transition duration-300 hover:opacity-100 hover:grayscale-0 md:h-12"
+                  loading="lazy"
+                />
+              ))}
             </div>
           ))}
         </div>
