@@ -6,6 +6,7 @@ import lojaCuritiba from "@/assets/loja-curitiba.jpg.asset.json";
 import { PageHero } from "@/components/site/PageHero";
 import { fetchSiteImages } from "@/lib/site-images";
 import { resolveImageAsync } from "@/lib/product-image";
+import { buildDefaults, fetchSiteTexts, type SiteTextsMap } from "@/lib/site-content";
 
 export const Route = createFileRoute("/sobre")({
   head: () => ({
@@ -28,6 +29,7 @@ function SobrePage() {
     sobre_bottom_2: collectionImg,
   };
   const [imgs, setImgs] = useState<Record<string, string>>(defaults);
+  const [t, setT] = useState<SiteTextsMap>(() => buildDefaults());
   useEffect(() => {
     let alive = true;
     (async () => {
@@ -41,6 +43,10 @@ function SobrePage() {
         );
         if (alive) setImgs(resolved);
       } catch {}
+      try {
+        const texts = await fetchSiteTexts();
+        if (alive) setT(texts);
+      } catch {}
     })();
     return () => {
       alive = false;
@@ -50,9 +56,9 @@ function SobrePage() {
   return (
     <>
       <PageHero
-        eyebrow="Sobre a Empresa"
-        title="Nane Benites Moda Fitness: onde estilo e conforto se encontram."
-        description="Fundada em 2020, em Campo Largo, a Nane Benites nasceu com o propósito de oferecer moda casual e fitness feminina — reunindo as melhores marcas em um só espaço, com um olhar atento à qualidade, ao conforto e ao estilo."
+        eyebrow={t.sobre_hero_eyebrow}
+        title={t.sobre_hero_title}
+        description={t.sobre_hero_description}
       />
 
       <section className="container-x grid gap-16 py-24 md:grid-cols-2 md:py-32">
@@ -62,18 +68,12 @@ function SobrePage() {
         <div className="flex flex-col justify-center">
           <p className="eyebrow">Nossa história</p>
           <h2 className="mt-3 font-display text-3xl font-semibold leading-tight tracking-tight md:text-4xl">
-            A união de duas trajetórias que se transformou em marca.
+            {t.sobre_history_title}
           </h2>
           <div className="mt-6 space-y-5 text-base leading-relaxed text-muted-foreground">
-            <p>
-              A Nane Benites Moda Fitness nasceu em 2020 da união da experiência de <strong className="text-foreground">Eliane Benites</strong>, com mais de 20 anos no setor de vendas e no comando de uma loja de artigos esportivos em Cascavel — PR, e de <strong className="text-foreground">José Henrique Espaki</strong>, administrador com mais de 30 anos de atuação nas áreas financeira e administrativa.
-            </p>
-            <p>
-              Fundada em Campo Largo, a marca surgiu com o propósito de oferecer moda casual e fitness feminina, reunindo as melhores marcas em um só espaço. Com um olhar atento à qualidade, ao conforto e ao estilo, a empresa busca se consolidar como referência no segmento.
-            </p>
-            <p>
-              Hoje, com lojas em Curitiba e Campo Largo, seguimos com o mesmo compromisso do primeiro dia: entregar peças que fazem a mulher se sentir a sua melhor versão — dentro e fora do treino.
-            </p>
+            <p>{t.sobre_history_p1}</p>
+            <p>{t.sobre_history_p2}</p>
+            <p>{t.sobre_history_p3}</p>
           </div>
         </div>
       </section>
@@ -81,9 +81,9 @@ function SobrePage() {
       <section className="border-y border-border bg-[color:var(--surface)] py-24">
         <div className="container-x grid gap-12 md:grid-cols-3">
           {[
-            { title: "A união de experiências", text: "Eliane trouxe sua expertise em vendas e no mercado esportivo, enquanto José contribuiu com seu conhecimento na gestão administrativa e financeira." },
-            { title: "Fundação e propósito", text: "Criada em 2020 em Campo Largo, a Nane Benites nasceu com foco na moda casual e fitness feminina, sempre prezando pela qualidade e pela variedade." },
-            { title: "Compromisso com as clientes", text: "Trabalhamos com marcas renomadas, selecionadas para proporcionar conforto, autoestima, praticidade e estilo, buscando ser referência no setor de moda fitness." },
+            { title: t.sobre_pillar1_title, text: t.sobre_pillar1_text },
+            { title: t.sobre_pillar2_title, text: t.sobre_pillar2_text },
+            { title: t.sobre_pillar3_title, text: t.sobre_pillar3_text },
           ].map((v) => (
             <div key={v.title} className="border-t border-foreground pt-6">
               <p className="text-[10px] font-medium uppercase tracking-[0.35em] text-brand">{v.title}</p>
