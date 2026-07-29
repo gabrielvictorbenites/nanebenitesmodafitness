@@ -22,13 +22,13 @@ import brandMulherElastica from "@/assets/brands/mulher-elastica.png";
 import brandLive from "@/assets/brands/live.png";
 
 const brandLogos = [
-  { name: "Run More", src: brandRunMore.url },
-  { name: "Zero Açúcar", src: brandZeroAcucar.url },
-  { name: "Let's Gym", src: brandLetsGym.url },
-  { name: "Lança Perfume", src: brandLancaPerfume.url },
-  { name: "Movimento & Companhia", src: brandMovimentoCia.url },
-  { name: "Mulher Elástica", src: brandMulherElastica.url },
-  { name: "Live", src: brandLive.url },
+  { name: "Run More", src: brandRunMore },
+  { name: "Zero Açúcar", src: brandZeroAcucar },
+  { name: "Let's Gym", src: brandLetsGym },
+  { name: "Lança Perfume", src: brandLancaPerfume },
+  { name: "Movimento & Companhia", src: brandMovimentoCia },
+  { name: "Mulher Elástica", src: brandMulherElastica },
+  { name: "Live", src: brandLive },
 ];
 
 export const Route = createFileRoute("/")({
