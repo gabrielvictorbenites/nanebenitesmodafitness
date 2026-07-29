@@ -14,6 +14,7 @@ export const generateProductDescription = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((data: Input) => data)
   .handler(async ({ data }) => {
+    const { supabase, userId } = (arguments as unknown as [{ context: { supabase: any; userId: string } }])[0].context;
     const key = process.env.LOVABLE_API_KEY;
     if (!key) throw new Error("Missing LOVABLE_API_KEY");
 
