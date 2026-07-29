@@ -109,13 +109,13 @@ function HomePage() {
         <div className="flex animate-marquee gap-16 whitespace-nowrap py-4 text-[12px] font-semibold uppercase tracking-[0.35em]">
           {Array.from({ length: 2 }).map((_, k) => (
             <div key={k} className="flex shrink-0 items-center gap-16">
-              <span>◆ Lança Perfume</span>
               <span>◆ Run More</span>
-              <span>◆ Mulher Elástica</span>
               <span>◆ Zero Açúcar</span>
               <span>◆ Let's Gym</span>
-              <span>◆ Alto Giro</span>
-              <span>◆ Live!</span>
+              <span>◆ Lança Perfume</span>
+              <span>◆ Movimento & Companhia</span>
+              <span>◆ Mulher Elástica</span>
+              <span>◆ Live</span>
             </div>
           ))}
         </div>
