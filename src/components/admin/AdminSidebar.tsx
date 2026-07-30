@@ -32,13 +32,31 @@ const NAV: NavItem[] = [
   { to: "/admin/usuarios", label: "Usuários", icon: UserCircle },
 ];
 
-export function AdminSidebar({ email, onSignOut }: { email: string | null; onSignOut: () => void }) {
+export function AdminSidebar({
+  email,
+  onSignOut,
+  open = false,
+  onClose,
+}: {
+  email: string | null;
+  onSignOut: () => void;
+  open?: boolean;
+  onClose?: () => void;
+}) {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const isActive = (to: string, exact?: boolean) =>
     exact ? pathname === to : pathname === to || pathname.startsWith(to + "/");
 
   return (
-    <aside className="fixed inset-y-0 left-0 z-40 flex w-64 flex-col border-r border-neutral-200 bg-white">
+    <>
+      {open ? (
+        <div onClick={onClose} className="fixed inset-0 z-40 bg-black/40 lg:hidden" aria-hidden />
+      ) : null}
+      <aside
+        className={`fixed inset-y-0 left-0 z-50 flex w-64 max-w-[80vw] flex-col border-r border-neutral-200 bg-white transition-transform duration-200 lg:translate-x-0 ${
+          open ? "translate-x-0" : "-translate-x-full"
+        }`}
+      >
       <div className="flex items-center gap-3 border-b border-neutral-200 px-5 py-5">
         <img src={lotus.url} alt="" className="h-10 w-10 object-contain" />
         <div className="min-w-0">
@@ -57,6 +75,7 @@ export function AdminSidebar({ email, onSignOut }: { email: string | null; onSig
           <Link
               key={item.to}
               to={item.to as any}
+              onClick={onClose}
               className={`flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors ${
                 active
                   ? "bg-[image:linear-gradient(135deg,oklch(0.72_0.13_195/0.15),oklch(0.55_0.22_300/0.15))] text-neutral-900"
@@ -79,6 +98,7 @@ export function AdminSidebar({ email, onSignOut }: { email: string | null; onSig
           <LogOut className="h-3.5 w-3.5" /> Sair
         </button>
       </div>
-    </aside>
+      </aside>
+    </>
   );
 }
