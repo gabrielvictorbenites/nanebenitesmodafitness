@@ -22,6 +22,7 @@ export const Route = createFileRoute("/catalogo")({
 });
 
 function CatalogoPage() {
+  const categories = useSiteCategories();
   const [q, setQ] = useState("");
   const [cat, setCat] = useState<string>("todos");
   const [brand, setBrand] = useState<string>("todos");
