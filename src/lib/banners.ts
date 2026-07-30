@@ -144,8 +144,7 @@ export async function fetchCategoryList(): Promise<CategoryEntry[]> {
     .eq("active", true)
     .order("sort_order", { ascending: true });
   const fromDb: CategoryEntry[] = (data ?? []).map((r) => ({ slug: r.slug, label: r.label }));
-  const map = new Map<string, CategoryEntry>();
-  for (const c of FALLBACK_CATEGORIES) map.set(c.slug, c);
-  for (const c of fromDb) map.set(c.slug, c);
-  return Array.from(map.values());
+  // Só as categorias realmente publicadas no site (admin > Campos).
+  if (fromDb.length > 0) return fromDb;
+  return FALLBACK_CATEGORIES;
 }
