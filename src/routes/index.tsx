@@ -4,7 +4,8 @@ import { ArrowRight, MapPin, Instagram } from "lucide-react";
 import heroImg from "@/assets/hero.jpg";
 import collectionImg from "@/assets/collection.jpg";
 import lojaCuritiba from "@/assets/loja-curitiba.jpg.asset.json";
-import { categories, site } from "@/lib/site-data";
+import { site } from "@/lib/site-data";
+import { useSiteCategories } from "@/lib/categories";
 import { whatsappLink } from "@/lib/whatsapp";
 import { CategoryCard } from "@/components/site/CategoryCard";
 import { ScrollZoomIntro } from "@/components/site/ScrollZoomIntro";
@@ -87,7 +88,8 @@ function HomePage() {
     })();
     return () => { alive = false; };
   }, []);
-  const cats = categories.map((c) => (catOverrides[c.slug] ? { ...c, image: catOverrides[c.slug] } : c));
+  const allCats = useSiteCategories();
+  const cats = allCats.map((c) => (catOverrides[c.slug] ? { ...c, image: catOverrides[c.slug] } : c));
   return (
     <>
       {/* HERO */}
@@ -161,12 +163,7 @@ function HomePage() {
           </Link>
         </div>
         <div className="grid grid-cols-2 gap-3 md:grid-cols-3 md:gap-5 lg:grid-cols-5">
-          {cats.slice(0, 5).map((c) => (
-            <CategoryCard key={c.slug} category={c} />
-          ))}
-        </div>
-        <div className="mt-3 grid grid-cols-2 gap-3 md:mt-5 md:grid-cols-3 md:gap-5 lg:grid-cols-5">
-          {cats.slice(5, 10).map((c) => (
+          {cats.map((c) => (
             <CategoryCard key={c.slug} category={c} />
           ))}
         </div>
