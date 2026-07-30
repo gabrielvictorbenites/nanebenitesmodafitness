@@ -79,21 +79,25 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Nane Benites — Moda Fitness Premium para Mulheres" },
+      { title: "Nane Benites Moda Fitness — Vista sua melhor versão" },
       {
         name: "description",
         content:
-          "Moda fitness premium para mulheres que treinam com estilo. Leggings, tops, conjuntos e acessórios selecionados. Vista sua melhor versão.",
+          "Moda fitness  roupas de treino e casuais das melhores marcas em Curitiba e Campo Largo. Leggings, tops, conjuntos e mais. Vem provar o seu!",
       },
       { name: "author", content: "Nane Benites" },
       { property: "og:site_name", content: "Nane Benites" },
-      { property: "og:title", content: "Nane Benites — Moda Fitness Premium" },
+      { property: "og:title", content: "Nane Benites Moda Fitness — Vista sua melhor versão" },
       {
         property: "og:description",
-        content: "Vista sua melhor versão. Moda fitness premium para mulheres que treinam com estilo.",
+        content: "Moda fitness  roupas de treino e casuais das melhores marcas em Curitiba e Campo Largo. Leggings, tops, conjuntos e mais. Vem provar o seu!",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: "Nane Benites Moda Fitness — Vista sua melhor versão" },
+      { name: "twitter:description", content: "Moda fitness  roupas de treino e casuais das melhores marcas em Curitiba e Campo Largo. Leggings, tops, conjuntos e mais. Vem provar o seu!" },
+      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/7c45013e-c964-4abc-929a-89beacdde1c1/id-preview-e1593a00--024a4bca-b330-4363-962d-1ef25808beca.lovable.app-1785454118115.png" },
+      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/7c45013e-c964-4abc-929a-89beacdde1c1/id-preview-e1593a00--024a4bca-b330-4363-962d-1ef25808beca.lovable.app-1785454118115.png" },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
