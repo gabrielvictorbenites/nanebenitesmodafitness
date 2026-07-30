@@ -12,7 +12,13 @@ export type HeroBanner = {
   active: boolean;
 };
 
-export type CategoryBanner = { imageRef: string; tagline: string };
+export type CategoryBanner = {
+  imageRef: string;
+  tagline: string;
+  /** Banner grande do topo de /categoria/[slug] (independente do card da home) */
+  heroImageRef?: string;
+  heroTagline?: string;
+};
 export type CategoryBannerMap = Record<string, CategoryBanner>;
 
 const CATEGORY_BANNERS_KEY = "category_banners";
@@ -66,8 +72,14 @@ export async function fetchCategoryBanners(): Promise<CategoryBannerMap> {
   const raw = (data?.content ?? {}) as Record<string, Partial<CategoryBanner> | string>;
   const out: CategoryBannerMap = {};
   for (const [slug, v] of Object.entries(raw)) {
-    if (typeof v === "string") out[slug] = { imageRef: v, tagline: "" };
-    else out[slug] = { imageRef: v?.imageRef ?? "", tagline: v?.tagline ?? "" };
+    if (typeof v === "string") out[slug] = { imageRef: v, tagline: "", heroImageRef: "", heroTagline: "" };
+    else
+      out[slug] = {
+        imageRef: v?.imageRef ?? "",
+        tagline: v?.tagline ?? "",
+        heroImageRef: v?.heroImageRef ?? "",
+        heroTagline: v?.heroTagline ?? "",
+      };
   }
   return out;
 }

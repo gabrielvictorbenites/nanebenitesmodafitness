@@ -330,10 +330,12 @@ function CategoryBannerRow({
 }: {
   index: number;
   category: CategoryEntry;
-  initial: { imageRef: string; tagline: string };
+  initial: { imageRef: string; tagline: string; heroImageRef?: string; heroTagline?: string };
 }) {
   const [imageRef, setImageRef] = useState(initial.imageRef);
   const [tagline, setTagline] = useState(initial.tagline);
+  const [heroImageRef, setHeroImageRef] = useState(initial.heroImageRef ?? "");
+  const [heroTagline, setHeroTagline] = useState(initial.heroTagline ?? "");
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
   const [err, setErr] = useState<string | null>(null);
@@ -343,7 +345,7 @@ function CategoryBannerRow({
     setSaved(false);
     setErr(null);
     try {
-      await saveCategoryBanner(category.slug, { imageRef, tagline });
+      await saveCategoryBanner(category.slug, { imageRef, tagline, heroImageRef, heroTagline });
       setSaved(true);
       setTimeout(() => setSaved(false), 2000);
     } catch (e) {
@@ -367,27 +369,53 @@ function CategoryBannerRow({
         </div>
       </div>
 
-      <div className="grid gap-6 p-5 md:grid-cols-[280px_1fr]">
-        <div>
-          <FocalPreview refValue={imageRef} onChange={setImageRef} />
-          <UploadButton value={imageRef} onChange={setImageRef} />
-          <p className="mt-2 text-center text-[11px] text-neutral-400">
-            Foto vertical (3:4) – recomendado 1200x1600px. Arraste a foto para ajustar o enquadramento.
+      <div className="grid gap-6 p-5 md:grid-cols-2">
+        <div className="rounded-xl border border-neutral-200 p-4">
+          <p className="mb-3 text-[11px] font-semibold uppercase tracking-[0.18em] text-neutral-500">
+            1. Card da Home / Categorias
           </p>
+          <div className="max-w-[280px]">
+            <FocalPreview refValue={imageRef} onChange={setImageRef} />
+            <UploadButton value={imageRef} onChange={setImageRef} />
+          </div>
+          <p className="mt-2 text-[11px] text-neutral-400">
+            Foto vertical (3:4) – recomendado 1200x1600px. Arraste para ajustar o enquadramento.
+          </p>
+          <div className="mt-4">
+            <Field label="Texto de destaque do card (opcional)">
+              <input
+                value={tagline}
+                onChange={(e) => setTagline(e.target.value)}
+                placeholder="Ex: Cintura alta, alta compressão"
+                className={inputCls}
+              />
+            </Field>
+          </div>
         </div>
 
-        <div className="grid gap-4">
-          <Field label="Texto de destaque (opcional)">
-            <input
-              value={tagline}
-              onChange={(e) => setTagline(e.target.value)}
-              placeholder="Ex: Cintura alta, alta compressão"
-              className={inputCls}
-            />
-          </Field>
-          <p className="text-xs text-neutral-500">
-            Este texto aparece sobre a imagem da categoria na home e no topo da página da categoria.
+        <div className="rounded-xl border border-neutral-200 p-4">
+          <p className="mb-3 text-[11px] font-semibold uppercase tracking-[0.18em] text-neutral-500">
+            2. Banner grande da página da categoria
           </p>
+          <FocalPreview
+            refValue={heroImageRef}
+            onChange={setHeroImageRef}
+            className="aspect-[16/9] w-full rounded-lg"
+          />
+          <UploadButton value={heroImageRef} onChange={setHeroImageRef} />
+          <p className="mt-2 text-[11px] text-neutral-400">
+            Imagem larga (16:9) – recomendado 2000x1125px. Se ficar vazio, usa a imagem do card.
+          </p>
+          <div className="mt-4">
+            <Field label="Texto do banner grande (opcional)">
+              <input
+                value={heroTagline}
+                onChange={(e) => setHeroTagline(e.target.value)}
+                placeholder="Ex: Suporte real com estética minimalista"
+                className={inputCls}
+              />
+            </Field>
+          </div>
         </div>
       </div>
 
@@ -545,7 +573,15 @@ function CollectionBannerRow({
   );
 }
 
-function FocalPreview({ refValue, onChange }: { refValue: string; onChange: (v: string) => void }) {
+function FocalPreview({
+  refValue,
+  onChange,
+  className = "aspect-[3/4] w-full rounded-lg",
+}: {
+  refValue: string;
+  onChange: (v: string) => void;
+  className?: string;
+}) {
   const [url, setUrl] = useState("");
   useEffect(() => {
     let alive = true;
@@ -566,7 +602,7 @@ function FocalPreview({ refValue, onChange }: { refValue: string; onChange: (v: 
       src={url}
       refValue={refValue}
       onChange={onChange}
-      className="aspect-[3/4] w-full rounded-lg"
+      className={className}
     />
   );
 }
