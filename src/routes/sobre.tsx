@@ -85,7 +85,7 @@ function SobrePage() {
 
       <section className="container-x grid gap-16 py-24 md:grid-cols-2 md:py-32">
         <div className="relative aspect-[4/5] overflow-hidden rounded-sm shadow-elegant">
-          <img src={imgs.sobre_top} alt="Interior da loja Nane Benites em Campo Largo" loading="lazy" style={{ objectPosition: pos.sobre_top ?? "50% 50%" }} className="h-full w-full object-cover" />
+          {imgs.sobre_top ? <img src={imgs.sobre_top} alt="Interior da loja Nane Benites em Campo Largo" loading="lazy" style={{ objectPosition: pos.sobre_top ?? "50% 50%" }} className="h-full w-full object-cover" /> : null}
         </div>
         <div className="flex flex-col justify-center">
           <p className="eyebrow">Nossa história</p>
@@ -118,14 +118,14 @@ function SobrePage() {
       <section className="container-x py-24">
         <div className="grid gap-6 md:grid-cols-2">
           <div className="relative aspect-[4/3] overflow-hidden rounded-sm shadow-elegant">
-            <img src={imgs.sobre_bottom_1} alt="Loja Nane Benites" loading="lazy" style={{ objectPosition: pos.sobre_bottom_1 ?? "50% 50%" }} className="h-full w-full object-cover" />
+            {imgs.sobre_bottom_1 ? <img src={imgs.sobre_bottom_1} alt="Loja Nane Benites" loading="lazy" style={{ objectPosition: pos.sobre_bottom_1 ?? "50% 50%" }} className="h-full w-full object-cover" /> : null}
             <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-foreground/70 to-transparent p-5">
               <p className="text-[10px] font-semibold uppercase tracking-[0.3em] text-white/80">Nossas lojas</p>
               <p className="mt-1 font-display text-lg font-semibold text-white">Curitiba · Campo Largo</p>
             </div>
           </div>
           <div className="relative aspect-[4/3] overflow-hidden rounded-sm shadow-elegant">
-            <img src={imgs.sobre_bottom_2} alt="Coleção Nane Benites" loading="lazy" style={{ objectPosition: pos.sobre_bottom_2 ?? "50% 50%" }} className="h-full w-full object-cover" />
+            {imgs.sobre_bottom_2 ? <img src={imgs.sobre_bottom_2} alt="Coleção Nane Benites" loading="lazy" style={{ objectPosition: pos.sobre_bottom_2 ?? "50% 50%" }} className="h-full w-full object-cover" /> : null}
           </div>
         </div>
       </section>
