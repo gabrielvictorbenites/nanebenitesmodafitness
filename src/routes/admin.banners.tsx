@@ -13,6 +13,13 @@ import {
   type CategoryEntry,
 } from "@/lib/banners";
 import { resolveImageAsync } from "@/lib/product-image";
+import { FocalImage } from "@/components/admin/FocalImage";
+import {
+  collectionList,
+  fetchCollectionBanners,
+  saveCollectionBanner,
+  type CollectionEntry,
+} from "@/lib/collections";
 
 export const Route = createFileRoute("/admin/banners")({
   ssr: false,
@@ -20,7 +27,7 @@ export const Route = createFileRoute("/admin/banners")({
 });
 
 function BannersPage() {
-  const [tab, setTab] = useState<"hero" | "categorias">("hero");
+  const [tab, setTab] = useState<"hero" | "categorias" | "colecoes">("hero");
   return (
     <div className="mx-auto max-w-6xl p-6 md:p-10">
       <header className="mb-6">
@@ -35,6 +42,7 @@ function BannersPage() {
           [
             { id: "hero", label: "Banners da Home" },
             { id: "categorias", label: "Banners de Categorias" },
+            { id: "colecoes", label: "Banners de Coleções" },
           ] as const
         ).map((t) => (
           <button
@@ -52,7 +60,7 @@ function BannersPage() {
         ))}
       </div>
 
-      {tab === "hero" ? <HeroTab /> : <CategoriesTab />}
+      {tab === "hero" ? <HeroTab /> : tab === "categorias" ? <CategoriesTab /> : <CollectionsTab />}
     </div>
   );
 }
