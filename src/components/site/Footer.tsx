@@ -1,6 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { Instagram, Facebook, MapPin, Phone, Mail, Clock } from "lucide-react";
-import { site, categories } from "@/lib/site-data";
+import { site } from "@/lib/site-data";
 import { whatsappLink } from "@/lib/whatsapp";
 
 export function Footer() {
@@ -37,17 +37,19 @@ export function Footer() {
           </div>
 
           <div>
-            <p className="eyebrow">Categorias</p>
-            <ul className="mt-4 grid grid-cols-2 gap-x-4 gap-y-2 text-sm">
-              {categories.slice(0, 8).map((c) => (
-                <li key={c.slug}>
-                  <Link
-                    to="/categoria/$slug"
-                    params={{ slug: c.slug }}
-                    className="link-underline text-foreground/80 hover:text-foreground"
-                  >
-                    {c.name}
-                  </Link>
+            <p className="eyebrow">Endereços</p>
+            <ul className="mt-4 space-y-4 text-sm text-foreground/80">
+              {site.addresses.map((a) => (
+                <li key={a.label} className="flex items-start gap-3">
+                  <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-brand" />
+                  <span>
+                    <span className="block text-[10px] font-semibold uppercase tracking-[0.3em] text-brand">
+                      {a.label}
+                    </span>
+                    {a.street}
+                    {a.neighborhood ? ` · ${a.neighborhood}` : ""}
+                    <span className="block text-muted-foreground">{a.city}</span>
+                  </span>
                 </li>
               ))}
             </ul>
@@ -56,15 +58,6 @@ export function Footer() {
           <div>
             <p className="eyebrow">Contato</p>
             <ul className="mt-4 space-y-2 text-sm text-foreground/80">
-              {site.addresses.map((a) => (
-                <li key={a.label} className="flex items-start gap-3">
-                  <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-brand" />
-                  <span>
-                    <span className="block text-[10px] font-semibold uppercase tracking-[0.3em] text-brand">{a.label}</span>
-                    {a.street} · {a.city}
-                  </span>
-                </li>
-              ))}
               <li className="flex items-center gap-3">
                 <Phone className="h-4 w-4 shrink-0 text-brand" />
                 <a href={`tel:+55${site.phone.replace(/\D/g, "")}`} className="hover:text-foreground">{site.phone}</a>
