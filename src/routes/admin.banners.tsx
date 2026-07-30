@@ -573,7 +573,15 @@ function CollectionBannerRow({
   );
 }
 
-function FocalPreview({ refValue, onChange }: { refValue: string; onChange: (v: string) => void }) {
+function FocalPreview({
+  refValue,
+  onChange,
+  className = "aspect-[3/4] w-full rounded-lg",
+}: {
+  refValue: string;
+  onChange: (v: string) => void;
+  className?: string;
+}) {
   const [url, setUrl] = useState("");
   useEffect(() => {
     let alive = true;
@@ -594,7 +602,7 @@ function FocalPreview({ refValue, onChange }: { refValue: string; onChange: (v: 
       src={url}
       refValue={refValue}
       onChange={onChange}
-      className="aspect-[3/4] w-full rounded-lg"
+      className={className}
     />
   );
 }
