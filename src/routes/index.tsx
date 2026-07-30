@@ -34,6 +34,24 @@ const brandLogos = [
 ];
 
 export const Route = createFileRoute("/")({
+  head: () => ({
+    meta: [
+      { title: "Nane Benites Moda Fitness — Vista sua melhor versão" },
+      {
+        name: "description",
+        content:
+          "Moda fitness premium em Curitiba e Campo Largo: leggings, tops, conjuntos e tênis das melhores marcas. Atendimento consultivo e compra pelo WhatsApp.",
+      },
+      { property: "og:title", content: "Nane Benites Moda Fitness — Vista sua melhor versão" },
+      {
+        property: "og:description",
+        content:
+          "Curadoria premium de moda fitness feminina. Lojas em Curitiba e Campo Largo e atendimento pelo WhatsApp.",
+      },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
+    ],
+  }),
   component: HomePage,
 });
 
