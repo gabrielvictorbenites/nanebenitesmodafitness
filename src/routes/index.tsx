@@ -71,6 +71,12 @@ function HomePage() {
   });
   // Paint the last known images before the first frame (no flash of old defaults).
   useLayoutEffect(() => {
+    const catSnap = readSnapshots(["__cat_overrides"]) as any;
+    if (catSnap.__cat_overrides?.url) {
+      try {
+        setCatOverrides(JSON.parse(catSnap.__cat_overrides.url));
+      } catch {}
+    }
     const snap = readSnapshots(["home_hero", "home_collection", "home_loja_curitiba"]);
     if (!Object.keys(snap).length) return;
     setImgs((p) => ({
@@ -93,7 +99,10 @@ function HomePage() {
           .filter(([, v]) => v.imageRef)
           .map(async ([slug, v]) => [slug, await resolveImageAsync(v.imageRef)] as const),
       );
-      if (alive) setCatOverrides(Object.fromEntries(entries));
+      if (!alive) return;
+      const obj = Object.fromEntries(entries);
+      setCatOverrides(obj);
+      writeSnapshots({ __cat_overrides: { url: JSON.stringify(obj), pos: "" } });
     })();
     (async () => {
       const m = await fetchSiteImages();
