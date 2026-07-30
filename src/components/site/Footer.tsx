@@ -102,6 +102,21 @@ export function Footer() {
                 <span>{site.hours}</span>
               </li>
             </ul>
+            <div className="mt-5 flex flex-col gap-3">
+              {site.addresses.map((a) => (
+                <div key={a.label} className="overflow-hidden rounded-lg border border-border">
+                  <iframe
+                    title={`Mapa ${a.label}`}
+                    src={a.mapEmbed}
+                    loading="lazy"
+                    className="h-28 w-full"
+                    style={{ border: 0 }}
+                    referrerPolicy="no-referrer-when-downgrade"
+                    allowFullScreen
+                  />
+                </div>
+              ))}
+            </div>
             <a
               href={whatsappLink()}
               target="_blank"
