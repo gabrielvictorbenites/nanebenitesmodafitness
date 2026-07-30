@@ -1,11 +1,12 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 import { ProductCard } from "@/components/site/ProductCard";
 import { findCategory } from "@/lib/site-data";
 import { useSiteCategories } from "@/lib/categories";
 import { fetchProducts, type DbProduct } from "@/lib/products";
 import { fetchCategoryBanners } from "@/lib/banners";
 import { resolveImageAsync, focalOf } from "@/lib/product-image";
+import { readSnapshot, writeSnapshots } from "@/lib/image-snapshot";
 
 export const Route = createFileRoute("/categoria/$slug")({
   loader: ({ params }) => {
