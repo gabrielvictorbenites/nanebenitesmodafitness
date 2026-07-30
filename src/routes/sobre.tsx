@@ -102,14 +102,14 @@ function SobrePage() {
       <section className="container-x py-24">
         <div className="grid gap-6 md:grid-cols-2">
           <div className="relative aspect-[4/3] overflow-hidden rounded-sm shadow-elegant">
-            <img src={imgs.sobre_bottom_1} alt="Loja Nane Benites" loading="lazy" className="h-full w-full object-cover" />
+            <img src={imgs.sobre_bottom_1} alt="Loja Nane Benites" loading="lazy" style={{ objectPosition: pos.sobre_bottom_1 ?? "50% 50%" }} className="h-full w-full object-cover" />
             <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-foreground/70 to-transparent p-5">
               <p className="text-[10px] font-semibold uppercase tracking-[0.3em] text-white/80">Nossas lojas</p>
               <p className="mt-1 font-display text-lg font-semibold text-white">Curitiba · Campo Largo</p>
             </div>
           </div>
           <div className="relative aspect-[4/3] overflow-hidden rounded-sm shadow-elegant">
-            <img src={imgs.sobre_bottom_2} alt="Coleção Nane Benites" loading="lazy" className="h-full w-full object-cover" />
+            <img src={imgs.sobre_bottom_2} alt="Coleção Nane Benites" loading="lazy" style={{ objectPosition: pos.sobre_bottom_2 ?? "50% 50%" }} className="h-full w-full object-cover" />
           </div>
         </div>
       </section>
