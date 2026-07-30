@@ -11,7 +11,7 @@ import { ScrollZoomIntro } from "@/components/site/ScrollZoomIntro";
 import { FeaturedProducts } from "@/components/site/FeaturedProducts";
 import { BrandMarquee } from "@/components/site/BrandMarquee";
 import { fetchCategoryBanners } from "@/lib/banners";
-import { resolveImageAsync } from "@/lib/product-image";
+import { resolveImageAsync, focalOf } from "@/lib/product-image";
 import { fetchSiteImages } from "@/lib/site-images";
 import { buildDefaults as buildTextDefaults, fetchSiteTexts, type SiteTextsMap } from "@/lib/site-content";
 import brandRunMore from "@/assets/brands/run-more.png";
@@ -44,6 +44,11 @@ function HomePage() {
     collection: collectionImg,
     lojaCuritiba: lojaCuritiba.url,
   });
+  const [imgPos, setImgPos] = useState<{ hero: string; collection: string; lojaCuritiba: string }>({
+    hero: "50% 50%",
+    collection: "50% 50%",
+    lojaCuritiba: "50% 50%",
+  });
   useEffect(() => {
     let alive = true;
     (async () => {
@@ -68,6 +73,11 @@ function HomePage() {
         collection: collection || prev.collection,
         lojaCuritiba: loja || prev.lojaCuritiba,
       }));
+      setImgPos({
+        hero: focalOf(m.home_hero),
+        collection: focalOf(m.home_collection),
+        lojaCuritiba: focalOf(m.home_loja_curitiba),
+      });
     })();
     (async () => {
       try {
@@ -87,7 +97,8 @@ function HomePage() {
           alt="Mulher em roupa fitness premium Nane Benites"
           width={1600}
           height={1920}
-          className="absolute inset-0 h-full w-full object-cover object-center"
+          style={{ objectPosition: imgPos.hero }}
+          className="absolute inset-0 h-full w-full object-cover"
         />
         <div className="absolute inset-0 bg-gradient-to-r from-foreground/85 via-foreground/40 to-foreground/10" />
         <div className="pointer-events-none absolute inset-0 bg-gradient-to-tr from-brand/25 via-transparent to-brand-purple/30 mix-blend-overlay" />
@@ -166,7 +177,7 @@ function HomePage() {
       <section className="bg-gradient-soft">
         <div className="container-x grid gap-12 py-24 md:grid-cols-2 md:gap-16 md:py-32">
           <div className="relative aspect-[4/5] overflow-hidden rounded-sm">
-            <img src={imgs.collection} alt="Coleção Nane Benites" loading="lazy" className="h-full w-full object-cover" />
+            <img src={imgs.collection} alt="Coleção Nane Benites" loading="lazy" style={{ objectPosition: imgPos.collection }} className="h-full w-full object-cover" />
           </div>
           <div className="flex flex-col justify-center">
             <p className="eyebrow">Nova Coleção</p>
