@@ -219,7 +219,9 @@ function HomePage() {
       <section className="bg-gradient-soft">
         <div className="container-x grid gap-12 py-24 md:grid-cols-2 md:gap-16 md:py-32">
           <div className="relative aspect-[4/5] overflow-hidden rounded-sm">
-            <img src={imgs.collection} alt="Coleção Nane Benites" loading="lazy" style={{ objectPosition: imgPos.collection }} className="h-full w-full object-cover" />
+            {imgs.collection ? (
+              <img src={imgs.collection} alt="Coleção Nane Benites" loading="lazy" style={{ objectPosition: imgPos.collection }} className="h-full w-full object-cover" />
+            ) : null}
           </div>
           <div className="flex flex-col justify-center">
             <p className="eyebrow">Nova Coleção</p>
@@ -280,6 +282,7 @@ function HomePage() {
           <div className="relative order-1 md:order-2">
             <div className="pointer-events-none absolute -inset-6 rounded-3xl bg-gradient-brand opacity-30 blur-2xl" />
             <div className="relative aspect-[3/4] overflow-hidden rounded-3xl shadow-elegant">
+              {imgs.lojaCuritiba ? (
               <img
                 src={imgs.lojaCuritiba}
                 alt="Fachada da loja Nane Benites em Curitiba"
@@ -287,6 +290,7 @@ function HomePage() {
                 style={{ objectPosition: imgPos.lojaCuritiba }}
                 className="h-full w-full object-cover transition-transform duration-[1200ms] hover:scale-105"
               />
+              ) : null}
               <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-foreground/70 to-transparent p-6">
                 <p className="text-[10px] font-semibold uppercase tracking-[0.3em] text-white/80">Loja Curitiba</p>
                 <p className="mt-1 font-display text-xl font-semibold text-white">Nane Benites Moda Fitness</p>
