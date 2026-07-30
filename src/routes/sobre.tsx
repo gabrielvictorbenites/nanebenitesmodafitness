@@ -28,9 +28,15 @@ function SobrePage() {
     sobre_bottom_1: lojaCuritiba.url,
     sobre_bottom_2: collectionImg,
   };
-  const [imgs, setImgs] = useState<Record<string, string>>(defaults);
+  const [imgs, setImgs] = useState<Record<string, string>>({});
   const [pos, setPos] = useState<Record<string, string>>({});
   const [t, setT] = useState<SiteTextsMap>(() => buildDefaults());
+  useLayoutEffect(() => {
+    const snap = readSnapshots(Object.keys(defaults));
+    if (!Object.keys(snap).length) return;
+    setImgs((p) => ({ ...p, ...Object.fromEntries(Object.entries(snap).map(([k, v]) => [k, v.url])) }));
+    setPos((p) => ({ ...p, ...Object.fromEntries(Object.entries(snap).map(([k, v]) => [k, v.pos])) }));
+  }, []);
   useEffect(() => {
     let alive = true;
     (async () => {
@@ -47,6 +53,14 @@ function SobrePage() {
         if (alive) {
           setImgs(resolved);
           setPos(positions);
+          writeSnapshots(
+            Object.fromEntries(
+              Object.keys(defaults).map((k) => [
+                k,
+                { url: resolved[k] ?? defaults[k], pos: positions[k] ?? "50% 50%" },
+              ]),
+            ),
+          );
         }
       } catch {}
       try {
