@@ -1,5 +1,6 @@
 import { createFileRoute, Outlet } from "@tanstack/react-router";
 import { useState, type FormEvent } from "react";
+import { Menu } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAdminAuth } from "@/lib/admin-auth";
 import { AdminSidebar } from "@/components/admin/AdminSidebar";
@@ -42,12 +43,29 @@ function AdminLayout() {
     );
   }
 
+  return <AdminShell email={email} signOut={signOut} />;
+}
+
+function AdminShell({ email, signOut }: { email: string | null; signOut: () => void }) {
+  const [open, setOpen] = useState(false);
   return (
     <div className="min-h-screen bg-neutral-50 font-sans text-neutral-900">
-      <AdminSidebar email={email} onSignOut={signOut} />
-      <main className="ml-64 min-h-screen">
-        <Outlet />
-      </main>
+      <AdminSidebar email={email} onSignOut={signOut} open={open} onClose={() => setOpen(false)} />
+      <div className="lg:ml-64">
+        <header className="sticky top-0 z-30 flex items-center gap-3 border-b border-neutral-200 bg-white/95 px-4 py-3 backdrop-blur lg:hidden">
+          <button
+            onClick={() => setOpen(true)}
+            aria-label="Abrir menu"
+            className="rounded-lg border border-neutral-200 p-2 text-neutral-700"
+          >
+            <Menu className="h-5 w-5" />
+          </button>
+          <span className="font-display text-sm font-bold tracking-widest">NANE BENITES</span>
+        </header>
+        <main className="min-h-screen overflow-x-hidden">
+          <Outlet />
+        </main>
+      </div>
     </div>
   );
 }

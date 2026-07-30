@@ -206,7 +206,8 @@ function ProductsPage() {
         ) : filtered.length === 0 ? (
           <p className="p-6 text-sm text-neutral-500">Nenhum produto encontrado.</p>
         ) : (
-          <table className="w-full text-sm">
+          <div className="overflow-x-auto">
+          <table className="w-full min-w-[720px] text-sm">
             <thead className="bg-neutral-50 text-left text-[11px] font-semibold uppercase tracking-wider text-neutral-500">
               <tr>
                 <th className="px-4 py-3">Código</th>
@@ -289,6 +290,7 @@ function ProductsPage() {
               ))}
             </tbody>
           </table>
+          </div>
         )}
       </div>
 
