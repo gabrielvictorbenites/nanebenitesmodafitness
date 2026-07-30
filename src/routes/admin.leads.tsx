@@ -149,7 +149,8 @@ function LeadsPage() {
         ) : filtered.length === 0 ? (
           <div className="p-10 text-center text-sm text-neutral-500">Nenhum lead encontrado.</div>
         ) : (
-          <table className="w-full text-sm">
+          <div className="overflow-x-auto">
+          <table className="w-full min-w-[640px] text-sm">
             <thead>
               <tr className="border-b border-neutral-200 bg-neutral-50 text-left text-xs uppercase tracking-wider text-neutral-500">
                 <th className="px-4 py-3 font-semibold">Contato</th>

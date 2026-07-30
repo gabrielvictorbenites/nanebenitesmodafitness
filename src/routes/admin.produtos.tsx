@@ -290,6 +290,7 @@ function ProductsPage() {
               ))}
             </tbody>
           </table>
+          </div>
         )}
       </div>
 
