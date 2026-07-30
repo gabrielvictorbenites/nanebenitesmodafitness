@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 import collectionImg from "@/assets/collection.jpg";
 import lojaCampoLargo from "@/assets/loja-campo-largo.jpg.asset.json";
 import lojaCuritiba from "@/assets/loja-curitiba.jpg.asset.json";
@@ -7,6 +7,7 @@ import { PageHero } from "@/components/site/PageHero";
 import { fetchSiteImages } from "@/lib/site-images";
 import { resolveImageAsync, focalOf } from "@/lib/product-image";
 import { buildDefaults, fetchSiteTexts, type SiteTextsMap } from "@/lib/site-content";
+import { readSnapshots, writeSnapshots, type Snap } from "@/lib/image-snapshot";
 
 export const Route = createFileRoute("/sobre")({
   head: () => ({
@@ -34,8 +35,9 @@ function SobrePage() {
   useLayoutEffect(() => {
     const snap = readSnapshots(Object.keys(defaults));
     if (!Object.keys(snap).length) return;
-    setImgs((p) => ({ ...p, ...Object.fromEntries(Object.entries(snap).map(([k, v]) => [k, v.url])) }));
-    setPos((p) => ({ ...p, ...Object.fromEntries(Object.entries(snap).map(([k, v]) => [k, v.pos])) }));
+    const list = Object.entries(snap) as [string, Snap][];
+    setImgs((p) => ({ ...p, ...Object.fromEntries(list.map(([k, v]) => [k, v.url])) }));
+    setPos((p) => ({ ...p, ...Object.fromEntries(list.map(([k, v]) => [k, v.pos])) }));
   }, []);
   useEffect(() => {
     let alive = true;
