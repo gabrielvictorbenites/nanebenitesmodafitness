@@ -1,7 +1,8 @@
-import { createFileRoute, notFound, Link } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { ProductCard } from "@/components/site/ProductCard";
-import { findCategory, categories } from "@/lib/site-data";
+import { findCategory } from "@/lib/site-data";
+import { useSiteCategories } from "@/lib/categories";
 import { fetchProducts, type DbProduct } from "@/lib/products";
 import { fetchCategoryBanners } from "@/lib/banners";
 import { resolveImageAsync } from "@/lib/product-image";
@@ -9,8 +10,19 @@ import { resolveImageAsync } from "@/lib/product-image";
 export const Route = createFileRoute("/categoria/$slug")({
   loader: ({ params }) => {
     const cat = findCategory(params.slug);
-    if (!cat) throw notFound();
-    return { category: cat };
+    if (cat) return { category: cat };
+    const name = params.slug
+      .split("-")
+      .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+      .join(" ");
+    return {
+      category: {
+        slug: params.slug,
+        name,
+        image: "",
+        description: `Peças selecionadas de ${name.toLowerCase()} com a curadoria Nane Benites.`,
+      },
+    };
   },
   head: ({ loaderData }) => {
     if (!loaderData) return { meta: [{ title: "Categoria não encontrada" }, { name: "robots", content: "noindex" }] };
@@ -40,9 +52,13 @@ export const Route = createFileRoute("/categoria/$slug")({
 
 function CategoryPage() {
   const { category } = Route.useLoaderData();
+  const allCats = useSiteCategories();
+  const dbCat = allCats.find((c) => c.slug === category.slug);
+  const name = dbCat?.name ?? category.name;
   const [products, setProducts] = useState<DbProduct[]>([]);
   const [loading, setLoading] = useState(true);
   const [bannerImg, setBannerImg] = useState<string>(category.image);
+  const heroImg = bannerImg || dbCat?.image || "";
   const [tagline, setTagline] = useState<string>("");
   useEffect(() => {
     let alive = true;
@@ -65,11 +81,13 @@ function CategoryPage() {
   return (
     <>
       <section className="relative h-[50vh] min-h-[380px] w-full overflow-hidden bg-foreground text-background">
-        <img src={bannerImg} alt={category.name} className="absolute inset-0 h-full w-full object-cover" />
+        {heroImg ? (
+          <img src={heroImg} alt={name} className="absolute inset-0 h-full w-full object-cover" />
+        ) : null}
         <div className="absolute inset-0 bg-gradient-to-t from-foreground/80 via-foreground/40 to-foreground/20" />
         <div className="container-x relative z-10 flex h-full flex-col justify-end pb-12">
           <p className="text-[10px] font-medium uppercase tracking-[0.35em] text-background/70">Categoria</p>
-          <h1 className="mt-3 font-display text-5xl font-semibold leading-tight tracking-tight md:text-7xl">{category.name}</h1>
+          <h1 className="mt-3 font-display text-5xl font-semibold leading-tight tracking-tight md:text-7xl">{name}</h1>
           <p className="mt-4 max-w-2xl text-base text-background/80">{tagline || category.description}</p>
         </div>
       </section>
@@ -92,7 +110,7 @@ function CategoryPage() {
         <div className="container-x">
           <p className="eyebrow mb-6">Outras categorias</p>
           <div className="flex flex-wrap gap-2">
-            {categories.filter((c) => c.slug !== category.slug).map((c) => (
+            {allCats.filter((c) => c.slug !== category.slug).map((c) => (
               <Link key={c.slug} to="/categoria/$slug" params={{ slug: c.slug }} className="rounded-full border border-border bg-background px-5 py-2 text-xs uppercase tracking-widest text-foreground transition-colors hover:border-brand hover:text-brand">
                 {c.name}
               </Link>

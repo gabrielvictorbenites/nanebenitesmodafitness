@@ -3,7 +3,8 @@ import { useEffect, useMemo, useState } from "react";
 import { Search } from "lucide-react";
 import { PageHero } from "@/components/site/PageHero";
 import { ProductCard } from "@/components/site/ProductCard";
-import { categories, brands } from "@/lib/site-data";
+import { brands } from "@/lib/site-data";
+import { useSiteCategories } from "@/lib/categories";
 import { fetchProducts, type DbProduct } from "@/lib/products";
 
 export const Route = createFileRoute("/catalogo")({
@@ -21,6 +22,7 @@ export const Route = createFileRoute("/catalogo")({
 });
 
 function CatalogoPage() {
+  const categories = useSiteCategories();
   const [q, setQ] = useState("");
   const [cat, setCat] = useState<string>("todos");
   const [brand, setBrand] = useState<string>("todos");

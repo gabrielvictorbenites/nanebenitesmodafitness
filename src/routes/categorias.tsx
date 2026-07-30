@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { categories } from "@/lib/site-data";
+import { useSiteCategories } from "@/lib/categories";
 import { CategoryCard } from "@/components/site/CategoryCard";
 import { PageHero } from "@/components/site/PageHero";
 import { fetchCategoryBanners } from "@/lib/banners";
@@ -33,6 +33,7 @@ function CategoriasPage() {
     })();
     return () => { alive = false; };
   }, []);
+  const categories = useSiteCategories();
   const cats = categories.map((c) => (overrides[c.slug] ? { ...c, image: overrides[c.slug] } : c));
   return (
     <>
