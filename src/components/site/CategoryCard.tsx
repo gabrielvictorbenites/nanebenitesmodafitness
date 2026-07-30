@@ -8,7 +8,7 @@ export function CategoryCard({ category, large = false }: { category: Category; 
       to="/categoria/$slug"
       params={{ slug: category.slug }}
       className={`group relative block overflow-hidden rounded-sm bg-[color:var(--surface)] ${
-        large ? "aspect-[4/5] md:aspect-[3/4]" : "aspect-[3/4]"
+        large ? "aspect-[3/4] md:aspect-[2/3]" : "aspect-[3/4] md:aspect-[4/5]"
       }`}
     >
       <img
