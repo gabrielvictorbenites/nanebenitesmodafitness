@@ -9,6 +9,7 @@ import {
   type SiteImageSlot,
 } from "@/lib/site-images";
 import { resolveImageAsync } from "@/lib/product-image";
+import { FocalImage } from "@/components/admin/FocalImage";
 
 export const Route = createFileRoute("/admin/imagens")({
   ssr: false,
@@ -121,17 +122,16 @@ function SlotRow({
     }
   }
 
+  const editableRef = ref || slot.fallback;
+
   return (
     <div className="grid gap-5 rounded-2xl border border-neutral-200 bg-white p-5 md:grid-cols-[220px,1fr] md:items-start">
-      <div className="aspect-[4/3] overflow-hidden rounded-xl bg-neutral-100">
-        {preview ? (
-          <img src={preview} alt="" className="h-full w-full object-cover" />
-        ) : (
-          <div className="flex h-full w-full items-center justify-center text-xs text-neutral-400">
-            Sem imagem
-          </div>
-        )}
-      </div>
+      <FocalImage
+        src={preview}
+        refValue={editableRef}
+        onChange={setRef}
+        className="aspect-[4/3] w-full rounded-xl"
+      />
 
       <div>
         <p className="text-[10px] font-semibold uppercase tracking-[0.25em] text-neutral-500">
@@ -141,6 +141,9 @@ function SlotRow({
         <p className="mt-1 text-sm text-neutral-600">{slot.description}</p>
         <p className="mt-2 text-[11px] text-neutral-500">
           {currentRef ? "Imagem personalizada ativa no site." : "Mostrando a imagem padrão que aparece hoje no site. Envie uma nova para substituir."}
+        </p>
+        <p className="mt-1 text-[11px] text-neutral-500">
+          Arraste a foto dentro do quadro para escolher o enquadramento (cima/baixo/lados) e clique em Salvar.
         </p>
 
         <div className="mt-4 flex flex-wrap items-center gap-3">

@@ -18,6 +18,7 @@ export function ProductCard({ product }: { product: Product }) {
           src={product.image}
           alt={product.name}
           loading="lazy"
+          style={{ objectPosition: product.imagePosition ?? "50% 50%" }}
           className="h-full w-full object-cover transition-transform duration-[900ms] ease-out group-hover:scale-105"
         />
         <div className="absolute left-4 top-4 flex flex-col gap-1.5">

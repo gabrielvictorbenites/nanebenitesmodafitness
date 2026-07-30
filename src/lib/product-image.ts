@@ -27,10 +27,42 @@ const PLACEHOLDER =
   "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 3 4'><rect width='3' height='4' fill='%23f2f2f2'/></svg>";
 
 /**
+ * Image refs may carry a focal point suffix: `<ref>#fp=50,30`
+ * (percent X, percent Y) used as CSS object-position.
+ */
+export function splitFocal(ref: string | null | undefined): { base: string; focal: string } {
+  if (!ref) return { base: "", focal: "50% 50%" };
+  const i = ref.indexOf("#fp=");
+  if (i === -1) return { base: ref, focal: "50% 50%" };
+  const base = ref.slice(0, i);
+  const [x, y] = ref.slice(i + 4).split(",").map((n) => Number(n));
+  const cx = Number.isFinite(x) ? Math.min(100, Math.max(0, x)) : 50;
+  const cy = Number.isFinite(y) ? Math.min(100, Math.max(0, y)) : 50;
+  return { base, focal: `${cx}% ${cy}%` };
+}
+
+export function focalOf(ref: string | null | undefined): string {
+  return splitFocal(ref).focal;
+}
+
+export function focalXY(ref: string | null | undefined): { x: number; y: number } {
+  const [x, y] = splitFocal(ref).focal.split(" ").map((v) => parseFloat(v));
+  return { x, y };
+}
+
+export function withFocal(ref: string, x: number, y: number): string {
+  const { base } = splitFocal(ref);
+  const cx = Math.round(Math.min(100, Math.max(0, x)));
+  const cy = Math.round(Math.min(100, Math.max(0, y)));
+  return `${base}#fp=${cx},${cy}`;
+}
+
+/**
  * Synchronous resolver used by admin/loading placeholders.
  * Storage refs return a placeholder here — use `resolveImageAsync` for signed URLs.
  */
-export function resolveImage(ref: string | null | undefined): string {
+export function resolveImage(rawRef: string | null | undefined): string {
+  const ref = splitFocal(rawRef).base;
   if (!ref) return PLACEHOLDER;
   if (ref.startsWith("local:")) {
     return LOCAL_ASSETS[ref.slice(6)] ?? PLACEHOLDER;
@@ -43,7 +75,8 @@ export function resolveImage(ref: string | null | undefined): string {
  * Async resolver. Storage refs are resolved to time-limited signed URLs
  * because the bucket is private (public buckets are blocked in this workspace).
  */
-export async function resolveImageAsync(ref: string | null | undefined): Promise<string> {
+export async function resolveImageAsync(rawRef: string | null | undefined): Promise<string> {
+  const ref = splitFocal(rawRef).base;
   if (!ref) return PLACEHOLDER;
   if (ref.startsWith("local:")) {
     return LOCAL_ASSETS[ref.slice(6)] ?? PLACEHOLDER;

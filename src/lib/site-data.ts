@@ -113,6 +113,8 @@ export type Product = {
   description: string;
   image: string;
   gallery?: string[];
+  imagePosition?: string;
+  galleryPositions?: string[];
   isNew?: boolean;
   isSale?: boolean;
   isBestseller?: boolean;

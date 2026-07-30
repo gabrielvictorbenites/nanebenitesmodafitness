@@ -1,6 +1,6 @@
 import { supabase } from "@/integrations/supabase/client";
 import type { Product } from "@/lib/site-data";
-import { resolveImageAsync } from "@/lib/product-image";
+import { resolveImageAsync, focalOf } from "@/lib/product-image";
 
 type Row = {
   id: string;
@@ -51,6 +51,8 @@ async function toProduct(row: Row): Promise<DbProduct> {
     imageRef,
     galleryRefs,
     gallery,
+    imagePosition: focalOf(imageRef),
+    galleryPositions: galleryRefs.map(focalOf),
     isNew: row.is_new,
     isSale: row.on_sale,
     isBestseller: row.is_bestseller,

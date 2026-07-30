@@ -1,14 +1,21 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Upload } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import { FocalImage } from "@/components/admin/FocalImage";
+import { resolveImageAsync } from "@/lib/product-image";
 
-function resolveImg(ref: string): string {
-  if (!ref) return "";
-  if (ref.startsWith("storage:")) {
-    const { data } = supabase.storage.from("product-images").getPublicUrl(ref.slice(8));
-    return data.publicUrl;
-  }
-  return ref;
+function useResolved(ref: string) {
+  const [url, setUrl] = useState("");
+  useEffect(() => {
+    let alive = true;
+    resolveImageAsync(ref).then((u) => {
+      if (alive) setUrl(u);
+    });
+    return () => {
+      alive = false;
+    };
+  }, [ref]);
+  return url;
 }
 
 export function MediaUploader({
@@ -99,8 +106,8 @@ export function MediaUploader({
           </button>
         </div>
         <p className="mt-3 text-[11px] leading-relaxed text-neutral-500">
-          Primeira imagem vira a capa. Arraste para reordenar.<br />
-          Imagens: proporção 1:1 (quadrada) — recomendado 1200×1200px. JPG, PNG ou WebP.
+          Primeira imagem vira a capa. Use as setas para reordenar.<br />
+          Arraste a foto dentro do quadrado para ajustar o enquadramento — nada é cortado.
         </p>
         <input
           ref={inputRef}
@@ -124,13 +131,16 @@ export function MediaUploader({
       ) : (
         <div className="mt-3 grid grid-cols-2 gap-3 sm:grid-cols-4">
           {values.map((v, i) => (
-            <div
-              key={v + i}
-              className={`group relative overflow-hidden rounded-lg border-2 bg-neutral-100 ${
-                i === coverIndex ? "border-cyan-500" : "border-transparent"
-              }`}
+            <MediaThumb
+              key={v.split("#")[0] + i}
+              value={v}
+              isCover={i === coverIndex}
+              onFocal={(next) => {
+                const arr = [...values];
+                arr[i] = next;
+                onChange(arr);
+              }}
             >
-              <img src={resolveImg(v)} alt="" className="aspect-square w-full object-cover" />
               <div className="absolute inset-x-0 top-0 flex justify-between p-1.5">
                 {i === coverIndex ? (
                   <span className="rounded bg-cyan-500 px-2 py-0.5 text-[10px] font-semibold uppercase text-white">
@@ -153,7 +163,7 @@ export function MediaUploader({
                   ×
                 </button>
               </div>
-              <div className="absolute inset-x-0 bottom-0 flex justify-center gap-1 p-1.5 opacity-0 transition group-hover:opacity-100">
+              <div className="absolute inset-x-0 bottom-0 flex justify-end gap-1 p-1.5 opacity-0 transition group-hover:opacity-100">
                 <button
                   type="button"
                   onClick={() => move(i, -1)}
@@ -169,10 +179,39 @@ export function MediaUploader({
                   →
                 </button>
               </div>
-            </div>
+            </MediaThumb>
           ))}
         </div>
       )}
+    </div>
+  );
+}
+
+function MediaThumb({
+  value,
+  isCover,
+  onFocal,
+  children,
+}: {
+  value: string;
+  isCover: boolean;
+  onFocal: (next: string) => void;
+  children: React.ReactNode;
+}) {
+  const url = useResolved(value);
+  return (
+    <div
+      className={`group relative overflow-hidden rounded-lg border-2 ${
+        isCover ? "border-cyan-500" : "border-transparent"
+      }`}
+    >
+      <FocalImage
+        src={url}
+        refValue={value}
+        onChange={onFocal}
+        className="aspect-square w-full rounded-md"
+      />
+      {children}
     </div>
   );
 }

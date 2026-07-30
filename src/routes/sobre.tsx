@@ -5,7 +5,7 @@ import lojaCampoLargo from "@/assets/loja-campo-largo.jpg.asset.json";
 import lojaCuritiba from "@/assets/loja-curitiba.jpg.asset.json";
 import { PageHero } from "@/components/site/PageHero";
 import { fetchSiteImages } from "@/lib/site-images";
-import { resolveImageAsync } from "@/lib/product-image";
+import { resolveImageAsync, focalOf } from "@/lib/product-image";
 import { buildDefaults, fetchSiteTexts, type SiteTextsMap } from "@/lib/site-content";
 
 export const Route = createFileRoute("/sobre")({
@@ -29,6 +29,7 @@ function SobrePage() {
     sobre_bottom_2: collectionImg,
   };
   const [imgs, setImgs] = useState<Record<string, string>>(defaults);
+  const [pos, setPos] = useState<Record<string, string>>({});
   const [t, setT] = useState<SiteTextsMap>(() => buildDefaults());
   useEffect(() => {
     let alive = true;
@@ -36,12 +37,17 @@ function SobrePage() {
       try {
         const map = await fetchSiteImages();
         const resolved: Record<string, string> = { ...defaults };
+        const positions: Record<string, string> = {};
         await Promise.all(
           Object.entries(map).map(async ([k, ref]) => {
             if (ref) resolved[k] = await resolveImageAsync(ref);
+            if (ref) positions[k] = focalOf(ref);
           }),
         );
-        if (alive) setImgs(resolved);
+        if (alive) {
+          setImgs(resolved);
+          setPos(positions);
+        }
       } catch {}
       try {
         const texts = await fetchSiteTexts();
@@ -63,7 +69,7 @@ function SobrePage() {
 
       <section className="container-x grid gap-16 py-24 md:grid-cols-2 md:py-32">
         <div className="relative aspect-[4/5] overflow-hidden rounded-sm shadow-elegant">
-          <img src={imgs.sobre_top} alt="Interior da loja Nane Benites em Campo Largo" loading="lazy" className="h-full w-full object-cover" />
+          <img src={imgs.sobre_top} alt="Interior da loja Nane Benites em Campo Largo" loading="lazy" style={{ objectPosition: pos.sobre_top ?? "50% 50%" }} className="h-full w-full object-cover" />
         </div>
         <div className="flex flex-col justify-center">
           <p className="eyebrow">Nossa história</p>
@@ -96,14 +102,14 @@ function SobrePage() {
       <section className="container-x py-24">
         <div className="grid gap-6 md:grid-cols-2">
           <div className="relative aspect-[4/3] overflow-hidden rounded-sm shadow-elegant">
-            <img src={imgs.sobre_bottom_1} alt="Loja Nane Benites" loading="lazy" className="h-full w-full object-cover" />
+            <img src={imgs.sobre_bottom_1} alt="Loja Nane Benites" loading="lazy" style={{ objectPosition: pos.sobre_bottom_1 ?? "50% 50%" }} className="h-full w-full object-cover" />
             <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-foreground/70 to-transparent p-5">
               <p className="text-[10px] font-semibold uppercase tracking-[0.3em] text-white/80">Nossas lojas</p>
               <p className="mt-1 font-display text-lg font-semibold text-white">Curitiba · Campo Largo</p>
             </div>
           </div>
           <div className="relative aspect-[4/3] overflow-hidden rounded-sm shadow-elegant">
-            <img src={imgs.sobre_bottom_2} alt="Coleção Nane Benites" loading="lazy" className="h-full w-full object-cover" />
+            <img src={imgs.sobre_bottom_2} alt="Coleção Nane Benites" loading="lazy" style={{ objectPosition: pos.sobre_bottom_2 ?? "50% 50%" }} className="h-full w-full object-cover" />
           </div>
         </div>
       </section>
