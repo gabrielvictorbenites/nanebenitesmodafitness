@@ -241,6 +241,8 @@
 
 @utility animate-blob {
   animation: blob 18s ease-in-out infinite;
+  will-change: transform;
+  transform: translateZ(0);
 }
 
 @keyframes marquee {
@@ -255,6 +257,9 @@
 
 @media (prefers-reduced-motion: reduce) {
   .animate-marquee {
+    animation: none;
+  }
+  .animate-blob {
     animation: none;
   }
 }

@@ -99,13 +99,15 @@ function HomePage() {
           alt="Mulher em roupa fitness premium Nane Benites"
           width={1600}
           height={1920}
+          fetchPriority="high"
+          decoding="async"
           style={{ objectPosition: imgPos.hero }}
           className="absolute inset-0 h-full w-full object-cover"
         />
         <div className="absolute inset-0 bg-gradient-to-r from-foreground/85 via-foreground/40 to-foreground/10" />
         <div className="pointer-events-none absolute inset-0 bg-gradient-to-tr from-brand/25 via-transparent to-brand-purple/30 mix-blend-overlay" />
-        <div className="pointer-events-none absolute -left-32 top-1/4 h-96 w-96 rounded-full bg-brand/30 blur-3xl animate-blob" />
-        <div className="pointer-events-none absolute -right-24 bottom-10 h-[28rem] w-[28rem] rounded-full bg-brand-purple/30 blur-3xl animate-blob" style={{ animationDelay: "6s" }} />
+        <div className="pointer-events-none absolute -left-32 top-1/4 hidden h-96 w-96 rounded-full bg-brand/30 blur-3xl animate-blob md:block" />
+        <div className="pointer-events-none absolute -right-24 bottom-10 hidden h-[28rem] w-[28rem] rounded-full bg-brand-purple/30 blur-3xl animate-blob md:block" style={{ animationDelay: "6s" }} />
         <div className="container-x relative z-10 flex h-full flex-col justify-end pb-16 md:justify-center md:pb-0">
           <div className="max-w-2xl animate-fade-in">
             <p className="mb-6 flex items-center gap-3 text-[11px] font-medium uppercase tracking-[0.35em] text-background/70">
