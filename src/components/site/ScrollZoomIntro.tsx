@@ -11,11 +11,11 @@ export function ScrollZoomIntro() {
     offset: ["start end", "end start"],
   });
 
-  const smooth = useSpring(scrollYProgress, { stiffness: 80, damping: 20 });
+  const smooth = useSpring(scrollYProgress, { stiffness: 80, damping: 20, restDelta: 0.001 });
 
-  const scale = useTransform(smooth, [0, 1], [1, 2.2]);
-  const blur = useTransform(smooth, [0, 0.5, 1], [14, 6, 2]);
-  const filter = useTransform(blur, (b) => `blur(${b}px) saturate(1.1)`);
+  // Only transform/opacity are animated — animating `filter: blur()` on a
+  // full-screen image forces a repaint every frame and causes scroll jank.
+  const scale = useTransform(smooth, [0, 1], [1.05, 1.7]);
   const overlay = useTransform(smooth, [0, 0.5, 1], [0.55, 0.4, 0.25]);
   const textY = useTransform(smooth, [0, 1], ["0%", "-30%"]);
   const textOpacity = useTransform(smooth, [0, 0.6, 1], [1, 0.6, 0]);
@@ -23,13 +23,15 @@ export function ScrollZoomIntro() {
   const ctaY = useTransform(smooth, [0.5, 0.85], [40, 0]);
 
   return (
-    <section ref={ref} className="relative h-[220vh] w-full">
+    <section ref={ref} className="relative h-[180vh] w-full">
       <div className="sticky top-0 h-screen w-full overflow-hidden">
         <motion.img
           src={lojaInterna.url}
           alt="Interior da loja Nane Benites em Campo Largo"
-          style={{ scale, filter }}
-          className="absolute inset-0 h-full w-full object-cover will-change-transform"
+          loading="lazy"
+          decoding="async"
+          style={{ scale }}
+          className="absolute inset-0 h-full w-full object-cover will-change-transform [transform:translateZ(0)]"
         />
         <motion.div
           style={{ opacity: overlay }}

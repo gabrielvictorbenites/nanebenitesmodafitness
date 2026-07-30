@@ -71,6 +71,32 @@ export function resolveImage(rawRef: string | null | undefined): string {
   return ref;
 }
 
+// Signed URLs are expensive to mint (one network round-trip per image).
+// Cache them in memory + sessionStorage so re-renders and route changes are instant.
+const SIGNED_TTL_SEC = 60 * 60 * 24 * 7;
+const CACHE_KEY = "nb_signed_urls_v1";
+type CacheEntry = { url: string; exp: number };
+
+const memCache = new Map<string, CacheEntry>();
+const inflight = new Map<string, Promise<string>>();
+
+function loadPersisted() {
+  if (typeof window === "undefined" || memCache.size) return;
+  try {
+    const raw = window.sessionStorage.getItem(CACHE_KEY);
+    if (!raw) return;
+    const parsed = JSON.parse(raw) as Record<string, CacheEntry>;
+    for (const [k, v] of Object.entries(parsed)) memCache.set(k, v);
+  } catch {}
+}
+
+function persist() {
+  if (typeof window === "undefined") return;
+  try {
+    window.sessionStorage.setItem(CACHE_KEY, JSON.stringify(Object.fromEntries(memCache)));
+  } catch {}
+}
+
 /**
  * Async resolver. Storage refs are resolved to time-limited signed URLs
  * because the bucket is private (public buckets are blocked in this workspace).
@@ -83,11 +109,26 @@ export async function resolveImageAsync(rawRef: string | null | undefined): Prom
   }
   if (ref.startsWith("storage:")) {
     const path = ref.slice(8);
-    const { data, error } = await supabase.storage
-      .from("product-images")
-      .createSignedUrl(path, 60 * 60 * 24 * 7); // 7 days
-    if (error || !data) return PLACEHOLDER;
-    return data.signedUrl;
+    loadPersisted();
+    const now = Date.now();
+    const hit = memCache.get(path);
+    if (hit && hit.exp > now) return hit.url;
+
+    const pending = inflight.get(path);
+    if (pending) return pending;
+
+    const task = (async () => {
+      const { data, error } = await supabase.storage
+        .from("product-images")
+        .createSignedUrl(path, SIGNED_TTL_SEC);
+      if (error || !data) return PLACEHOLDER;
+      memCache.set(path, { url: data.signedUrl, exp: now + (SIGNED_TTL_SEC - 3600) * 1000 });
+      persist();
+      return data.signedUrl;
+    })().finally(() => inflight.delete(path));
+
+    inflight.set(path, task);
+    return task;
   }
   return ref;
 }
