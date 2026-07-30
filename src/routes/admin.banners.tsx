@@ -369,18 +369,10 @@ function CategoryBannerRow({
 
       <div className="grid gap-6 p-5 md:grid-cols-[280px_1fr]">
         <div>
-          <div className="aspect-[4/3] w-full overflow-hidden rounded-lg bg-neutral-100">
-            {imageRef ? (
-              <AsyncImg refValue={imageRef} />
-            ) : (
-              <div className="flex h-full w-full items-center justify-center text-xs text-neutral-400">
-                Sem imagem
-              </div>
-            )}
-          </div>
+          <FocalPreview refValue={imageRef} onChange={setImageRef} />
           <UploadButton value={imageRef} onChange={setImageRef} />
           <p className="mt-2 text-center text-[11px] text-neutral-400">
-            Proporção 4:3 – recomendado 1200x900px
+            Foto vertical (3:4) – recomendado 1200x1600px. Arraste a foto para ajustar o enquadramento.
           </p>
         </div>
 
