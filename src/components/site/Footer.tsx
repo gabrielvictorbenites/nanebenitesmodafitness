@@ -5,22 +5,22 @@ import { whatsappLink } from "@/lib/whatsapp";
 
 export function Footer() {
   return (
-    <footer className="mt-24 border-t border-border bg-[color:var(--surface)]">
-      <div className="container-x py-16">
-        <div className="grid gap-12 md:grid-cols-2 lg:grid-cols-4">
+    <footer className="mt-16 border-t border-border bg-[color:var(--surface)]">
+      <div className="container-x py-10">
+        <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
           <div>
             <p className="font-display text-xl font-extrabold tracking-tight">NANE BENITES</p>
             <p className="eyebrow mt-1">Moda Fitness Premium</p>
-            <p className="mt-6 max-w-xs text-sm leading-relaxed text-muted-foreground">
+            <p className="mt-4 max-w-xs text-sm leading-relaxed text-muted-foreground">
               Curadoria exclusiva das melhores marcas de moda fitness. Peças selecionadas para mulheres que treinam com estilo.
             </p>
-            <div className="mt-6 flex items-center gap-3">
+            <div className="mt-4 flex items-center gap-3">
               <a
                 href={site.instagram}
                 target="_blank"
                 rel="noreferrer"
                 aria-label="Instagram"
-                className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-border text-foreground transition-colors hover:border-brand hover:text-brand"
+                className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-border text-foreground transition-colors hover:border-brand hover:text-brand"
               >
                 <Instagram className="h-4 w-4" />
               </a>
@@ -29,7 +29,7 @@ export function Footer() {
                 target="_blank"
                 rel="noreferrer"
                 aria-label="Facebook"
-                className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-border text-foreground transition-colors hover:border-brand hover:text-brand"
+                className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-border text-foreground transition-colors hover:border-brand hover:text-brand"
               >
                 <Facebook className="h-4 w-4" />
               </a>
@@ -37,27 +37,8 @@ export function Footer() {
           </div>
 
           <div>
-            <p className="eyebrow">Navegação</p>
-            <ul className="mt-5 space-y-3 text-sm">
-              {[
-                ["/", "Home"],
-                ["/sobre", "Sobre"],
-                ["/colecoes", "Coleções"],
-                ["/lancamentos", "Lançamentos"],
-                ["/contato", "Contato"],
-              ].map(([to, label]) => (
-                <li key={to}>
-                  <Link to={to} className="link-underline text-foreground/80 hover:text-foreground">
-                    {label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          <div>
             <p className="eyebrow">Categorias</p>
-            <ul className="mt-5 grid grid-cols-2 gap-x-4 gap-y-3 text-sm">
+            <ul className="mt-4 grid grid-cols-2 gap-x-4 gap-y-2 text-sm">
               {categories.slice(0, 8).map((c) => (
                 <li key={c.slug}>
                   <Link
@@ -74,24 +55,21 @@ export function Footer() {
 
           <div>
             <p className="eyebrow">Contato</p>
-            <ul className="mt-5 space-y-3 text-sm text-foreground/80">
+            <ul className="mt-4 space-y-2 text-sm text-foreground/80">
               {site.addresses.map((a) => (
                 <li key={a.label} className="flex items-start gap-3">
                   <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-brand" />
                   <span>
                     <span className="block text-[10px] font-semibold uppercase tracking-[0.3em] text-brand">{a.label}</span>
-                    {a.street}
-                    <br />
-                    {a.neighborhood} · {a.city}
+                    {a.street} · {a.city}
                   </span>
                 </li>
               ))}
               <li className="flex items-center gap-3">
                 <Phone className="h-4 w-4 shrink-0 text-brand" />
-                <div className="flex flex-col">
-                  <a href={`tel:+55${site.phone.replace(/\D/g, "")}`} className="hover:text-foreground">{site.phone}</a>
-                  <a href={`tel:+55${site.phoneSecondary.replace(/\D/g, "")}`} className="hover:text-foreground">{site.phoneSecondary}</a>
-                </div>
+                <a href={`tel:+55${site.phone.replace(/\D/g, "")}`} className="hover:text-foreground">{site.phone}</a>
+                <span className="text-muted-foreground">·</span>
+                <a href={`tel:+55${site.phoneSecondary.replace(/\D/g, "")}`} className="hover:text-foreground">{site.phoneSecondary}</a>
               </li>
               <li className="flex items-center gap-3">
                 <Mail className="h-4 w-4 shrink-0 text-brand" />
@@ -102,14 +80,14 @@ export function Footer() {
                 <span>{site.hours}</span>
               </li>
             </ul>
-            <div className="mt-5 flex flex-col gap-3">
+            <div className="mt-4 flex flex-col gap-2">
               {site.addresses.map((a) => (
-                <div key={a.label} className="overflow-hidden rounded-lg border border-border">
+                <div key={a.label} className="overflow-hidden rounded-md border border-border">
                   <iframe
                     title={`Mapa ${a.label}`}
                     src={a.mapEmbed}
                     loading="lazy"
-                    className="h-28 w-full"
+                    className="h-20 w-full"
                     style={{ border: 0 }}
                     referrerPolicy="no-referrer-when-downgrade"
                     allowFullScreen
@@ -121,14 +99,14 @@ export function Footer() {
               href={whatsappLink()}
               target="_blank"
               rel="noreferrer"
-              className="mt-5 inline-flex rounded-full bg-brand px-5 py-2.5 text-xs font-semibold uppercase tracking-widest text-brand-foreground transition-colors hover:bg-brand-dark"
+              className="mt-4 inline-flex rounded-full bg-brand px-5 py-2.5 text-xs font-semibold uppercase tracking-widest text-brand-foreground transition-colors hover:bg-brand-dark"
             >
               WhatsApp
             </a>
           </div>
         </div>
 
-        <div className="mt-16 flex flex-col items-center justify-between gap-4 border-t border-border pt-8 text-xs text-muted-foreground md:flex-row">
+        <div className="mt-8 flex flex-col items-center justify-between gap-2 border-t border-border pt-6 text-xs text-muted-foreground md:flex-row">
           <p>© {new Date().getFullYear()} Nane Benites Moda Fitness. Todos os direitos reservados.</p>
           <p>CNPJ {site.cnpj}</p>
           <p>
