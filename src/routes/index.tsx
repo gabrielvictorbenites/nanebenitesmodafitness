@@ -242,6 +242,7 @@ function HomePage() {
                 src={imgs.lojaCuritiba}
                 alt="Fachada da loja Nane Benites em Curitiba"
                 loading="lazy"
+                style={{ objectPosition: imgPos.lojaCuritiba }}
                 className="h-full w-full object-cover transition-transform duration-[1200ms] hover:scale-105"
               />
               <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-foreground/70 to-transparent p-6">
