@@ -8,6 +8,9 @@ import { useSiteCategories } from "@/lib/categories";
 import { fetchProducts, type DbProduct } from "@/lib/products";
 
 export const Route = createFileRoute("/catalogo")({
+  validateSearch: (search: Record<string, unknown>) => ({
+    marca: typeof search.marca === "string" ? search.marca : undefined,
+  }),
   head: () => ({
     meta: [
       { title: "Catálogo — Nane Benites" },
@@ -22,10 +25,14 @@ export const Route = createFileRoute("/catalogo")({
 });
 
 function CatalogoPage() {
+  const { marca } = Route.useSearch();
   const categories = useSiteCategories();
   const [q, setQ] = useState("");
   const [cat, setCat] = useState<string>("todos");
-  const [brand, setBrand] = useState<string>("todos");
+  const [brand, setBrand] = useState<string>(marca ?? "todos");
+  useEffect(() => {
+    setBrand(marca ?? "todos");
+  }, [marca]);
   const [sort, setSort] = useState<"recentes" | "vendidos" | "menor" | "maior">("recentes");
   const [products, setProducts] = useState<DbProduct[]>([]);
   const [loading, setLoading] = useState(true);

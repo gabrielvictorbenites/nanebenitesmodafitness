@@ -13,6 +13,13 @@ import {
   type CategoryEntry,
 } from "@/lib/banners";
 import { resolveImageAsync } from "@/lib/product-image";
+import { FocalImage } from "@/components/admin/FocalImage";
+import {
+  collectionList,
+  fetchCollectionBanners,
+  saveCollectionBanner,
+  type CollectionEntry,
+} from "@/lib/collections";
 
 export const Route = createFileRoute("/admin/banners")({
   ssr: false,
@@ -20,7 +27,7 @@ export const Route = createFileRoute("/admin/banners")({
 });
 
 function BannersPage() {
-  const [tab, setTab] = useState<"hero" | "categorias">("hero");
+  const [tab, setTab] = useState<"hero" | "categorias" | "colecoes">("hero");
   return (
     <div className="mx-auto max-w-6xl p-6 md:p-10">
       <header className="mb-6">
@@ -35,6 +42,7 @@ function BannersPage() {
           [
             { id: "hero", label: "Banners da Home" },
             { id: "categorias", label: "Banners de Categorias" },
+            { id: "colecoes", label: "Banners de Coleções" },
           ] as const
         ).map((t) => (
           <button
@@ -52,7 +60,7 @@ function BannersPage() {
         ))}
       </div>
 
-      {tab === "hero" ? <HeroTab /> : <CategoriesTab />}
+      {tab === "hero" ? <HeroTab /> : tab === "categorias" ? <CategoriesTab /> : <CollectionsTab />}
     </div>
   );
 }
@@ -361,18 +369,10 @@ function CategoryBannerRow({
 
       <div className="grid gap-6 p-5 md:grid-cols-[280px_1fr]">
         <div>
-          <div className="aspect-[4/3] w-full overflow-hidden rounded-lg bg-neutral-100">
-            {imageRef ? (
-              <AsyncImg refValue={imageRef} />
-            ) : (
-              <div className="flex h-full w-full items-center justify-center text-xs text-neutral-400">
-                Sem imagem
-              </div>
-            )}
-          </div>
+          <FocalPreview refValue={imageRef} onChange={setImageRef} />
           <UploadButton value={imageRef} onChange={setImageRef} />
           <p className="mt-2 text-center text-[11px] text-neutral-400">
-            Proporção 4:3 – recomendado 1200x900px
+            Foto vertical (3:4) – recomendado 1200x1600px. Arraste a foto para ajustar o enquadramento.
           </p>
         </div>
 
@@ -417,6 +417,159 @@ function CategoryBannerRow({
 // ============================================================
 // Reusable pieces
 // ============================================================
+
+function CollectionsTab() {
+  const list = collectionList();
+  const [map, setMap] = useState<Record<string, { imageRef: string; tagline: string }>>({});
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    let alive = true;
+    fetchCollectionBanners()
+      .then((m) => alive && setMap(m))
+      .catch(() => {})
+      .finally(() => alive && setLoading(false));
+    return () => {
+      alive = false;
+    };
+  }, []);
+
+  if (loading) return <p className="py-12 text-center text-sm text-neutral-500">Carregando…</p>;
+
+  return (
+    <div>
+      <p className="mb-4 text-sm text-neutral-600">
+        Cada card é uma coleção de marca exibida na página <code>/colecoes</code>. Envie uma foto vertical e
+        arraste para ajustar o enquadramento — a moça aparece de corpo inteiro.
+      </p>
+      <div className="space-y-4">
+        {list.map((c, i) => (
+          <CollectionBannerRow
+            key={c.slug}
+            index={i + 1}
+            collection={c}
+            initial={map[c.slug] ?? { imageRef: "", tagline: "" }}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function CollectionBannerRow({
+  index,
+  collection,
+  initial,
+}: {
+  index: number;
+  collection: CollectionEntry;
+  initial: { imageRef: string; tagline: string };
+}) {
+  const [imageRef, setImageRef] = useState(initial.imageRef);
+  const [tagline, setTagline] = useState(initial.tagline);
+  const [saving, setSaving] = useState(false);
+  const [saved, setSaved] = useState(false);
+  const [err, setErr] = useState<string | null>(null);
+
+  async function onSave() {
+    setSaving(true);
+    setSaved(false);
+    setErr(null);
+    try {
+      await saveCollectionBanner(collection.slug, { imageRef, tagline });
+      setSaved(true);
+      setTimeout(() => setSaved(false), 2000);
+    } catch (e) {
+      setErr(e instanceof Error ? e.message : "Erro ao salvar");
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  return (
+    <div className="rounded-2xl border border-neutral-200 bg-white shadow-sm">
+      <div className="flex items-center gap-3 border-b border-neutral-100 px-5 py-3">
+        <span className="text-[11px] font-semibold uppercase tracking-[0.2em] text-neutral-500">
+          Coleção #{index}
+        </span>
+        <span className="font-serif text-base font-bold text-neutral-900">{collection.name}</span>
+        <span className="rounded bg-neutral-100 px-2 py-0.5 font-mono text-[10px] text-neutral-500">
+          /colecoes
+        </span>
+      </div>
+
+      <div className="grid gap-6 p-5 md:grid-cols-[280px_1fr]">
+        <div>
+          <FocalPreview refValue={imageRef} onChange={setImageRef} />
+          <UploadButton value={imageRef} onChange={setImageRef} />
+          <p className="mt-2 text-center text-[11px] text-neutral-400">
+            Foto vertical (3:4) – recomendado 1200x1600px.
+          </p>
+        </div>
+
+        <div className="grid gap-4">
+          <Field label="Texto da coleção (opcional)">
+            <input
+              value={tagline}
+              onChange={(e) => setTagline(e.target.value)}
+              placeholder={collection.description}
+              className={inputCls}
+            />
+          </Field>
+          <p className="text-xs text-neutral-500">
+            O card leva direto ao catálogo filtrado pela marca {collection.name}.
+          </p>
+        </div>
+      </div>
+
+      <div className="flex items-center justify-between border-t border-neutral-100 px-5 py-3">
+        {err ? (
+          <p className="text-xs text-red-600">{err}</p>
+        ) : saved ? (
+          <p className="inline-flex items-center gap-1 text-xs font-medium text-green-600">
+            <Check className="h-3.5 w-3.5" /> Salvo
+          </p>
+        ) : (
+          <span />
+        )}
+        <button
+          onClick={onSave}
+          disabled={saving}
+          className="inline-flex items-center gap-2 rounded-lg bg-gradient-to-r from-cyan-500 to-violet-600 px-5 py-2 text-sm font-medium text-white disabled:opacity-60"
+        >
+          {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : null}
+          {saving ? "Salvando…" : "Salvar"}
+        </button>
+      </div>
+    </div>
+  );
+}
+
+function FocalPreview({ refValue, onChange }: { refValue: string; onChange: (v: string) => void }) {
+  const [url, setUrl] = useState("");
+  useEffect(() => {
+    let alive = true;
+    if (!refValue) {
+      setUrl("");
+      return;
+    }
+    resolveImageAsync(refValue).then((u) => {
+      if (alive) setUrl(u);
+    });
+    return () => {
+      alive = false;
+    };
+  }, [refValue]);
+
+  return (
+    <FocalImage
+      src={url}
+      refValue={refValue}
+      onChange={onChange}
+      className="aspect-[3/4] w-full rounded-lg"
+    />
+  );
+}
 
 function UploadButton({ value, onChange }: { value: string; onChange: (v: string) => void }) {
   const [uploading, setUploading] = useState(false);

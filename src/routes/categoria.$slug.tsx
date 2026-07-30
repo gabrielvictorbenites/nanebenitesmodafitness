@@ -5,7 +5,7 @@ import { findCategory } from "@/lib/site-data";
 import { useSiteCategories } from "@/lib/categories";
 import { fetchProducts, type DbProduct } from "@/lib/products";
 import { fetchCategoryBanners } from "@/lib/banners";
-import { resolveImageAsync } from "@/lib/product-image";
+import { resolveImageAsync, focalOf } from "@/lib/product-image";
 
 export const Route = createFileRoute("/categoria/$slug")({
   loader: ({ params }) => {
@@ -58,6 +58,7 @@ function CategoryPage() {
   const [products, setProducts] = useState<DbProduct[]>([]);
   const [loading, setLoading] = useState(true);
   const [bannerImg, setBannerImg] = useState<string>(category.image);
+  const [focal, setFocal] = useState<string>("50% 50%");
   const heroImg = bannerImg || dbCat?.image || "";
   const [tagline, setTagline] = useState<string>("");
   useEffect(() => {
@@ -71,7 +72,10 @@ function CategoryPage() {
       if (!alive || !entry) return;
       if (entry.imageRef) {
         const url = await resolveImageAsync(entry.imageRef);
-        if (alive) setBannerImg(url);
+        if (alive) {
+          setBannerImg(url);
+          setFocal(focalOf(entry.imageRef));
+        }
       }
       if (entry.tagline) setTagline(entry.tagline);
     })();
@@ -80,9 +84,14 @@ function CategoryPage() {
 
   return (
     <>
-      <section className="relative h-[50vh] min-h-[380px] w-full overflow-hidden bg-foreground text-background">
+      <section className="relative h-[78vh] min-h-[560px] w-full overflow-hidden bg-foreground text-background">
         {heroImg ? (
-          <img src={heroImg} alt={name} className="absolute inset-0 h-full w-full object-cover" />
+          <img
+            src={heroImg}
+            alt={name}
+            style={{ objectPosition: focal }}
+            className="absolute inset-0 h-full w-full object-cover"
+          />
         ) : null}
         <div className="absolute inset-0 bg-gradient-to-t from-foreground/80 via-foreground/40 to-foreground/20" />
         <div className="container-x relative z-10 flex h-full flex-col justify-end pb-12">
