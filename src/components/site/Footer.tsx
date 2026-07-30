@@ -1,4 +1,3 @@
-import { Link } from "@tanstack/react-router";
 import { Instagram, Facebook, MapPin, Phone, Mail, Clock } from "lucide-react";
 import { site } from "@/lib/site-data";
 import { whatsappLink } from "@/lib/whatsapp";
