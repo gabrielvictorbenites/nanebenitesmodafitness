@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 import collectionImg from "@/assets/collection.jpg";
 import lojaCampoLargo from "@/assets/loja-campo-largo.jpg.asset.json";
 import lojaCuritiba from "@/assets/loja-curitiba.jpg.asset.json";
@@ -7,6 +7,7 @@ import { PageHero } from "@/components/site/PageHero";
 import { fetchSiteImages } from "@/lib/site-images";
 import { resolveImageAsync, focalOf } from "@/lib/product-image";
 import { buildDefaults, fetchSiteTexts, type SiteTextsMap } from "@/lib/site-content";
+import { readSnapshots, writeSnapshots, type Snap } from "@/lib/image-snapshot";
 
 export const Route = createFileRoute("/sobre")({
   head: () => ({
@@ -28,9 +29,16 @@ function SobrePage() {
     sobre_bottom_1: lojaCuritiba.url,
     sobre_bottom_2: collectionImg,
   };
-  const [imgs, setImgs] = useState<Record<string, string>>(defaults);
+  const [imgs, setImgs] = useState<Record<string, string>>({});
   const [pos, setPos] = useState<Record<string, string>>({});
   const [t, setT] = useState<SiteTextsMap>(() => buildDefaults());
+  useLayoutEffect(() => {
+    const snap = readSnapshots(Object.keys(defaults));
+    if (!Object.keys(snap).length) return;
+    const list = Object.entries(snap) as [string, Snap][];
+    setImgs((p) => ({ ...p, ...Object.fromEntries(list.map(([k, v]) => [k, v.url])) }));
+    setPos((p) => ({ ...p, ...Object.fromEntries(list.map(([k, v]) => [k, v.pos])) }));
+  }, []);
   useEffect(() => {
     let alive = true;
     (async () => {
@@ -47,6 +55,14 @@ function SobrePage() {
         if (alive) {
           setImgs(resolved);
           setPos(positions);
+          writeSnapshots(
+            Object.fromEntries(
+              Object.keys(defaults).map((k) => [
+                k,
+                { url: resolved[k] ?? defaults[k], pos: positions[k] ?? "50% 50%" },
+              ]),
+            ),
+          );
         }
       } catch {}
       try {
@@ -69,7 +85,7 @@ function SobrePage() {
 
       <section className="container-x grid gap-16 py-24 md:grid-cols-2 md:py-32">
         <div className="relative aspect-[4/5] overflow-hidden rounded-sm shadow-elegant">
-          <img src={imgs.sobre_top} alt="Interior da loja Nane Benites em Campo Largo" loading="lazy" style={{ objectPosition: pos.sobre_top ?? "50% 50%" }} className="h-full w-full object-cover" />
+          {imgs.sobre_top ? <img src={imgs.sobre_top} alt="Interior da loja Nane Benites em Campo Largo" loading="lazy" style={{ objectPosition: pos.sobre_top ?? "50% 50%" }} className="h-full w-full object-cover" /> : null}
         </div>
         <div className="flex flex-col justify-center">
           <p className="eyebrow">Nossa história</p>
@@ -102,14 +118,14 @@ function SobrePage() {
       <section className="container-x py-24">
         <div className="grid gap-6 md:grid-cols-2">
           <div className="relative aspect-[4/3] overflow-hidden rounded-sm shadow-elegant">
-            <img src={imgs.sobre_bottom_1} alt="Loja Nane Benites" loading="lazy" style={{ objectPosition: pos.sobre_bottom_1 ?? "50% 50%" }} className="h-full w-full object-cover" />
+            {imgs.sobre_bottom_1 ? <img src={imgs.sobre_bottom_1} alt="Loja Nane Benites" loading="lazy" style={{ objectPosition: pos.sobre_bottom_1 ?? "50% 50%" }} className="h-full w-full object-cover" /> : null}
             <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-foreground/70 to-transparent p-5">
               <p className="text-[10px] font-semibold uppercase tracking-[0.3em] text-white/80">Nossas lojas</p>
               <p className="mt-1 font-display text-lg font-semibold text-white">Curitiba · Campo Largo</p>
             </div>
           </div>
           <div className="relative aspect-[4/3] overflow-hidden rounded-sm shadow-elegant">
-            <img src={imgs.sobre_bottom_2} alt="Coleção Nane Benites" loading="lazy" style={{ objectPosition: pos.sobre_bottom_2 ?? "50% 50%" }} className="h-full w-full object-cover" />
+            {imgs.sobre_bottom_2 ? <img src={imgs.sobre_bottom_2} alt="Coleção Nane Benites" loading="lazy" style={{ objectPosition: pos.sobre_bottom_2 ?? "50% 50%" }} className="h-full w-full object-cover" /> : null}
           </div>
         </div>
       </section>

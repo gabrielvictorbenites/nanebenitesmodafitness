@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 import { ArrowRight, MapPin, Instagram } from "lucide-react";
 import heroImg from "@/assets/hero.jpg";
 import collectionImg from "@/assets/collection.jpg";
@@ -14,6 +14,7 @@ import { BrandMarquee } from "@/components/site/BrandMarquee";
 import { fetchCategoryBanners } from "@/lib/banners";
 import { resolveImageAsync, focalOf } from "@/lib/product-image";
 import { fetchSiteImages } from "@/lib/site-images";
+import { readSnapshots, writeSnapshots } from "@/lib/image-snapshot";
 import { buildDefaults as buildTextDefaults, fetchSiteTexts, type SiteTextsMap } from "@/lib/site-content";
 import brandRunMore from "@/assets/brands/run-more.png";
 import brandZeroAcucar from "@/assets/brands/zero-acucar.png";
@@ -59,15 +60,36 @@ function HomePage() {
   const [catOverrides, setCatOverrides] = useState<Record<string, string>>({});
   const [t, setT] = useState<SiteTextsMap>(() => buildTextDefaults());
   const [imgs, setImgs] = useState<{ hero: string; collection: string; lojaCuritiba: string }>({
-    hero: heroImg,
-    collection: collectionImg,
-    lojaCuritiba: lojaCuritiba.url,
+    hero: "",
+    collection: "",
+    lojaCuritiba: "",
   });
   const [imgPos, setImgPos] = useState<{ hero: string; collection: string; lojaCuritiba: string }>({
     hero: "50% 50%",
     collection: "50% 50%",
     lojaCuritiba: "50% 50%",
   });
+  // Paint the last known images before the first frame (no flash of old defaults).
+  useLayoutEffect(() => {
+    const catSnap = readSnapshots(["__cat_overrides"]) as any;
+    if (catSnap.__cat_overrides?.url) {
+      try {
+        setCatOverrides(JSON.parse(catSnap.__cat_overrides.url));
+      } catch {}
+    }
+    const snap = readSnapshots(["home_hero", "home_collection", "home_loja_curitiba"]);
+    if (!Object.keys(snap).length) return;
+    setImgs((p) => ({
+      hero: snap.home_hero?.url || p.hero,
+      collection: snap.home_collection?.url || p.collection,
+      lojaCuritiba: snap.home_loja_curitiba?.url || p.lojaCuritiba,
+    }));
+    setImgPos((p) => ({
+      hero: snap.home_hero?.pos || p.hero,
+      collection: snap.home_collection?.pos || p.collection,
+      lojaCuritiba: snap.home_loja_curitiba?.pos || p.lojaCuritiba,
+    }));
+  }, []);
   useEffect(() => {
     let alive = true;
     (async () => {
@@ -77,7 +99,10 @@ function HomePage() {
           .filter(([, v]) => v.imageRef)
           .map(async ([slug, v]) => [slug, await resolveImageAsync(v.imageRef)] as const),
       );
-      if (alive) setCatOverrides(Object.fromEntries(entries));
+      if (!alive) return;
+      const obj = Object.fromEntries(entries);
+      setCatOverrides(obj);
+      writeSnapshots({ __cat_overrides: { url: JSON.stringify(obj), pos: "" } });
     })();
     (async () => {
       const m = await fetchSiteImages();
@@ -87,15 +112,22 @@ function HomePage() {
         m.home_loja_curitiba ? resolveImageAsync(m.home_loja_curitiba) : Promise.resolve(""),
       ]);
       if (!alive) return;
-      setImgs((prev) => ({
-        hero: hero || prev.hero,
-        collection: collection || prev.collection,
-        lojaCuritiba: loja || prev.lojaCuritiba,
-      }));
-      setImgPos({
+      const next = {
+        hero: hero || heroImg,
+        collection: collection || collectionImg,
+        lojaCuritiba: loja || lojaCuritiba.url,
+      };
+      const pos = {
         hero: focalOf(m.home_hero),
         collection: focalOf(m.home_collection),
         lojaCuritiba: focalOf(m.home_loja_curitiba),
+      };
+      setImgs(next);
+      setImgPos(pos);
+      writeSnapshots({
+        home_hero: { url: next.hero, pos: pos.hero },
+        home_collection: { url: next.collection, pos: pos.collection },
+        home_loja_curitiba: { url: next.lojaCuritiba, pos: pos.lojaCuritiba },
       });
     })();
     (async () => {
@@ -112,16 +144,18 @@ function HomePage() {
     <>
       {/* HERO */}
       <section className="relative h-[72vh] min-h-[520px] max-h-[780px] w-full overflow-hidden bg-foreground text-background">
-        <img
-          src={imgs.hero}
-          alt="Mulher em roupa fitness premium Nane Benites"
-          width={1600}
-          height={1920}
-          fetchPriority="high"
-          decoding="async"
-          style={{ objectPosition: imgPos.hero }}
-          className="absolute inset-0 h-full w-full object-cover"
-        />
+        {imgs.hero ? (
+          <img
+            src={imgs.hero}
+            alt="Mulher em roupa fitness premium Nane Benites"
+            width={1600}
+            height={1920}
+            fetchPriority="high"
+            decoding="async"
+            style={{ objectPosition: imgPos.hero }}
+            className="absolute inset-0 h-full w-full object-cover"
+          />
+        ) : null}
         <div className="absolute inset-0 bg-gradient-to-r from-foreground/85 via-foreground/40 to-foreground/10" />
         <div className="pointer-events-none absolute inset-0 bg-gradient-to-tr from-brand/25 via-transparent to-brand-purple/30 mix-blend-overlay" />
         <div className="pointer-events-none absolute -left-32 top-1/4 hidden h-96 w-96 rounded-full bg-brand/30 blur-3xl animate-blob md:block" />
@@ -194,7 +228,9 @@ function HomePage() {
       <section className="bg-gradient-soft">
         <div className="container-x grid gap-12 py-24 md:grid-cols-2 md:gap-16 md:py-32">
           <div className="relative aspect-[4/5] overflow-hidden rounded-sm">
-            <img src={imgs.collection} alt="Coleção Nane Benites" loading="lazy" style={{ objectPosition: imgPos.collection }} className="h-full w-full object-cover" />
+            {imgs.collection ? (
+              <img src={imgs.collection} alt="Coleção Nane Benites" loading="lazy" style={{ objectPosition: imgPos.collection }} className="h-full w-full object-cover" />
+            ) : null}
           </div>
           <div className="flex flex-col justify-center">
             <p className="eyebrow">Nova Coleção</p>
@@ -255,6 +291,7 @@ function HomePage() {
           <div className="relative order-1 md:order-2">
             <div className="pointer-events-none absolute -inset-6 rounded-3xl bg-gradient-brand opacity-30 blur-2xl" />
             <div className="relative aspect-[3/4] overflow-hidden rounded-3xl shadow-elegant">
+              {imgs.lojaCuritiba ? (
               <img
                 src={imgs.lojaCuritiba}
                 alt="Fachada da loja Nane Benites em Curitiba"
@@ -262,6 +299,7 @@ function HomePage() {
                 style={{ objectPosition: imgPos.lojaCuritiba }}
                 className="h-full w-full object-cover transition-transform duration-[1200ms] hover:scale-105"
               />
+              ) : null}
               <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-foreground/70 to-transparent p-6">
                 <p className="text-[10px] font-semibold uppercase tracking-[0.3em] text-white/80">Loja Curitiba</p>
                 <p className="mt-1 font-display text-xl font-semibold text-white">Nane Benites Moda Fitness</p>

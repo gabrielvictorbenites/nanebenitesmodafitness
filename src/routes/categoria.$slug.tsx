@@ -1,11 +1,12 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 import { ProductCard } from "@/components/site/ProductCard";
 import { findCategory } from "@/lib/site-data";
 import { useSiteCategories } from "@/lib/categories";
 import { fetchProducts, type DbProduct } from "@/lib/products";
 import { fetchCategoryBanners } from "@/lib/banners";
 import { resolveImageAsync, focalOf } from "@/lib/product-image";
+import { readSnapshot, writeSnapshots } from "@/lib/image-snapshot";
 
 export const Route = createFileRoute("/categoria/$slug")({
   loader: ({ params }) => {
@@ -57,10 +58,17 @@ function CategoryPage() {
   const name = dbCat?.name ?? category.name;
   const [products, setProducts] = useState<DbProduct[]>([]);
   const [loading, setLoading] = useState(true);
-  const [bannerImg, setBannerImg] = useState<string>(category.image);
+  const [bannerImg, setBannerImg] = useState<string>("");
   const [focal, setFocal] = useState<string>("50% 50%");
-  const heroImg = bannerImg || dbCat?.image || "";
+  const heroImg = bannerImg;
   const [tagline, setTagline] = useState<string>("");
+  useLayoutEffect(() => {
+    const snap = readSnapshot(`cat_hero_${category.slug}`);
+    if (snap?.url) {
+      setBannerImg(snap.url);
+      setFocal(snap.pos || "50% 50%");
+    }
+  }, [category.slug]);
   useEffect(() => {
     let alive = true;
     fetchProducts()
@@ -69,14 +77,21 @@ function CategoryPage() {
     (async () => {
       const map = await fetchCategoryBanners();
       const entry = map[category.slug];
-      if (!alive || !entry) return;
+      if (!alive) return;
+      if (!entry) {
+        setBannerImg((p) => p || dbCat?.image || category.image);
+        return;
+      }
       const heroRef = entry.heroImageRef || entry.imageRef;
       if (heroRef) {
         const url = await resolveImageAsync(heroRef);
         if (alive) {
           setBannerImg(url);
           setFocal(focalOf(heroRef));
+          writeSnapshots({ [`cat_hero_${category.slug}`]: { url, pos: focalOf(heroRef) } });
         }
+      } else {
+        setBannerImg((p) => p || dbCat?.image || category.image);
       }
       const t = entry.heroTagline || entry.tagline;
       if (t) setTagline(t);
