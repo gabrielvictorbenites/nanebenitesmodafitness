@@ -70,14 +70,16 @@ function CategoryPage() {
       const map = await fetchCategoryBanners();
       const entry = map[category.slug];
       if (!alive || !entry) return;
-      if (entry.imageRef) {
-        const url = await resolveImageAsync(entry.imageRef);
+      const heroRef = entry.heroImageRef || entry.imageRef;
+      if (heroRef) {
+        const url = await resolveImageAsync(heroRef);
         if (alive) {
           setBannerImg(url);
-          setFocal(focalOf(entry.imageRef));
+          setFocal(focalOf(heroRef));
         }
       }
-      if (entry.tagline) setTagline(entry.tagline);
+      const t = entry.heroTagline || entry.tagline;
+      if (t) setTagline(t);
     })();
     return () => { alive = false; };
   }, [category.slug]);
