@@ -101,7 +101,12 @@ function ProductPage() {
       <section className="container-x grid gap-12 py-12 md:grid-cols-2 md:gap-16 md:py-16">
         <div>
           <div className="relative aspect-[3/4] overflow-hidden rounded-sm bg-[color:var(--surface)]">
-            <img src={gallery[active]} alt={product.name} className="h-full w-full object-cover" />
+            <img
+              src={gallery[active]}
+              alt={product.name}
+              style={{ objectPosition: product.galleryPositions?.[active] ?? product.imagePosition ?? "50% 50%" }}
+              className="h-full w-full object-cover"
+            />
           </div>
           {gallery.length > 1 ? (
             <div className="mt-4 grid grid-cols-4 gap-2">
@@ -113,7 +118,12 @@ function ProductPage() {
                     i === active ? "border-brand" : "border-border hover:border-foreground"
                   }`}
                 >
-                  <img src={g} alt="" className="h-full w-full object-cover" />
+                  <img
+                    src={g}
+                    alt=""
+                    style={{ objectPosition: product.galleryPositions?.[i] ?? "50% 50%" }}
+                    className="h-full w-full object-cover"
+                  />
                 </button>
               ))}
             </div>
