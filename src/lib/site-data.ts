@@ -16,14 +16,14 @@ export const site = {
   name: "Nane Benites",
   tagline: "Moda Fitness",
   // WhatsApp para compras — formato internacional (55 + DDD + número).
-  whatsapp: "5545999675120",
+  whatsapp: "5541997071344",
   instagram:
     "https://www.instagram.com/nanebenites?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==",
   instagramHandle: "@nanebenites",
   facebook: "https://facebook.com/nanebenites",
   email: "nanebenites@yahoo.com",
   phone: "(45) 99967-5120",
-  phoneSecondary: "(41) 9707-1344",
+  phoneSecondary: "(41) 99707-1344",
   address: "Av. Des. Clotário Portugal, 501 — Centro",
   city: "Campo Largo — PR",
   cnpj: "43.288.784/0001-08",
@@ -38,7 +38,7 @@ export const site = {
         "https://www.google.com/maps?q=Av.+Des.+Clot%C3%A1rio+Portugal,+501+-+Centro,+Campo+Largo+-+PR&output=embed",
       hoursList: [
         { day: "Segunda a Sexta", time: "09:00 – 18:00" },
-        { day: "Sábado", time: "09:00 – 14:00" },
+        { day: "Sábado", time: "09:00 – 12:00" },
         { day: "Domingo", time: "Fechado" },
       ],
     },
@@ -56,7 +56,7 @@ export const site = {
       ],
     },
   ],
-  hours: "Curitiba: Seg-Sex 09h–19h · Campo Largo: Seg-Sex 09h–18h · Sáb 09h–14h",
+  hours: "Curitiba: Seg-Sex 09h–19h · Sáb 09h–14h · Campo Largo: Seg-Sex 09h–18h · Sáb 09h–12h",
   hoursList: [
     { day: "Segunda-feira", time: "09:00 – 19:00" },
     { day: "Terça-feira", time: "09:00 – 19:00" },
