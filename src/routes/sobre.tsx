@@ -4,6 +4,7 @@ import collectionImg from "@/assets/collection.jpg";
 import lojaCampoLargo from "@/assets/loja-campo-largo.jpg.asset.json";
 import lojaCuritiba from "@/assets/loja-curitiba.jpg.asset.json";
 import { PageHero } from "@/components/site/PageHero";
+import { SmartImage } from "@/components/site/SmartImage";
 import { fetchSiteImages } from "@/lib/site-images";
 import { resolveImageAsync, focalOf } from "@/lib/product-image";
 import { buildDefaults, fetchSiteTexts, type SiteTextsMap } from "@/lib/site-content";
