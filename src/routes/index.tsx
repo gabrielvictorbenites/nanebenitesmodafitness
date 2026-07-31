@@ -5,9 +5,10 @@ import heroImg from "@/assets/hero.jpg";
 import collectionImg from "@/assets/collection.jpg";
 import lojaCuritiba from "@/assets/loja-curitiba.jpg.asset.json";
 import { site } from "@/lib/site-data";
-import { useSiteCategories } from "@/lib/categories";
+import { useSiteCategoriesState } from "@/lib/categories";
 import { whatsappLink } from "@/lib/whatsapp";
 import { CategoryCard } from "@/components/site/CategoryCard";
+import { SmartImage } from "@/components/site/SmartImage";
 import { ScrollZoomIntro } from "@/components/site/ScrollZoomIntro";
 import { FeaturedProducts } from "@/components/site/FeaturedProducts";
 import { BrandMarquee } from "@/components/site/BrandMarquee";
@@ -138,24 +139,21 @@ function HomePage() {
     })();
     return () => { alive = false; };
   }, []);
-  const allCats = useSiteCategories();
+  const { categories: allCats, loading: catsLoading } = useSiteCategoriesState();
   const cats = allCats.map((c) => (catOverrides[c.slug] ? { ...c, image: catOverrides[c.slug] } : c));
   return (
     <>
       {/* HERO */}
       <section className="relative h-[72vh] min-h-[520px] max-h-[780px] w-full overflow-hidden bg-foreground text-background">
-        {imgs.hero ? (
-          <img
-            src={imgs.hero}
-            alt="Mulher em roupa fitness premium Nane Benites"
-            width={1600}
-            height={1920}
-            fetchPriority="high"
-            decoding="async"
-            style={{ objectPosition: imgPos.hero }}
-            className="absolute inset-0 h-full w-full object-cover"
-          />
-        ) : null}
+        <SmartImage
+          src={imgs.hero}
+          alt="Mulher em roupa fitness premium Nane Benites"
+          width={1600}
+          height={1920}
+          priority
+          objectPosition={imgPos.hero}
+          skeletonClassName="bg-foreground"
+        />
         <div className="absolute inset-0 bg-gradient-to-r from-foreground/85 via-foreground/40 to-foreground/10" />
         <div className="pointer-events-none absolute inset-0 bg-gradient-to-tr from-brand/25 via-transparent to-brand-purple/30 mix-blend-overlay" />
         <div className="pointer-events-none absolute -left-32 top-1/4 hidden h-96 w-96 rounded-full bg-brand/30 blur-3xl animate-blob md:block" />
@@ -217,9 +215,11 @@ function HomePage() {
           </Link>
         </div>
         <div className="grid grid-cols-2 gap-3 md:grid-cols-3 md:gap-5 lg:grid-cols-5">
-          {cats.map((c) => (
-            <CategoryCard key={c.slug} category={c} />
-          ))}
+          {catsLoading
+            ? Array.from({ length: 5 }).map((_, i) => (
+                <div key={i} className="aspect-[3/4] rounded-sm skeleton-block md:aspect-[4/5]" />
+              ))
+            : cats.map((c) => <CategoryCard key={c.slug} category={c} />)}
         </div>
        </div>
       </section>
@@ -228,9 +228,7 @@ function HomePage() {
       <section className="bg-gradient-soft">
         <div className="container-x grid gap-12 py-24 md:grid-cols-2 md:gap-16 md:py-32">
           <div className="relative aspect-[4/5] overflow-hidden rounded-sm">
-            {imgs.collection ? (
-              <img src={imgs.collection} alt="Coleção Nane Benites" loading="lazy" style={{ objectPosition: imgPos.collection }} className="h-full w-full object-cover" />
-            ) : null}
+            <SmartImage src={imgs.collection} alt="Coleção Nane Benites" objectPosition={imgPos.collection} />
           </div>
           <div className="flex flex-col justify-center">
             <p className="eyebrow">Nova Coleção</p>
@@ -291,15 +289,12 @@ function HomePage() {
           <div className="relative order-1 md:order-2">
             <div className="pointer-events-none absolute -inset-6 rounded-3xl bg-gradient-brand opacity-30 blur-2xl" />
             <div className="relative aspect-[3/4] overflow-hidden rounded-3xl shadow-elegant">
-              {imgs.lojaCuritiba ? (
-              <img
+              <SmartImage
                 src={imgs.lojaCuritiba}
                 alt="Fachada da loja Nane Benites em Curitiba"
-                loading="lazy"
-                style={{ objectPosition: imgPos.lojaCuritiba }}
-                className="h-full w-full object-cover transition-transform duration-[1200ms] hover:scale-105"
+                objectPosition={imgPos.lojaCuritiba}
+                className="transition-transform duration-[1200ms] hover:scale-105"
               />
-              ) : null}
               <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-foreground/70 to-transparent p-6">
                 <p className="text-[10px] font-semibold uppercase tracking-[0.3em] text-white/80">Loja Curitiba</p>
                 <p className="mt-1 font-display text-xl font-semibold text-white">Nane Benites Moda Fitness</p>
