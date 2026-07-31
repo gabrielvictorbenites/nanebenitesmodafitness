@@ -44,7 +44,7 @@ export function Header() {
           <img
             src={logoAsset.url}
             alt="Nane Benites Moda Fitness"
-            className="h-11 w-auto shrink-0 object-contain md:h-14"
+            className="h-16 w-auto shrink-0 object-contain md:h-20"
           />
         </Link>
 
