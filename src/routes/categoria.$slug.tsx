@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useLayoutEffect, useState } from "react";
 import { ProductCard } from "@/components/site/ProductCard";
+import { SmartImage } from "@/components/site/SmartImage";
 import { findCategory } from "@/lib/site-data";
 import { useSiteCategories } from "@/lib/categories";
 import { fetchProducts, type DbProduct } from "@/lib/products";
@@ -102,14 +103,7 @@ function CategoryPage() {
   return (
     <>
       <section className="relative h-[78vh] min-h-[560px] w-full overflow-hidden bg-foreground text-background">
-        {heroImg ? (
-          <img
-            src={heroImg}
-            alt={name}
-            style={{ objectPosition: focal }}
-            className="absolute inset-0 h-full w-full object-cover"
-          />
-        ) : null}
+        <SmartImage src={heroImg} alt={name} objectPosition={focal} priority skeletonClassName="bg-foreground" />
         <div className="absolute inset-0 bg-gradient-to-t from-foreground/80 via-foreground/40 to-foreground/20" />
         <div className="container-x relative z-10 flex h-full flex-col justify-end pb-12">
           <p className="text-[10px] font-medium uppercase tracking-[0.35em] text-background/70">Categoria</p>
@@ -120,7 +114,15 @@ function CategoryPage() {
 
       <section className="container-x py-16 md:py-24">
         {loading ? (
-          <p className="py-20 text-center text-muted-foreground">Carregando…</p>
+          <div className="grid grid-cols-2 gap-4 md:grid-cols-3 md:gap-6 lg:grid-cols-4">
+            {Array.from({ length: 8 }).map((_, i) => (
+              <div key={i} className="space-y-3">
+                <div className="aspect-[3/4] rounded-sm skeleton-block" />
+                <div className="h-3 w-1/3 skeleton-block" />
+                <div className="h-3 w-2/3 skeleton-block" />
+              </div>
+            ))}
+          </div>
         ) : products.length === 0 ? (
           <p className="py-20 text-center text-muted-foreground">Em breve novas peças nesta categoria.</p>
         ) : (
