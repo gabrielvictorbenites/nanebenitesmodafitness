@@ -27,15 +27,15 @@ type Row = {
 
 export type DbProduct = Product & { id: string; imageRef: string; galleryRefs: string[]; featured: boolean; active: boolean };
 
-async function toProduct(row: Row): Promise<DbProduct> {
+async function toProduct(row: Row, includeGallery = false): Promise<DbProduct> {
   const price = Number(row.price);
   const salePriceRaw = row.sale_price == null ? null : Number(row.sale_price);
   const imageRef = row.image ?? "";
   const galleryRefs = row.gallery ?? [];
-  const [image, gallery] = await Promise.all([
-    resolveImageAsync(imageRef),
-    Promise.all(galleryRefs.map(resolveImageAsync)),
-  ]);
+  const image = await resolveImageAsync(imageRef, includeGallery ? "full" : "card");
+  const gallery = includeGallery
+    ? await Promise.all(galleryRefs.map((ref) => resolveImageAsync(ref, "full")))
+    : [];
   return {
     id: row.id,
     slug: row.slug,
@@ -80,5 +80,5 @@ export async function fetchProductBySlug(slug: string): Promise<DbProduct | null
     .eq("slug", slug)
     .maybeSingle();
   if (error) throw error;
-  return data ? await toProduct(data as Row) : null;
+  return data ? await toProduct(data as Row, true) : null;
 }
