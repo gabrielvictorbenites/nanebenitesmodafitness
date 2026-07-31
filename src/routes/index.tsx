@@ -108,7 +108,7 @@ function HomePage() {
     (async () => {
       const m = await fetchSiteImages();
       const [hero, collection, loja] = await Promise.all([
-        m.home_hero ? resolveImageAsync(m.home_hero) : Promise.resolve(""),
+        m.home_hero ? resolveImageAsync(m.home_hero, "hero") : Promise.resolve(""),
         m.home_collection ? resolveImageAsync(m.home_collection) : Promise.resolve(""),
         m.home_loja_curitiba ? resolveImageAsync(m.home_loja_curitiba) : Promise.resolve(""),
       ]);
@@ -155,9 +155,6 @@ function HomePage() {
           skeletonClassName="bg-foreground"
         />
         <div className="absolute inset-0 bg-gradient-to-r from-foreground/85 via-foreground/40 to-foreground/10" />
-        <div className="pointer-events-none absolute inset-0 bg-gradient-to-tr from-brand/25 via-transparent to-brand-purple/30 mix-blend-overlay" />
-        <div className="pointer-events-none absolute -left-32 top-1/4 hidden h-96 w-96 rounded-full bg-brand/30 blur-3xl animate-blob md:block" />
-        <div className="pointer-events-none absolute -right-24 bottom-10 hidden h-[28rem] w-[28rem] rounded-full bg-brand-purple/30 blur-3xl animate-blob md:block" style={{ animationDelay: "6s" }} />
         <div className="container-x relative z-10 flex h-full flex-col justify-end pb-16 md:justify-center md:pb-0">
           <div className="max-w-2xl animate-fade-in">
             <p className="mb-6 flex items-center gap-3 text-[11px] font-medium uppercase tracking-[0.35em] text-background/70">
@@ -287,7 +284,6 @@ function HomePage() {
             </div>
           </div>
           <div className="relative order-1 md:order-2">
-            <div className="pointer-events-none absolute -inset-6 rounded-3xl bg-gradient-brand opacity-30 blur-2xl" />
             <div className="relative aspect-[3/4] overflow-hidden rounded-3xl shadow-elegant">
               <SmartImage
                 src={imgs.lojaCuritiba}
@@ -313,8 +309,6 @@ function HomePage() {
             rel="noreferrer"
             className="group relative block overflow-hidden rounded-3xl bg-gradient-brand p-10 text-white shadow-elegant transition-transform hover:scale-[1.01] md:p-16"
           >
-            <div className="pointer-events-none absolute -right-16 -top-16 h-64 w-64 rounded-full bg-white/10 blur-3xl" />
-            <div className="pointer-events-none absolute -left-10 -bottom-10 h-56 w-56 rounded-full bg-white/10 blur-3xl" />
             <div className="relative flex flex-col items-start justify-between gap-8 md:flex-row md:items-center">
               <div className="max-w-xl">
                 <p className="text-[11px] font-medium uppercase tracking-[0.35em] text-white/80">Instagram</p>

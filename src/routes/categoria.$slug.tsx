@@ -85,7 +85,7 @@ function CategoryPage() {
       }
       const heroRef = entry.heroImageRef || entry.imageRef;
       if (heroRef) {
-        const url = await resolveImageAsync(heroRef);
+        const url = await resolveImageAsync(heroRef, "hero");
         if (alive) {
           setBannerImg(url);
           setFocal(focalOf(heroRef));

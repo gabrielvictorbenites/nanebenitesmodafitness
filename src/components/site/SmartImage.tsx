@@ -41,12 +41,12 @@ export function SmartImage({
 
   return (
     <>
-      <div
-        aria-hidden
-        className={`absolute inset-0 skeleton-shimmer transition-opacity duration-500 ${
-          loaded ? "opacity-0" : "opacity-100"
-        } ${skeletonClassName}`}
-      />
+      {!loaded ? (
+        <div
+          aria-hidden
+          className={`absolute inset-0 skeleton-shimmer ${skeletonClassName}`}
+        />
+      ) : null}
       {src ? (
         <img
           ref={imgRef}

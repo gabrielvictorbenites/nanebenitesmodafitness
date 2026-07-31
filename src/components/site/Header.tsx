@@ -1,5 +1,5 @@
 import { Link, useRouterState } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Menu, X, Heart } from "lucide-react";
 import { whatsappLink } from "@/lib/whatsapp";
 import { useFavorites } from "@/lib/favorites";
@@ -19,27 +19,40 @@ export function Header() {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [hidden, setHidden] = useState(false);
+  const hiddenRef = useRef(false);
+  const scrolledRef = useRef(false);
   const { count } = useFavorites();
 
   useEffect(() => {
     let lastY = window.scrollY;
+    let frame = 0;
     const onScroll = () => {
-      const y = window.scrollY;
-      setScrolled(y > 12);
-      // Esconde ao rolar para baixo, mostra ao rolar para cima.
-      // Ignora o topo da página e pequenas variações.
-      if (y <= 12) {
-        setHidden(false);
-      } else if (y > lastY + 6 && !open) {
-        setHidden(true);
-      } else if (y < lastY - 6) {
-        setHidden(false);
-      }
-      lastY = y;
+      if (frame) return;
+      frame = window.requestAnimationFrame(() => {
+        const y = window.scrollY;
+        const nextScrolled = y > 12;
+        let nextHidden = hiddenRef.current;
+        if (y <= 12) nextHidden = false;
+        else if (y > lastY + 10 && !open) nextHidden = true;
+        else if (y < lastY - 10) nextHidden = false;
+        if (nextScrolled !== scrolledRef.current) {
+          scrolledRef.current = nextScrolled;
+          setScrolled(nextScrolled);
+        }
+        if (nextHidden !== hiddenRef.current) {
+          hiddenRef.current = nextHidden;
+          setHidden(nextHidden);
+        }
+        lastY = y;
+        frame = 0;
+      });
     };
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      if (frame) window.cancelAnimationFrame(frame);
+    };
   }, [open]);
 
   useEffect(() => {
@@ -48,12 +61,12 @@ export function Header() {
 
   return (
     <header
-      className={`sticky top-0 z-50 w-full transition-[transform,background-color,box-shadow,border-color] duration-500 ease-out ${
+      className={`sticky top-0 z-50 w-full transform-gpu transition-[transform,background-color,box-shadow,border-color] duration-300 ease-out ${
         hidden ? "-translate-y-full" : "translate-y-0"
       } ${
         scrolled
-          ? "border-b border-border/60 bg-background/60 backdrop-blur-md shadow-[0_8px_30px_-20px_oklch(0.18_0_0/0.18)]"
-          : "bg-background/40 backdrop-blur-sm"
+          ? "border-b border-border/60 bg-background/95 shadow-sm supports-[backdrop-filter]:bg-background/80 supports-[backdrop-filter]:backdrop-blur-sm"
+          : "bg-background/90 supports-[backdrop-filter]:bg-background/70 supports-[backdrop-filter]:backdrop-blur-sm"
       }`}
     >
       <div className="container-x flex h-16 items-center justify-between gap-4 md:h-20">
