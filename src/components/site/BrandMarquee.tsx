@@ -27,19 +27,7 @@ export function BrandMarquee({ brands, title = "Marcas parceiras" }: BrandMarque
         <p className="eyebrow text-foreground/55">{title}</p>
       </div>
 
-      <div
-        className="group relative flex items-center py-8 md:py-10"
-        onMouseEnter={() => {
-          if (trackRef.current) {
-            trackRef.current.style.animationPlayState = "paused";
-          }
-        }}
-        onMouseLeave={() => {
-          if (trackRef.current) {
-            trackRef.current.style.animationPlayState = "running";
-          }
-        }}
-      >
+      <div className="group relative flex items-center py-8 md:py-10">
         {/* Soft edge fades for a premium seamless look */}
         <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-16 bg-gradient-to-r from-white to-transparent md:w-28" />
         <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-16 bg-gradient-to-l from-white to-transparent md:w-28" />
