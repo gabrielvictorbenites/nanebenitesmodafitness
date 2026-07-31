@@ -263,3 +263,7 @@
     animation: none;
   }
 }
+
+#lovable-badge {
+  display: none !important;
+}
