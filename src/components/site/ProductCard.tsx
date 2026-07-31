@@ -3,6 +3,7 @@ import { Heart } from "lucide-react";
 import type { Product } from "@/lib/site-data";
 import { formatPrice } from "@/lib/site-data";
 import { useFavorites } from "@/lib/favorites";
+import { SmartImage } from "./SmartImage";
 
 export function ProductCard({ product }: { product: Product }) {
   const { has, toggle } = useFavorites();
@@ -14,12 +15,11 @@ export function ProductCard({ product }: { product: Product }) {
       className="group block"
     >
       <div className="relative aspect-[3/4] overflow-hidden rounded-sm bg-[color:var(--surface)]">
-        <img
+        <SmartImage
           src={product.image}
           alt={product.name}
-          loading="lazy"
-          style={{ objectPosition: product.imagePosition ?? "50% 50%" }}
-          className="h-full w-full object-cover transition-transform duration-[900ms] ease-out group-hover:scale-105"
+          objectPosition={product.imagePosition ?? "50% 50%"}
+          className="transition-transform duration-[900ms] ease-out group-hover:scale-105"
         />
         <div className="absolute left-4 top-4 flex flex-col gap-1.5">
           {product.isNew ? (
