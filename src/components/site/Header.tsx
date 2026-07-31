@@ -35,16 +35,16 @@ export function Header() {
     <header
       className={`sticky top-0 z-50 w-full transition-all duration-500 ${
         scrolled
-          ? "border-b border-border bg-background/85 backdrop-blur-xl"
-          : "bg-background/0"
+          ? "border-b border-border/60 bg-background/60 backdrop-blur-md shadow-[0_8px_30px_-20px_oklch(0.18_0_0/0.18)]"
+          : "bg-background/40 backdrop-blur-sm"
       }`}
     >
-      <div className="container-x flex h-28 items-center justify-between gap-4 md:h-32">
+      <div className="container-x flex h-16 items-center justify-between gap-4 md:h-20">
         <Link to="/" className="group flex items-center">
           <img
             src={logoAsset.url}
             alt="Nane Benites Moda Fitness"
-            className="h-20 w-auto shrink-0 object-contain md:h-28"
+            className="h-11 w-auto shrink-0 object-contain md:h-14"
           />
         </Link>
 
