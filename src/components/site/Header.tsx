@@ -48,7 +48,9 @@ export function Header() {
 
   return (
     <header
-      className={`sticky top-0 z-50 w-full transition-all duration-500 ${
+      className={`sticky top-0 z-50 w-full transition-[transform,background-color,box-shadow,border-color] duration-500 ease-out ${
+        hidden ? "-translate-y-full" : "translate-y-0"
+      } ${
         scrolled
           ? "border-b border-border/60 bg-background/60 backdrop-blur-md shadow-[0_8px_30px_-20px_oklch(0.18_0_0/0.18)]"
           : "bg-background/40 backdrop-blur-sm"
