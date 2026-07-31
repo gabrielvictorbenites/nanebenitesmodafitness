@@ -36,3 +36,20 @@ export function useSiteCategories(): Category[] {
   }, []);
   return cats;
 }
+
+/** Igual a useSiteCategories, mas expõe o estado de carregamento (para skeletons). */
+export function useSiteCategoriesState(): { categories: Category[]; loading: boolean } {
+  const [categories, setCategories] = useState<Category[]>(staticCategories);
+  const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    let alive = true;
+    fetchSiteCategories()
+      .then((c) => alive && setCategories(c))
+      .catch(() => {})
+      .finally(() => alive && setLoading(false));
+    return () => {
+      alive = false;
+    };
+  }, []);
+  return { categories, loading };
+}

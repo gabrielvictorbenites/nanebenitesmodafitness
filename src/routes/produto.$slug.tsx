@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { Heart, Share2, MessageCircle } from "lucide-react";
 import { ProductCard } from "@/components/site/ProductCard";
+import { SmartImage } from "@/components/site/SmartImage";
 import { findCategory, formatPrice, type Product } from "@/lib/site-data";
 import { whatsappLink, productWhatsappMessage } from "@/lib/whatsapp";
 import { useFavorites } from "@/lib/favorites";
@@ -101,11 +102,11 @@ function ProductPage() {
       <section className="container-x grid gap-12 py-12 md:grid-cols-2 md:gap-16 md:py-16">
         <div>
           <div className="relative aspect-[3/4] overflow-hidden rounded-sm bg-[color:var(--surface)]">
-            <img
+            <SmartImage
               src={gallery[active]}
               alt={product.name}
-              style={{ objectPosition: product.galleryPositions?.[active] ?? product.imagePosition ?? "50% 50%" }}
-              className="h-full w-full object-cover"
+              priority
+              objectPosition={product.galleryPositions?.[active] ?? product.imagePosition ?? "50% 50%"}
             />
           </div>
           {gallery.length > 1 ? (
@@ -118,12 +119,13 @@ function ProductPage() {
                     i === active ? "border-brand" : "border-border hover:border-foreground"
                   }`}
                 >
-                  <img
-                    src={g}
-                    alt=""
-                    style={{ objectPosition: product.galleryPositions?.[i] ?? "50% 50%" }}
-                    className="h-full w-full object-cover"
-                  />
+                  <span className="relative block h-full w-full">
+                    <SmartImage
+                      src={g}
+                      alt=""
+                      objectPosition={product.galleryPositions?.[i] ?? "50% 50%"}
+                    />
+                  </span>
                 </button>
               ))}
             </div>
