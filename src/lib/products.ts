@@ -70,7 +70,7 @@ export async function fetchProducts(): Promise<DbProduct[]> {
     .order("sort_order", { ascending: true })
     .order("created_at", { ascending: false });
   if (error) throw error;
-  return Promise.all((data as Row[]).map(toProduct));
+  return Promise.all((data as Row[]).map((row) => toProduct(row)));
 }
 
 export async function fetchProductBySlug(slug: string): Promise<DbProduct | null> {

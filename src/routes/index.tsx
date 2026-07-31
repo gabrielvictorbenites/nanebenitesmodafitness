@@ -108,7 +108,7 @@ function HomePage() {
     (async () => {
       const m = await fetchSiteImages();
       const [hero, collection, loja] = await Promise.all([
-        m.home_hero ? resolveImageAsync(m.home_hero) : Promise.resolve(""),
+        m.home_hero ? resolveImageAsync(m.home_hero, "hero") : Promise.resolve(""),
         m.home_collection ? resolveImageAsync(m.home_collection) : Promise.resolve(""),
         m.home_loja_curitiba ? resolveImageAsync(m.home_loja_curitiba) : Promise.resolve(""),
       ]);
