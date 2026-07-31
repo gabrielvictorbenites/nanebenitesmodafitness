@@ -98,13 +98,13 @@ export function Header() {
       </div>
 
       {open ? (
-        <div className="border-t border-border bg-background lg:hidden">
+        <div className="border-t border-border/60 bg-background/80 backdrop-blur-lg lg:hidden">
           <nav className="container-x flex flex-col gap-1 py-4">
             {NAV.map((item) => (
               <Link
                 key={item.to}
                 to={item.to}
-                className="rounded-md px-2 py-3 text-base font-medium text-foreground/80 transition-colors hover:bg-muted hover:text-foreground"
+                className="rounded-lg px-3 py-2.5 text-sm font-medium text-foreground/80 transition-colors hover:bg-muted hover:text-foreground"
               >
                 {item.label}
               </Link>
@@ -113,7 +113,7 @@ export function Header() {
               href={whatsappLink("Olá! Gostaria de conhecer as novidades da Nane Benites.")}
               target="_blank"
               rel="noreferrer"
-              className="mt-2 rounded-full bg-brand px-5 py-3 text-center text-sm font-semibold uppercase tracking-widest text-brand-foreground"
+              className="mt-2 rounded-full bg-gradient-brand px-5 py-3 text-center text-[11px] font-semibold uppercase tracking-[0.2em] text-white"
             >
               Chamar no WhatsApp
             </a>
