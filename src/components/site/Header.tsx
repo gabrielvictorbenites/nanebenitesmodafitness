@@ -48,15 +48,15 @@ export function Header() {
           />
         </Link>
 
-        <nav className="hidden items-center gap-8 lg:flex">
+        <nav className="hidden items-center gap-10 lg:flex">
           {NAV.map((item) => {
             const active = pathname === item.to;
             return (
               <Link
                 key={item.to}
                 to={item.to}
-                className={`link-underline text-sm font-medium transition-colors ${
-                  active ? "text-brand" : "text-foreground/80 hover:text-foreground"
+                className={`link-underline text-[13px] font-medium tracking-wide transition-colors ${
+                  active ? "text-brand" : "text-foreground/70 hover:text-foreground"
                 }`}
               >
                 {item.label}
@@ -65,13 +65,13 @@ export function Header() {
           })}
         </nav>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1.5">
           <Link
             to="/favoritos"
             aria-label="Favoritos"
-            className="relative inline-flex h-10 w-10 items-center justify-center rounded-full text-foreground transition-colors hover:bg-muted"
+            className="relative inline-flex h-9 w-9 items-center justify-center rounded-full text-foreground/80 transition-all hover:bg-muted hover:text-foreground"
           >
-            <Heart className={`h-5 w-5 ${count > 0 ? "fill-brand text-brand" : ""}`} />
+            <Heart className={`h-[18px] w-[18px] ${count > 0 ? "fill-brand text-brand" : ""}`} />
             {count > 0 ? (
               <span className="absolute -right-0.5 -top-0.5 inline-flex h-4 min-w-4 items-center justify-center rounded-full bg-gradient-brand px-1 text-[10px] font-bold text-white">
                 {count}
@@ -82,14 +82,14 @@ export function Header() {
             href={whatsappLink("Olá! Gostaria de conhecer as novidades da Nane Benites.")}
             target="_blank"
             rel="noreferrer"
-            className="hidden rounded-full bg-gradient-brand px-5 py-2.5 text-xs font-semibold uppercase tracking-widest text-white shadow-elegant transition-transform hover:scale-105 md:inline-flex"
+            className="hidden rounded-full bg-gradient-brand px-5 py-2 text-[11px] font-semibold uppercase tracking-[0.2em] text-white shadow-elegant transition-transform hover:scale-105 md:inline-flex"
           >
             WhatsApp
           </a>
           <button
             type="button"
             onClick={() => setOpen((v) => !v)}
-            className="rounded-full p-2.5 text-foreground transition-colors hover:bg-muted lg:hidden"
+            className="rounded-full p-2 text-foreground/80 transition-colors hover:bg-muted hover:text-foreground lg:hidden"
             aria-label="Abrir menu"
           >
             {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
