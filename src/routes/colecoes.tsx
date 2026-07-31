@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { ArrowUpRight } from "lucide-react";
 import { PageHero } from "@/components/site/PageHero";
+import { SmartImage } from "@/components/site/SmartImage";
 import { collectionList, fetchCollectionBanners, type CollectionEntry } from "@/lib/collections";
 import { resolveImageAsync, focalOf } from "@/lib/product-image";
 
@@ -76,12 +77,11 @@ function CollectionCard({
       className="group relative block aspect-[3/4] overflow-hidden rounded-sm bg-[color:var(--surface)] md:aspect-[4/5]"
     >
       {banner?.url ? (
-        <img
+        <SmartImage
           src={banner.url}
           alt={`Coleção ${collection.name}`}
-          loading="lazy"
-          style={{ objectPosition: banner.focal }}
-          className="h-full w-full object-cover transition-transform duration-[1200ms] ease-out group-hover:scale-105"
+          objectPosition={banner.focal}
+          className="transition-transform duration-[1200ms] ease-out group-hover:scale-105"
         />
       ) : (
         <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-[color:var(--surface)] to-background">
