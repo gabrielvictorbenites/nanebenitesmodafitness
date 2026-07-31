@@ -18,14 +18,29 @@ export function Header() {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [hidden, setHidden] = useState(false);
   const { count } = useFavorites();
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 12);
+    let lastY = window.scrollY;
+    const onScroll = () => {
+      const y = window.scrollY;
+      setScrolled(y > 12);
+      // Esconde ao rolar para baixo, mostra ao rolar para cima.
+      // Ignora o topo da página e pequenas variações.
+      if (y <= 12) {
+        setHidden(false);
+      } else if (y > lastY + 6 && !open) {
+        setHidden(true);
+      } else if (y < lastY - 6) {
+        setHidden(false);
+      }
+      lastY = y;
+    };
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
-  }, []);
+  }, [open]);
 
   useEffect(() => {
     setOpen(false);
@@ -33,7 +48,9 @@ export function Header() {
 
   return (
     <header
-      className={`sticky top-0 z-50 w-full transition-all duration-500 ${
+      className={`sticky top-0 z-50 w-full transition-[transform,background-color,box-shadow,border-color] duration-500 ease-out ${
+        hidden ? "-translate-y-full" : "translate-y-0"
+      } ${
         scrolled
           ? "border-b border-border/60 bg-background/60 backdrop-blur-md shadow-[0_8px_30px_-20px_oklch(0.18_0_0/0.18)]"
           : "bg-background/40 backdrop-blur-sm"
