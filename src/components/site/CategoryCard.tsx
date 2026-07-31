@@ -1,6 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { ArrowUpRight } from "lucide-react";
 import type { Category } from "@/lib/site-data";
+import { SmartImage } from "./SmartImage";
 
 export function CategoryCard({ category, large = false }: { category: Category; large?: boolean }) {
   return (
@@ -11,11 +12,10 @@ export function CategoryCard({ category, large = false }: { category: Category; 
         large ? "aspect-[3/4] md:aspect-[2/3]" : "aspect-[3/4] md:aspect-[4/5]"
       }`}
     >
-      <img
+      <SmartImage
         src={category.image}
         alt={category.name}
-        loading="lazy"
-        className="h-full w-full object-cover transition-transform duration-[1200ms] ease-out group-hover:scale-105"
+        className="transition-transform duration-[1200ms] ease-out group-hover:scale-105"
       />
       <div className="absolute inset-0 bg-gradient-to-t from-foreground/70 via-foreground/10 to-transparent" />
       <div className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-4 p-5 text-background md:p-7">
