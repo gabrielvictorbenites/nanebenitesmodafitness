@@ -1,6 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { ArrowRight } from "lucide-react";
-import lojaInterna from "@/assets/loja-campo-largo.jpg.asset.json";
+import lojaInterna from "@/assets/loja-interior-hd.png.asset.json";
 
 export function ScrollZoomIntro() {
   return (
