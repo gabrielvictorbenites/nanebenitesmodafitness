@@ -22,11 +22,11 @@ export function ScrollZoomIntro() {
               <span className="h-px w-10 bg-gradient-brand" />
             </p>
             <h2 className="font-display text-4xl font-semibold leading-[0.95] tracking-tight md:text-7xl">
-              Uma experiência que{" "}
-              <span className="italic font-light text-gradient-brand">se abre</span> para você.
+              Sua loja de{" "}
+              <span className="italic font-light text-gradient-brand">moda fitness</span> premium.
             </h2>
             <p className="mx-auto mt-8 max-w-xl text-base leading-relaxed text-white/80 md:text-lg">
-              Role para descobrir a curadoria completa da Nane Benites — cada peça escolhida para vestir sua melhor versão.
+              Curadoria exclusiva de marcas selecionadas — cada peça pensada para vestir sua melhor versão, com atendimento consultivo e provador exclusivo.
             </p>
           </div>
 
