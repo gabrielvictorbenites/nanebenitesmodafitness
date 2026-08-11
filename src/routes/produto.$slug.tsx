@@ -8,14 +8,37 @@ import { whatsappLink, productWhatsappMessage } from "@/lib/whatsapp";
 import { useFavorites } from "@/lib/favorites";
 import { fetchProductBySlug, fetchProducts, type DbProduct } from "@/lib/products";
 
+const SITE_URL = "https://nanebenitesmodafitness.com";
+
+function humanizeSlug(slug: string) {
+  return slug
+    .split("-")
+    .filter(Boolean)
+    .map((w) => (w.length <= 2 ? w : w.charAt(0).toUpperCase() + w.slice(1)))
+    .join(" ");
+}
+
 export const Route = createFileRoute("/produto/$slug")({
-  head: ({ params }) => ({
-    meta: [
-      { title: `${params.slug} — Nane Benites` },
-      { property: "og:title", content: `${params.slug} — Nane Benites` },
-    ],
-    links: [{ rel: "canonical", href: `/produto/${params.slug}` }],
-  }),
+  head: ({ params }) => {
+    const name = humanizeSlug(params.slug);
+    const title = `${name} — Nane Benites Moda Fitness`;
+    const description = `${name}: peça de moda fitness selecionada pela Nane Benites. Confira cores, tamanhos e disponibilidade e fale com a loja pelo WhatsApp.`;
+    const url = `${SITE_URL}/produto/${params.slug}`;
+    return {
+      meta: [
+        { title },
+        { name: "description", content: description },
+        { property: "og:title", content: title },
+        { property: "og:description", content: description },
+        { property: "og:type", content: "product" },
+        { property: "og:url", content: url },
+        { name: "twitter:card", content: "summary_large_image" },
+        { name: "twitter:title", content: title },
+        { name: "twitter:description", content: description },
+      ],
+      links: [{ rel: "canonical", href: url }],
+    };
+  },
   component: ProductPage,
   errorComponent: () => <div className="container-x py-32 text-center">Erro ao carregar produto.</div>,
 });
