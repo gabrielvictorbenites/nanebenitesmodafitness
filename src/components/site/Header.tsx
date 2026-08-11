@@ -1,6 +1,6 @@
 import { Link, useRouterState } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
-import { Menu, X, Heart, ShoppingBag, MessageCircle } from "lucide-react";
+import { Menu, X, Heart, MessageCircle } from "lucide-react";
 import { whatsappLink } from "@/lib/whatsapp";
 import { useFavorites } from "@/lib/favorites";
 import logoAsset from "@/assets/logo-nane-v2.png.asset.json";
