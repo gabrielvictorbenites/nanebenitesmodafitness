@@ -170,7 +170,7 @@ function HomePage() {
             </p>
             <div className="mt-10 flex flex-wrap items-center gap-3">
               <Link
-                to="/catalogo"
+                to="/catalogo" search={{ marca: undefined }}
                 className="group inline-flex items-center gap-3 rounded-full bg-gradient-brand px-7 py-4 text-xs font-semibold uppercase tracking-[0.2em] text-white shadow-elegant transition-transform hover:scale-105"
               >
                 {t.home_hero_cta_label}
@@ -207,7 +207,7 @@ function HomePage() {
               Encontre <span className="text-gradient-brand italic font-light">sua peça.</span>
             </h2>
           </div>
-          <Link to="/catalogo" className="link-underline text-sm font-medium text-foreground/80 hover:text-foreground">
+          <Link to="/catalogo" search={{ marca: undefined }} className="link-underline text-sm font-medium text-foreground/80 hover:text-foreground">
             Ver catálogo completo →
           </Link>
         </div>

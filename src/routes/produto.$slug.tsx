@@ -60,7 +60,7 @@ function ProductPage() {
       <div className="container-x py-32 text-center">
         <p className="eyebrow">404</p>
         <h1 className="mt-3 font-display text-4xl font-semibold">Produto não encontrado</h1>
-        <Link to="/catalogo" className="mt-6 inline-block link-underline text-sm">Ver catálogo</Link>
+        <Link to="/catalogo" search={{ marca: undefined }} className="mt-6 inline-block link-underline text-sm">Ver catálogo</Link>
       </div>
     );
   }
@@ -89,7 +89,7 @@ function ProductPage() {
         <nav className="flex items-center gap-2 text-xs uppercase tracking-widest text-muted-foreground">
           <Link to="/" className="hover:text-foreground">Home</Link>
           <span>/</span>
-          <Link to="/catalogo" className="hover:text-foreground">Catálogo</Link>
+          <Link to="/catalogo" search={{ marca: undefined }} className="hover:text-foreground">Catálogo</Link>
           {category ? (
             <>
               <span>/</span>

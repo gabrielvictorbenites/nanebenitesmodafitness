@@ -61,7 +61,7 @@ function FavoritesPage() {
               Explore o catálogo e comece a montar seus looks favoritos.
             </p>
             <Link
-              to="/catalogo"
+              to="/catalogo" search={{ marca: undefined }}
               className="rounded-full bg-gradient-brand px-7 py-3.5 text-xs font-semibold uppercase tracking-[0.2em] text-white shadow-elegant transition-transform hover:scale-105"
             >
               Ir para o catálogo

@@ -108,7 +108,7 @@ export function Header() {
             ) : null}
           </Link>
           <Link
-            to="/catalogo"
+            to="/catalogo" search={{ marca: undefined }}
             aria-label="Catálogo"
             className="hidden h-9 w-9 items-center justify-center rounded-full text-foreground/75 transition-colors hover:text-foreground sm:inline-flex"
           >
