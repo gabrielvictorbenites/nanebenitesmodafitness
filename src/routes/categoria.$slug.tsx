@@ -46,7 +46,7 @@ export const Route = createFileRoute("/categoria/$slug")({
     <div className="container-x py-32 text-center">
       <p className="eyebrow">404</p>
       <h1 className="mt-3 font-display text-4xl font-semibold">Categoria não encontrada</h1>
-      <Link to="/catalogo" className="mt-6 inline-block link-underline text-sm">Ver catálogo</Link>
+      <Link to="/catalogo" search={{ marca: undefined }} className="mt-6 inline-block link-underline text-sm">Ver catálogo</Link>
     </div>
   ),
   errorComponent: () => <div className="container-x py-32 text-center">Erro ao carregar.</div>,

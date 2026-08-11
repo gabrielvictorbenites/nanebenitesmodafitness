@@ -65,6 +65,7 @@
   --color-brand-foreground: var(--brand-foreground);
   --color-brand-purple: var(--brand-purple);
   --color-brand-purple-dark: var(--brand-purple-dark);
+  --color-nav: var(--nav);
  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
  --font-display: "Playfair Display", "Cormorant Garamond", Georgia, serif;
   --shadow-elegant: 0 20px 60px -30px color-mix(in oklab, var(--brand) 25%, transparent);
@@ -77,6 +78,7 @@
   --background: oklch(0.972 0.014 305);
   --foreground: oklch(0.18 0 0);          /* #1D1D1D */
   --surface: oklch(0.98 0.012 200);       /* soft turquoise mist */
+  --nav: oklch(0.977 0.006 80);           /* bege sutil da navbar */
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.18 0 0);
   --popover: oklch(1 0 0);

@@ -32,7 +32,7 @@ export function ScrollZoomIntro() {
 
           <div className="absolute inset-x-0 bottom-16 flex flex-col items-center gap-6 px-6">
             <Link
-              to="/catalogo"
+              to="/catalogo" search={{ marca: undefined }}
               className="group inline-flex items-center gap-3 rounded-full bg-white px-9 py-5 text-xs font-semibold uppercase tracking-[0.25em] text-foreground shadow-elegant transition-transform hover:scale-105"
             >
               Entrar no catálogo

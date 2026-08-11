@@ -1,6 +1,6 @@
 import { Link, useRouterState } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
-import { Menu, X, Heart } from "lucide-react";
+import { Menu, X, Heart, ShoppingBag, MessageCircle } from "lucide-react";
 import { whatsappLink } from "@/lib/whatsapp";
 import { useFavorites } from "@/lib/favorites";
 import logoAsset from "@/assets/logo-nane-v2.png.asset.json";
@@ -61,59 +61,67 @@ export function Header() {
 
   return (
     <header
-      className={`sticky top-0 z-50 w-full transform-gpu transition-[transform,background-color,box-shadow,border-color] duration-300 ease-out ${
+      className={`sticky top-0 z-50 w-full transform-gpu bg-nav transition-[transform,box-shadow,border-color] duration-300 ease-out ${
         hidden ? "-translate-y-full" : "translate-y-0"
-      } ${
-        scrolled
-          ? "border-b border-border/60 bg-background/95 shadow-sm supports-[backdrop-filter]:bg-background/80 supports-[backdrop-filter]:backdrop-blur-sm"
-          : "bg-background/90 supports-[backdrop-filter]:bg-background/70 supports-[backdrop-filter]:backdrop-blur-sm"
-      }`}
+      } ${scrolled ? "border-b border-border/50 shadow-sm" : "border-b border-transparent"}`}
     >
-      <div className="container-x flex h-16 items-center justify-between gap-4 md:h-20">
-        <Link to="/" className="group flex items-center">
+      <div className="container-x flex h-16 items-center justify-between gap-6 md:h-[76px]">
+        <Link to="/" className="flex shrink-0 items-center">
           <img
             src={logoAsset.url}
             alt="Nane Benites Moda Fitness"
-            className="h-16 w-auto shrink-0 object-contain md:h-20"
+            className="h-12 w-auto shrink-0 object-contain md:h-14"
           />
         </Link>
 
-        <nav className="hidden items-center gap-10 lg:flex">
+        <nav className="hidden items-center gap-8 lg:flex xl:gap-10">
           {NAV.map((item) => {
             const active = pathname === item.to;
             return (
               <Link
                 key={item.to}
                 to={item.to}
-                className={`link-underline text-[13px] font-medium tracking-wide transition-colors ${
-                  active ? "text-brand" : "text-foreground/70 hover:text-foreground"
+                className={`relative py-1 text-[12px] font-semibold uppercase tracking-[0.14em] transition-colors ${
+                  active ? "text-foreground" : "text-foreground/65 hover:text-foreground"
                 }`}
               >
                 {item.label}
+                {active ? (
+                  <span className="absolute -bottom-1 left-0 h-[2px] w-full rounded-full bg-gradient-brand" />
+                ) : null}
               </Link>
             );
           })}
         </nav>
 
-        <div className="flex items-center gap-1.5">
+        <div className="flex items-center gap-1">
           <Link
             to="/favoritos"
             aria-label="Favoritos"
-            className="relative inline-flex h-9 w-9 items-center justify-center rounded-full text-foreground/80 transition-all hover:bg-muted hover:text-foreground"
+            className="relative inline-flex h-9 w-9 items-center justify-center rounded-full text-foreground/75 transition-colors hover:text-foreground"
           >
-            <Heart className={`h-[18px] w-[18px] ${count > 0 ? "fill-brand text-brand" : ""}`} />
+            <Heart className={`h-[19px] w-[19px] ${count > 0 ? "fill-brand text-brand" : ""}`} strokeWidth={1.6} />
             {count > 0 ? (
               <span className="absolute -right-0.5 -top-0.5 inline-flex h-4 min-w-4 items-center justify-center rounded-full bg-gradient-brand px-1 text-[10px] font-bold text-white">
                 {count}
               </span>
             ) : null}
           </Link>
+          <Link
+            to="/catalogo" search={{ marca: undefined }}
+            aria-label="Catálogo"
+            className="hidden h-9 w-9 items-center justify-center rounded-full text-foreground/75 transition-colors hover:text-foreground sm:inline-flex"
+          >
+            <ShoppingBag className="h-[19px] w-[19px]" strokeWidth={1.6} />
+          </Link>
+          <span className="mx-2 hidden h-5 w-px bg-border md:block" />
           <a
             href={whatsappLink("Olá! Gostaria de conhecer as novidades da Nane Benites.")}
             target="_blank"
             rel="noreferrer"
-            className="hidden rounded-full bg-gradient-brand px-5 py-2 text-[11px] font-semibold uppercase tracking-[0.2em] text-white shadow-elegant transition-transform hover:scale-105 md:inline-flex"
+            className="hidden items-center gap-2 rounded-full bg-gradient-brand px-6 py-2.5 text-[11px] font-bold uppercase tracking-[0.18em] text-white shadow-elegant transition-transform hover:scale-[1.03] md:inline-flex"
           >
+            <MessageCircle className="h-4 w-4" strokeWidth={2} />
             WhatsApp
           </a>
           <button
@@ -128,13 +136,13 @@ export function Header() {
       </div>
 
       {open ? (
-        <div className="border-t border-border/60 bg-background/80 backdrop-blur-lg lg:hidden">
+        <div className="border-t border-border/60 bg-nav lg:hidden">
           <nav className="container-x flex flex-col gap-1 py-4">
             {NAV.map((item) => (
               <Link
                 key={item.to}
                 to={item.to}
-                className="rounded-lg px-3 py-2.5 text-sm font-medium text-foreground/80 transition-colors hover:bg-muted hover:text-foreground"
+                className="rounded-lg px-3 py-2.5 text-[12px] font-semibold uppercase tracking-[0.14em] text-foreground/80 transition-colors hover:bg-muted hover:text-foreground"
               >
                 {item.label}
               </Link>
