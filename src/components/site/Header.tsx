@@ -107,13 +107,6 @@ export function Header() {
               </span>
             ) : null}
           </Link>
-          <Link
-            to="/catalogo" search={{ marca: undefined }}
-            aria-label="Catálogo"
-            className="hidden h-9 w-9 items-center justify-center rounded-full text-foreground/75 transition-colors hover:text-foreground sm:inline-flex"
-          >
-            <ShoppingBag className="h-[19px] w-[19px]" strokeWidth={1.6} />
-          </Link>
           <span className="mx-2 hidden h-5 w-px bg-border md:block" />
           <a
             href={whatsappLink("Olá! Gostaria de conhecer as novidades da Nane Benites.")}
