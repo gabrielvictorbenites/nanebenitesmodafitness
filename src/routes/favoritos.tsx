@@ -86,7 +86,7 @@ function FavoritesPage() {
                 )}
                 target="_blank"
                 rel="noreferrer"
-                className="rounded-full bg-white px-8 py-3.5 text-xs font-semibold uppercase tracking-[0.2em] text-foreground hover:bg-white/90"
+                className="rounded-full bg-card px-8 py-3.5 text-xs font-semibold uppercase tracking-[0.2em] text-foreground hover:bg-card/90"
               >
                 Enviar lista pelo WhatsApp
               </a>

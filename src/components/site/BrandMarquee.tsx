@@ -22,7 +22,7 @@ export function BrandMarquee({ brands, title = "Marcas parceiras" }: BrandMarque
   const items = [...brands, ...brands];
 
   return (
-    <section className="overflow-hidden border-y border-border bg-white">
+    <section className="overflow-hidden border-y border-border bg-card">
       <div className="container-x pt-8 pb-3 text-center">
         <p className="eyebrow text-foreground/55">{title}</p>
       </div>
