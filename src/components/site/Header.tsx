@@ -1,6 +1,6 @@
 import { Link, useRouterState } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
-import { Menu, X, Heart, ShoppingBag, MessageCircle } from "lucide-react";
+import { Menu, X, Heart, MessageCircle } from "lucide-react";
 import { whatsappLink } from "@/lib/whatsapp";
 import { useFavorites } from "@/lib/favorites";
 import logoAsset from "@/assets/logo-nane-v2.png.asset.json";
@@ -70,18 +70,18 @@ export function Header() {
           <img
             src={logoAsset.url}
             alt="Nane Benites Moda Fitness"
-            className="h-12 w-auto shrink-0 object-contain md:h-14"
+            className="h-16 w-auto shrink-0 object-contain md:h-20"
           />
         </Link>
 
-        <nav className="hidden items-center gap-8 lg:flex xl:gap-10">
+        <nav className="hidden items-center gap-5 xl:gap-6 lg:flex">
           {NAV.map((item) => {
             const active = pathname === item.to;
             return (
               <Link
                 key={item.to}
                 to={item.to}
-                className={`relative py-1 text-[12px] font-semibold uppercase tracking-[0.14em] transition-colors ${
+                className={`relative py-1 text-[11px] font-semibold uppercase tracking-[0.12em] transition-colors ${
                   active ? "text-foreground" : "text-foreground/65 hover:text-foreground"
                 }`}
               >
@@ -106,13 +106,6 @@ export function Header() {
                 {count}
               </span>
             ) : null}
-          </Link>
-          <Link
-            to="/catalogo" search={{ marca: undefined }}
-            aria-label="Catálogo"
-            className="hidden h-9 w-9 items-center justify-center rounded-full text-foreground/75 transition-colors hover:text-foreground sm:inline-flex"
-          >
-            <ShoppingBag className="h-[19px] w-[19px]" strokeWidth={1.6} />
           </Link>
           <span className="mx-2 hidden h-5 w-px bg-border md:block" />
           <a
