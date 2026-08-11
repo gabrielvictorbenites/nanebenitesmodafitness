@@ -66,7 +66,7 @@ function BannersPage() {
 }
 
 // ============================================================
-// HERO TAB — inline card por banner
+// HERO TAB - inline card por banner
 // ============================================================
 
 function HeroTab() {
@@ -468,7 +468,7 @@ function CollectionsTab() {
     <div>
       <p className="mb-4 text-sm text-neutral-600">
         Cada card é uma coleção de marca exibida na página <code>/colecoes</code>. Envie uma foto vertical e
-        arraste para ajustar o enquadramento — a moça aparece de corpo inteiro.
+        arraste para ajustar o enquadramento - a moça aparece de corpo inteiro.
       </p>
       <div className="space-y-4">
         {list.map((c, i) => (

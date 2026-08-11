@@ -10,7 +10,7 @@ export const Route = createFileRoute("/favoritos")({
   component: FavoritesPage,
   head: () => ({
     meta: [
-      { title: "Meus Favoritos — Nane Benites" },
+      { title: "Meus Favoritos - Nane Benites" },
       { name: "description", content: "Suas peças favoritas da Nane Benites Moda Fitness." },
     ],
   }),

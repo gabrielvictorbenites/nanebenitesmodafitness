@@ -7,9 +7,9 @@ import { fetchProducts, type DbProduct } from "@/lib/products";
 export const Route = createFileRoute("/lancamentos")({
   head: () => ({
     meta: [
-      { title: "Lançamentos — Nane Benites" },
+      { title: "Lançamentos - Nane Benites" },
       { name: "description", content: "As últimas novidades em moda fitness premium chegaram. Confira os lançamentos da Nane Benites." },
-      { property: "og:title", content: "Lançamentos — Nane Benites" },
+      { property: "og:title", content: "Lançamentos - Nane Benites" },
       { property: "og:description", content: "Novidades em moda fitness premium." },
       { property: "og:url", content: "/lancamentos" },
     ],

@@ -107,7 +107,7 @@ export function MediaUploader({
         </div>
         <p className="mt-3 text-[11px] leading-relaxed text-neutral-500">
           Primeira imagem vira a capa. Use as setas para reordenar.<br />
-          Arraste a foto dentro do quadrado para ajustar o enquadramento — nada é cortado.
+          Arraste a foto dentro do quadrado para ajustar o enquadramento - nada é cortado.
         </p>
         <input
           ref={inputRef}

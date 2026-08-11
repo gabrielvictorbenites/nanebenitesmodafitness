@@ -9,9 +9,9 @@ import { resolveImageAsync } from "@/lib/product-image";
 export const Route = createFileRoute("/categorias")({
   head: () => ({
     meta: [
-      { title: "Categorias — Nane Benites Moda Fitness" },
+      { title: "Categorias - Nane Benites Moda Fitness" },
       { name: "description", content: "Explore todas as categorias da Nane Benites: leggings, tops, shorts, conjuntos, tênis e mais." },
-      { property: "og:title", content: "Categorias — Nane Benites Moda Fitness" },
+      { property: "og:title", content: "Categorias - Nane Benites Moda Fitness" },
       { property: "og:description", content: "Navegue por todas as categorias de moda fitness premium." },
     ],
   }),
@@ -40,7 +40,7 @@ function CategoriasPage() {
       <PageHero
         eyebrow="Categorias"
         title="Encontre sua peça"
-        description="Curadoria completa por categoria — das leggings de compressão aos acessórios essenciais do seu treino."
+        description="Curadoria completa por categoria - das leggings de compressão aos acessórios essenciais do seu treino."
       />
       <section className="bg-aurora">
         <div className="container-x py-16 md:py-24">

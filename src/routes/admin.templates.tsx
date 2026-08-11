@@ -284,7 +284,7 @@ function TemplatesPage() {
                   <div>
                     <p className="text-xs font-medium text-neutral-600">Pré-visualização</p>
                     <div className="mt-1 whitespace-pre-wrap rounded-lg border border-emerald-200 bg-emerald-50/50 p-3 text-sm text-neutral-800">
-                      {preview || "—"}
+                      {preview || "-"}
                     </div>
                   </div>
                   <button

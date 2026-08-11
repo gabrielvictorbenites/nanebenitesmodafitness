@@ -13,9 +13,9 @@ import { readSnapshots, writeSnapshots, type Snap } from "@/lib/image-snapshot";
 export const Route = createFileRoute("/sobre")({
   head: () => ({
     meta: [
-      { title: "Sobre — Nane Benites Moda Fitness" },
-      { name: "description", content: "Conheça a nossa loja de moda fitness feminina em Campo Largo — PR." },
-      { property: "og:title", content: "Sobre — Nane Benites" },
+      { title: "Sobre - Nane Benites Moda Fitness" },
+      { name: "description", content: "Conheça a nossa loja de moda fitness feminina em Campo Largo - PR." },
+      { property: "og:title", content: "Sobre - Nane Benites" },
       { property: "og:description", content: "A história da nossa loja de moda fitness feminina." },
       { property: "og:url", content: "/sobre" },
     ],

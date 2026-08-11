@@ -221,7 +221,7 @@ function ProductsPage() {
             <tbody className="divide-y divide-neutral-100">
               {filtered.map((p) => (
                 <tr key={p.id} className="hover:bg-neutral-50/60">
-                  <td className="px-4 py-3 font-mono text-[11px] text-neutral-500">{p.sku || "—"}</td>
+                  <td className="px-4 py-3 font-mono text-[11px] text-neutral-500">{p.sku || "-"}</td>
                   <td className="px-4 py-3">
                     <div className="flex items-center gap-3">
                       <div className="h-10 w-10 shrink-0 overflow-hidden rounded-md bg-neutral-100">
@@ -230,7 +230,7 @@ function ProductsPage() {
                       <div className="min-w-0">
                         <p className="truncate font-medium text-neutral-900">{p.name}</p>
                         <p className="mt-0.5 text-[11px] text-neutral-500">
-                          {p.category || "—"} {p.brand ? `· ${p.brand}` : ""}
+                          {p.category || "-"} {p.brand ? `· ${p.brand}` : ""}
                         </p>
                       </div>
                     </div>

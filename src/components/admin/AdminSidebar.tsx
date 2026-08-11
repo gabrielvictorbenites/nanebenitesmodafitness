@@ -90,7 +90,7 @@ export function AdminSidebar({
       </nav>
 
       <div className="border-t border-neutral-200 p-4">
-        <p className="truncate text-xs text-neutral-500">{email ?? "—"}</p>
+        <p className="truncate text-xs text-neutral-500">{email ?? "-"}</p>
         <button
           onClick={onSignOut}
           className="mt-3 flex w-full items-center gap-2 rounded-lg border border-neutral-200 px-3 py-2 text-xs font-medium text-neutral-700 transition-colors hover:bg-neutral-100"

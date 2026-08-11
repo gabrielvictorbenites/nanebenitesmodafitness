@@ -6,9 +6,9 @@ import { productsByCategory } from "@/lib/site-data";
 export const Route = createFileRoute("/acessorios")({
   head: () => ({
     meta: [
-      { title: "Acessórios — Nane Benites" },
+      { title: "Acessórios - Nane Benites" },
       { name: "description", content: "Acessórios fitness premium: garrafas, faixas, meias e essenciais para completar seu look." },
-      { property: "og:title", content: "Acessórios — Nane Benites" },
+      { property: "og:title", content: "Acessórios - Nane Benites" },
       { property: "og:description", content: "Acessórios fitness premium." },
       { property: "og:url", content: "/acessorios" },
     ],

@@ -31,9 +31,9 @@ export const Route = createFileRoute("/categoria/$slug")({
     const c = loaderData.category;
     return {
       meta: [
-        { title: `${c.name} — Nane Benites` },
+        { title: `${c.name} - Nane Benites` },
         { name: "description", content: `${c.name} premium: ${c.description}` },
-        { property: "og:title", content: `${c.name} — Nane Benites` },
+        { property: "og:title", content: `${c.name} - Nane Benites` },
         { property: "og:description", content: c.description },
         { property: "og:url", content: `/categoria/${c.slug}` },
         { property: "og:type", content: "product.group" },

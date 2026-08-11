@@ -4,7 +4,7 @@ import { focalXY, withFocal } from "@/lib/product-image";
 
 /**
  * Image preview where the admin can drag the photo up/down (and sideways)
- * inside the frame to choose which part stays visible — no cropping needed.
+ * inside the frame to choose which part stays visible - no cropping needed.
  * The chosen position is stored in the image ref as `#fp=x,y`.
  */
 export function FocalImage({

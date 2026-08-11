@@ -246,10 +246,10 @@ function HomePage() {
         </div>
       </section>
 
-      {/* SCROLL ZOOM INTRO — foto interna da loja de Campo Largo */}
+      {/* SCROLL ZOOM INTRO - foto interna da loja de Campo Largo */}
       <ScrollZoomIntro />
 
-      {/* NOSSA LOJA — Curitiba */}
+      {/* NOSSA LOJA - Curitiba */}
       <section className="bg-gradient-soft">
         <div className="container-x grid gap-12 py-24 md:grid-cols-2 md:gap-16 md:py-32">
           <div className="flex flex-col justify-center order-2 md:order-1">
@@ -317,7 +317,7 @@ function HomePage() {
                   Siga <span className="italic font-light">@nanebenites</span>
                 </h2>
                 <p className="mt-4 max-w-md text-sm leading-relaxed text-white/85 md:text-base">
-                  Novidades, bastidores da loja e inspirações de looks fitness — tudo em primeira mão no nosso Instagram.
+                  Novidades, bastidores da loja e inspirações de looks fitness - tudo em primeira mão no nosso Instagram.
                 </p>
               </div>
               <span className="inline-flex items-center gap-3 rounded-full bg-card px-7 py-4 text-xs font-semibold uppercase tracking-[0.25em] text-foreground shadow-sm transition-transform group-hover:scale-105">

@@ -9,9 +9,9 @@ import { resolveImageAsync, focalOf } from "@/lib/product-image";
 export const Route = createFileRoute("/colecoes")({
   head: () => ({
     meta: [
-      { title: "Coleções por marca — Nane Benites" },
+      { title: "Coleções por marca - Nane Benites" },
       { name: "description", content: "Conheça as coleções Let's Gym, Run More, Live!, Lança Perfume e outras marcas parceiras da Nane Benites Moda Fitness." },
-      { property: "og:title", content: "Coleções por marca — Nane Benites" },
+      { property: "og:title", content: "Coleções por marca - Nane Benites" },
       { property: "og:description", content: "Let's Gym, Run More, Live!, Lança Perfume e mais coleções fitness premium." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -48,7 +48,7 @@ function ColecoesPage() {
       <PageHero
         eyebrow="Coleções"
         title="Cada marca, um universo."
-        description="Reunimos as coleções das marcas que amamos — da alta performance ao lifestyle — com curadoria Nane Benites."
+        description="Reunimos as coleções das marcas que amamos - da alta performance ao lifestyle - com curadoria Nane Benites."
       />
       <section className="container-x py-16 md:py-24">
         <div className="grid gap-8 md:grid-cols-2">

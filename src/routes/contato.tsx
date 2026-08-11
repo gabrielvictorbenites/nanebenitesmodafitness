@@ -8,9 +8,9 @@ import { whatsappLink } from "@/lib/whatsapp";
 export const Route = createFileRoute("/contato")({
   head: () => ({
     meta: [
-      { title: "Contato — Nane Benites" },
+      { title: "Contato - Nane Benites" },
       { name: "description", content: "Entre em contato com a Nane Benites. Endereço, telefone, WhatsApp, redes sociais e formulário." },
-      { property: "og:title", content: "Contato — Nane Benites" },
+      { property: "og:title", content: "Contato - Nane Benites" },
       { property: "og:description", content: "Fale com a Nane Benites Moda Fitness." },
       { property: "og:url", content: "/contato" },
     ],
