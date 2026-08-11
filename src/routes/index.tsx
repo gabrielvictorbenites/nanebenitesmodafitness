@@ -319,7 +319,7 @@ function HomePage() {
                   Novidades, bastidores da loja e inspirações de looks fitness — tudo em primeira mão no nosso Instagram.
                 </p>
               </div>
-              <span className="inline-flex items-center gap-3 rounded-full bg-white px-7 py-4 text-xs font-semibold uppercase tracking-[0.25em] text-foreground shadow-sm transition-transform group-hover:scale-105">
+              <span className="inline-flex items-center gap-3 rounded-full bg-card px-7 py-4 text-xs font-semibold uppercase tracking-[0.25em] text-foreground shadow-sm transition-transform group-hover:scale-105">
                 <Instagram className="h-4 w-4" />
                 Seguir agora
               </span>
