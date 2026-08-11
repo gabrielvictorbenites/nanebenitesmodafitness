@@ -70,18 +70,18 @@ export function Header() {
           <img
             src={logoAsset.url}
             alt="Nane Benites Moda Fitness"
-            className="h-12 w-auto shrink-0 object-contain md:h-14"
+            className="h-16 w-auto shrink-0 object-contain md:h-20"
           />
         </Link>
 
-        <nav className="hidden items-center gap-8 lg:flex xl:gap-10">
+        <nav className="hidden items-center gap-5 xl:gap-6 lg:flex">
           {NAV.map((item) => {
             const active = pathname === item.to;
             return (
               <Link
                 key={item.to}
                 to={item.to}
-                className={`relative py-1 text-[12px] font-semibold uppercase tracking-[0.14em] transition-colors ${
+                className={`relative py-1 text-[11px] font-semibold uppercase tracking-[0.12em] transition-colors ${
                   active ? "text-foreground" : "text-foreground/65 hover:text-foreground"
                 }`}
               >
