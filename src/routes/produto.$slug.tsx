@@ -75,6 +75,18 @@ function ProductPage() {
     };
   }, [slug]);
 
+  useEffect(() => {
+    if (!product || typeof document === "undefined") return;
+    const title = `${product.name} — Nane Benites Moda Fitness`;
+    document.title = title;
+    const desc = (product.description || "").trim();
+    const content = desc
+      ? `${product.name}: ${desc}`.slice(0, 158)
+      : `${product.name}: peça de moda fitness selecionada pela Nane Benites.`;
+    const tag = document.querySelector('meta[name="description"]');
+    if (tag) tag.setAttribute("content", content);
+  }, [product]);
+
   if (loading) {
     return <div className="container-x py-32 text-center text-muted-foreground">Carregando…</div>;
   }
