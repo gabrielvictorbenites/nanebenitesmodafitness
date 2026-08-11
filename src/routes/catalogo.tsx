@@ -13,9 +13,9 @@ export const Route = createFileRoute("/catalogo")({
   }),
   head: () => ({
     meta: [
-      { title: "Catálogo — Nane Benites" },
+      { title: "Catálogo - Nane Benites" },
       { name: "description", content: "Explore o catálogo completo de moda fitness premium: leggings, tops, conjuntos, tênis e mais." },
-      { property: "og:title", content: "Catálogo — Nane Benites" },
+      { property: "og:title", content: "Catálogo - Nane Benites" },
       { property: "og:description", content: "Catálogo completo de moda fitness premium para mulheres." },
       { property: "og:url", content: "/catalogo" },
     ],

@@ -15,7 +15,7 @@ import catAcessorios from "@/assets/cat-acessorios.jpg";
 export const site = {
   name: "Nane Benites",
   tagline: "Moda Fitness",
-  // WhatsApp para compras — formato internacional (55 + DDD + número).
+  // WhatsApp para compras - formato internacional (55 + DDD + número).
   whatsapp: "5541997071344",
   instagram:
     "https://www.instagram.com/nanebenites?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==",
@@ -24,8 +24,8 @@ export const site = {
   email: "nanebenites@yahoo.com",
   phone: "(45) 99967-5120",
   phoneSecondary: "(41) 99707-1344",
-  address: "Av. Des. Clotário Portugal, 501 — Centro",
-  city: "Campo Largo — PR",
+  address: "Av. Des. Clotário Portugal, 501 - Centro",
+  city: "Campo Largo - PR",
   cnpj: "43.288.784/0001-08",
   creator: "Gabriel Benites",
   addresses: [
@@ -33,7 +33,7 @@ export const site = {
       label: "Campo Largo",
       street: "Av. Des. Clotário Portugal, 501",
       neighborhood: "Centro",
-      city: "Campo Largo — PR",
+      city: "Campo Largo - PR",
       mapEmbed:
         "https://www.google.com/maps?q=Av.+Des.+Clot%C3%A1rio+Portugal,+501+-+Centro,+Campo+Largo+-+PR&output=embed",
       hoursList: [
@@ -46,7 +46,7 @@ export const site = {
       label: "Curitiba",
       street: "Rua Major Heitor Guimarães, 1740",
       neighborhood: "Campina do Siqueira",
-      city: "Curitiba — PR",
+      city: "Curitiba - PR",
       mapEmbed:
         "https://www.google.com/maps?q=Rua+Major+Heitor+Guimar%C3%A3es,+1740+-+Campina+do+Siqueira,+Curitiba+-+PR&output=embed",
       hoursList: [

@@ -59,7 +59,7 @@ export function withFocal(ref: string, x: number, y: number): string {
 
 /**
  * Synchronous resolver used by admin/loading placeholders.
- * Storage refs return a placeholder here — use `resolveImageAsync` for signed URLs.
+ * Storage refs return a placeholder here - use `resolveImageAsync` for signed URLs.
  */
 export function resolveImage(rawRef: string | null | undefined): string {
   const ref = splitFocal(rawRef).base;

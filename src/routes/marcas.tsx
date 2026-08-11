@@ -6,9 +6,9 @@ import { brands, products } from "@/lib/site-data";
 export const Route = createFileRoute("/marcas")({
   head: () => ({
     meta: [
-      { title: "Marcas — Nane Benites" },
+      { title: "Marcas - Nane Benites" },
       { name: "description", content: "As melhores marcas de moda fitness premium reunidas em um só lugar." },
-      { property: "og:title", content: "Marcas — Nane Benites" },
+      { property: "og:title", content: "Marcas - Nane Benites" },
       { property: "og:description", content: "Curadoria das melhores marcas fitness." },
       { property: "og:url", content: "/marcas" },
     ],

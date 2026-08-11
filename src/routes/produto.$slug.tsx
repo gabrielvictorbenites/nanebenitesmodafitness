@@ -21,7 +21,7 @@ function humanizeSlug(slug: string) {
 export const Route = createFileRoute("/produto/$slug")({
   head: ({ params }) => {
     const name = humanizeSlug(params.slug);
-    const title = `${name} — Nane Benites Moda Fitness`;
+    const title = `${name} - Nane Benites Moda Fitness`;
     const description = `${name}: peça de moda fitness selecionada pela Nane Benites. Confira cores, tamanhos e disponibilidade e fale com a loja pelo WhatsApp.`;
     const url = `${SITE_URL}/produto/${params.slug}`;
     return {
@@ -77,7 +77,7 @@ function ProductPage() {
 
   useEffect(() => {
     if (!product || typeof document === "undefined") return;
-    const title = `${product.name} — Nane Benites Moda Fitness`;
+    const title = `${product.name} - Nane Benites Moda Fitness`;
     document.title = title;
     const desc = (product.description || "").trim();
     const content = desc
@@ -217,7 +217,7 @@ function ProductPage() {
               className="flex items-center justify-center gap-3 rounded-full bg-brand px-8 py-4 text-xs font-semibold uppercase tracking-[0.2em] text-brand-foreground transition-colors hover:bg-brand-dark"
             >
               <MessageCircle className="h-4 w-4" />
-              Tenho interesse — WhatsApp
+              Tenho interesse - WhatsApp
             </a>
             <div className="grid grid-cols-2 gap-3">
               <button onClick={() => toggle(product.slug)} className={`flex items-center justify-center gap-2 rounded-full border px-6 py-3.5 text-xs font-semibold uppercase tracking-[0.2em] transition-colors ${

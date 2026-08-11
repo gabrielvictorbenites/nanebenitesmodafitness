@@ -145,7 +145,7 @@ function AdminDashboard() {
       <header className="flex items-end justify-between gap-6">
         <div>
           <h1 className="font-display text-3xl font-bold text-neutral-900">Dashboard</h1>
-          <p className="mt-1 text-sm text-neutral-500">Métricas em tempo real da sua loja — dados conectados ao site.</p>
+          <p className="mt-1 text-sm text-neutral-500">Métricas em tempo real da sua loja - dados conectados ao site.</p>
         </div>
         <div className="hidden gap-2 md:flex">
           <Link to="/admin/produtos" className="rounded-full border border-neutral-200 bg-white px-4 py-2 text-xs font-semibold text-neutral-700 transition hover:border-neutral-400">Gerenciar produtos</Link>
@@ -162,7 +162,7 @@ function AdminDashboard() {
                 <p className="text-[10px] font-semibold uppercase tracking-wider text-neutral-500">{c.label}</p>
                 <Icon className={`h-4 w-4 ${c.tone}`} />
               </div>
-              <p className="mt-2 font-display text-2xl font-bold text-neutral-900">{loading ? "—" : c.value}</p>
+              <p className="mt-2 font-display text-2xl font-bold text-neutral-900">{loading ? "-" : c.value}</p>
             </div>
           );
         })}

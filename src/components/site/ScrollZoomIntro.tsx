@@ -26,7 +26,7 @@ export function ScrollZoomIntro() {
               <span className="italic font-light text-gradient-brand">moda fitness</span> premium.
             </h2>
             <p className="mx-auto mt-8 max-w-xl text-base leading-relaxed text-white/80 md:text-lg">
-              Curadoria exclusiva de marcas selecionadas — cada peça pensada para vestir sua melhor versão, com atendimento consultivo e provador exclusivo.
+              Curadoria exclusiva de marcas selecionadas - cada peça pensada para vestir sua melhor versão, com atendimento consultivo e provador exclusivo.
             </p>
           </div>
 

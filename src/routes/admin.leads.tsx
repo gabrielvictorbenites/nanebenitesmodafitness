@@ -168,7 +168,7 @@ function LeadsPage() {
                 return (
                   <tr key={l.id} className="border-b border-neutral-100 align-top last:border-b-0 hover:bg-neutral-50/50">
                     <td className="px-4 py-4">
-                      <p className="font-semibold text-neutral-900">{l.name || "—"}</p>
+                      <p className="font-semibold text-neutral-900">{l.name || "-"}</p>
                       {l.email ? (
                         <a href={`mailto:${l.email}`} className="mt-1 flex items-center gap-1.5 text-xs text-neutral-500 hover:text-neutral-800">
                           <Mail className="h-3 w-3" /> {l.email}
@@ -181,7 +181,7 @@ function LeadsPage() {
                       ) : null}
                     </td>
                     <td className="max-w-md px-4 py-4 text-xs text-neutral-600">
-                      <p className="line-clamp-3 whitespace-pre-wrap">{l.message || "—"}</p>
+                      <p className="line-clamp-3 whitespace-pre-wrap">{l.message || "-"}</p>
                     </td>
                     <td className="px-4 py-4 text-xs text-neutral-500">{l.source || "site"}</td>
                     <td className="px-4 py-4 text-xs text-neutral-500">{new Date(l.created_at).toLocaleString("pt-BR")}</td>
