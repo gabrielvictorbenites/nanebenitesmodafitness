@@ -463,6 +463,7 @@ function ProductForm({ initial, onClose, onSaved }: { initial: ProductRow | null
             onChange={(v) => set("media", v)}
             coverIndex={state.coverIndex}
             onCoverChange={(i) => set("coverIndex", i)}
+            colors={state.colors}
           />
         </div>
 
