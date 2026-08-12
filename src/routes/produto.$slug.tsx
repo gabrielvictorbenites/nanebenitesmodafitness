@@ -186,8 +186,8 @@ function ProductPage() {
           <div className="mt-8">
             <p className="text-xs uppercase tracking-widest text-muted-foreground">Cor: <span className="text-foreground">{color}</span></p>
             <div className="mt-3 flex flex-wrap gap-2">
-              {product.colors.map((c: string) => (
-                <button key={c} onClick={() => setColor(c)} className={`rounded-full border px-4 py-2 text-xs uppercase tracking-widest transition-colors ${
+              {product.colors.map((c: string, ci: number) => (
+                <button key={c} onClick={() => { setColor(c); if (gallery.length > 1) setActive(Math.min(ci, gallery.length - 1)); }} className={`rounded-full border px-4 py-2 text-xs uppercase tracking-widest transition-colors ${
                   c === color ? "border-brand bg-brand text-brand-foreground" : "border-border hover:border-foreground"
                 }`}>
                   {c}
