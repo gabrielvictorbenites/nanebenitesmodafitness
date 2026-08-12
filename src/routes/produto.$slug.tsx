@@ -204,7 +204,7 @@ function ProductPage() {
               <span className="font-display text-3xl font-semibold text-foreground">{formatPrice(product.price)}</span>
             )}
           </div>
-          <p className="mt-2 text-xs uppercase tracking-widest text-muted-foreground">Ou em até 6x sem juros no cartão</p>
+          <p className="mt-2 text-xs uppercase tracking-widest text-muted-foreground">Ou em até 4x sem juros no cartão</p>
 
           <div className="mt-8">
             <p className="text-xs uppercase tracking-widest text-muted-foreground">Cor: <span className="text-foreground">{color}</span></p>
