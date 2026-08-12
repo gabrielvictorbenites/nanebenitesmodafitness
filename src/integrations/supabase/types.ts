@@ -199,6 +199,7 @@ export type Database = {
           on_sale: boolean
           price: number
           sale_price: number | null
+          size_availability: Json | null
           sizes: string[]
           sku: string
           slug: string
@@ -223,6 +224,7 @@ export type Database = {
           on_sale?: boolean
           price?: number
           sale_price?: number | null
+          size_availability?: Json | null
           sizes?: string[]
           sku?: string
           slug: string
@@ -247,6 +249,7 @@ export type Database = {
           on_sale?: boolean
           price?: number
           sale_price?: number | null
+          size_availability?: Json | null
           sizes?: string[]
           sku?: string
           slug?: string
