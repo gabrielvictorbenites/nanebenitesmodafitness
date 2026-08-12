@@ -134,8 +134,8 @@ export function MediaUploader({
       ) : (
         <div className="mt-3 grid grid-cols-2 gap-3 sm:grid-cols-4">
           {values.map((v, i) => (
+            <div key={v.split("#")[0] + i}>
             <MediaThumb
-              key={v.split("#")[0] + i}
               value={v}
               isCover={i === coverIndex}
               onFocal={(next) => {
