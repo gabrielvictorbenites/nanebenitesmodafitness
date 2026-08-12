@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { Upload } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { FocalImage } from "@/components/admin/FocalImage";
-import { resolveImageAsync } from "@/lib/product-image";
+import { resolveImageAsync, colorOf, withColor } from "@/lib/product-image";
 
 function useResolved(ref: string) {
   const [url, setUrl] = useState("");
@@ -23,11 +23,13 @@ export function MediaUploader({
   onChange,
   coverIndex,
   onCoverChange,
+  colors = [],
 }: {
   values: string[];
   onChange: (v: string[]) => void;
   coverIndex: number;
   onCoverChange: (i: number) => void;
+  colors?: string[];
 }) {
   const [uploading, setUploading] = useState(false);
   const [err, setErr] = useState<string | null>(null);
@@ -107,6 +109,7 @@ export function MediaUploader({
         </div>
         <p className="mt-3 text-[11px] leading-relaxed text-neutral-500">
           Primeira imagem vira a capa. Use as setas para reordenar.<br />
+          Marque a cor de cada foto para o cliente trocar de cor no site.<br />
           Arraste a foto dentro do quadrado para ajustar o enquadramento - nada é cortado.
         </p>
         <input
@@ -131,8 +134,8 @@ export function MediaUploader({
       ) : (
         <div className="mt-3 grid grid-cols-2 gap-3 sm:grid-cols-4">
           {values.map((v, i) => (
+            <div key={v.split("#")[0] + i}>
             <MediaThumb
-              key={v.split("#")[0] + i}
               value={v}
               isCover={i === coverIndex}
               onFocal={(next) => {
@@ -179,7 +182,24 @@ export function MediaUploader({
                   →
                 </button>
               </div>
-            </MediaThumb>
+              </MediaThumb>
+              {colors.length > 0 ? (
+                <select
+                  value={colorOf(v)}
+                  onChange={(e) => {
+                    const arr = [...values];
+                    arr[i] = withColor(v, e.target.value);
+                    onChange(arr);
+                  }}
+                  className="mt-1 h-8 w-full rounded-md border border-neutral-300 bg-white px-2 text-[11px]"
+                >
+                  <option value="">Sem cor</option>
+                  {colors.map((c) => (
+                    <option key={c} value={c}>{c}</option>
+                  ))}
+                </select>
+              ) : null}
+            </div>
           ))}
         </div>
       )}
