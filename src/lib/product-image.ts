@@ -32,13 +32,38 @@ const PLACEHOLDER =
  */
 export function splitFocal(ref: string | null | undefined): { base: string; focal: string } {
   if (!ref) return { base: "", focal: "50% 50%" };
-  const i = ref.indexOf("#fp=");
-  if (i === -1) return { base: ref, focal: "50% 50%" };
-  const base = ref.slice(0, i);
-  const [x, y] = ref.slice(i + 4).split(",").map((n) => Number(n));
+  const { base, params } = parseRef(ref);
+  const fp = params.get("fp");
+  if (!fp) return { base, focal: "50% 50%" };
+  const [x, y] = fp.split(",").map((n) => Number(n));
   const cx = Number.isFinite(x) ? Math.min(100, Math.max(0, x)) : 50;
   const cy = Number.isFinite(y) ? Math.min(100, Math.max(0, y)) : 50;
   return { base, focal: `${cx}% ${cy}%` };
+}
+
+/** Refs carry metadata in the hash: `<ref>#fp=50,30&c=Vermelho` */
+function parseRef(ref: string): { base: string; params: URLSearchParams } {
+  const i = ref.indexOf("#");
+  if (i === -1) return { base: ref, params: new URLSearchParams() };
+  return { base: ref.slice(0, i), params: new URLSearchParams(ref.slice(i + 1)) };
+}
+
+function buildRef(base: string, params: URLSearchParams): string {
+  const q = params.toString();
+  return q ? `${base}#${q}` : base;
+}
+
+/** Color tag assigned to an image (empty when untagged). */
+export function colorOf(ref: string | null | undefined): string {
+  if (!ref) return "";
+  return parseRef(ref).params.get("c") ?? "";
+}
+
+export function withColor(ref: string, color: string): string {
+  const { base, params } = parseRef(ref);
+  if (color) params.set("c", color);
+  else params.delete("c");
+  return buildRef(base, params);
 }
 
 export function focalOf(ref: string | null | undefined): string {
@@ -51,10 +76,11 @@ export function focalXY(ref: string | null | undefined): { x: number; y: number 
 }
 
 export function withFocal(ref: string, x: number, y: number): string {
-  const { base } = splitFocal(ref);
   const cx = Math.round(Math.min(100, Math.max(0, x)));
   const cy = Math.round(Math.min(100, Math.max(0, y)));
-  return `${base}#fp=${cx},${cy}`;
+  const { base, params } = parseRef(ref);
+  params.set("fp", `${cx},${cy}`);
+  return buildRef(base, params);
 }
 
 /**
