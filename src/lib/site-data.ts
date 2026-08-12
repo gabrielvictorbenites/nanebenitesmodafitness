@@ -120,6 +120,7 @@ export type Product = {
   isBestseller?: boolean;
   stock: number;
   sku: string;
+  sizeAvailability?: Record<string, string[]>;
 };
 
 export const products: Product[] = [

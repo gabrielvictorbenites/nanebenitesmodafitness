@@ -31,9 +31,10 @@ type ProductRow = {
   sku: string | null;
   is_new: boolean;
   is_bestseller: boolean;
-  active?: boolean;
-  featured?: boolean;
-};
+   active?: boolean;
+   featured?: boolean;
+   size_availability?: Record<string, string[]>;
+ };
 
 function Thumb({ refValue }: { refValue: string | null | undefined }) {
   const [url, setUrl] = useState<string>("");
@@ -291,8 +292,9 @@ function ProductsPage() {
 type FormState = {
   name: string; slug: string; description: string; category: string; brand: string;
   price: string; on_sale: boolean; sale_price: string; sizes: string[]; colors: string[];
-  media: string[]; coverIndex: number; stock: string; is_new: boolean; is_bestseller: boolean;
-};
+   media: string[]; coverIndex: number; stock: string; is_new: boolean; is_bestseller: boolean;
+   size_availability: Record<string, string[]>;
+ };
 
 function ProductForm({ initial, onClose, onSaved }: { initial: ProductRow | null; onClose: () => void; onSaved: () => void }) {
   const initialGallery = (() => {
@@ -315,9 +317,10 @@ function ProductForm({ initial, onClose, onSaved }: { initial: ProductRow | null
     media: initialGallery.list,
     coverIndex: initialGallery.cover,
     stock: initial ? String(initial.stock) : "0",
-    is_new: initial?.is_new ?? false,
-    is_bestseller: initial?.is_bestseller ?? false,
-  }));
+     is_new: initial?.is_new ?? false,
+     is_bestseller: initial?.is_bestseller ?? false,
+     size_availability: initial?.size_availability ?? {},
+   }));
   const [saving, setSaving] = useState(false);
   const [err, setErr] = useState<string | null>(null);
   const [aiLoading, setAiLoading] = useState(false);
@@ -370,9 +373,10 @@ function ProductForm({ initial, onClose, onSaved }: { initial: ProductRow | null
       image: cover || undefined,
       gallery: state.media,
       stock: Number(state.stock) || 0,
-      sku,
-      is_new: state.is_new, is_bestseller: state.is_bestseller,
-    };
+       sku,
+       is_new: state.is_new, is_bestseller: state.is_bestseller,
+       size_availability: state.size_availability,
+     };
     const q = initial
       ? supabase.from("products").update(payload).eq("id", initial.id)
       : supabase.from("products").insert(payload);
@@ -432,7 +436,47 @@ function ProductForm({ initial, onClose, onSaved }: { initial: ProductRow | null
         </div>
 
         <TagList label="Tamanhos" values={state.sizes} onChange={(v) => set("sizes", v)} placeholder="Ex: P, M, G, 38…" />
-        <TagList label="Cores" values={state.colors} onChange={(v) => set("colors", v)} placeholder="Ex: Preto, Bordô…" />
+         <TagList label="Cores" values={state.colors} onChange={(v) => set("colors", v)} placeholder="Ex: Preto, Bordô…" />
+ 
+         {state.colors.length > 0 && state.sizes.length > 0 && (
+           <div className="mt-6 border-t border-neutral-100 pt-6">
+             <p className="text-[11px] font-semibold uppercase tracking-wider text-neutral-500">Disponibilidade de Tamanhos por Cor</p>
+             <p className="mt-1 text-[11px] text-neutral-400">Marque quais tamanhos estão disponíveis para cada cor cadastrada.</p>
+             
+             <div className="mt-4 space-y-4">
+               {state.colors.map(color => (
+                 <div key={color} className="rounded-lg border border-neutral-100 bg-neutral-50/50 p-3">
+                   <p className="text-xs font-bold text-neutral-800">{color}</p>
+                   <div className="mt-2 flex flex-wrap gap-2">
+                     {state.sizes.map(size => {
+                       const isChecked = state.size_availability[color]?.includes(size) ?? true;
+                       return (
+                         <label key={size} className="flex cursor-pointer items-center gap-2 rounded border bg-white px-2 py-1 text-[10px] hover:bg-neutral-50">
+                           <input 
+                             type="checkbox" 
+                             checked={isChecked}
+                             onChange={(e) => {
+                               const current = state.size_availability[color] ?? state.sizes;
+                               let next: string[];
+                               if (e.target.checked) {
+                                 next = [...current, size];
+                               } else {
+                                 next = current.filter(s => s !== size);
+                               }
+                               set("size_availability", { ...state.size_availability, [color]: next });
+                             }}
+                             className="h-3 w-3 accent-cyan-600"
+                           />
+                           {size}
+                         </label>
+                       );
+                     })}
+                   </div>
+                 </div>
+               ))}
+             </div>
+           </div>
+         )}
 
         <div className="mt-4 flex items-center gap-3">
           <label className="flex items-center gap-2 text-sm">
