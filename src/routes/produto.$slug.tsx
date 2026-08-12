@@ -104,9 +104,13 @@ function ProductPage() {
   const p = product;
   const category = findCategory(p.category);
   const gallery = p.gallery && p.gallery.length > 0 ? p.gallery : [p.image];
+  const galleryRefs =
+    p.galleryRefs && p.galleryRefs.length > 0 ? p.galleryRefs : [p.imageRef];
   const norm = (s: string) => s.trim().toLowerCase();
   const indexesForColor = (c: string) =>
-    gallery.map((g, i) => (norm(colorOf(g)) === norm(c) ? i : -1)).filter((i) => i >= 0);
+    gallery
+      .map((_, i) => (norm(colorOf(galleryRefs[i])) === norm(c) ? i : -1))
+      .filter((i) => i >= 0);
   const selectedIdx = color ? indexesForColor(color) : [];
   const shown = selectedIdx.length > 0 ? selectedIdx : gallery.map((_, i) => i);
   const activeIdx = shown.includes(active) ? active : (shown[0] ?? 0);
