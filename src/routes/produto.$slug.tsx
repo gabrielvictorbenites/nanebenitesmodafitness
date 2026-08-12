@@ -224,18 +224,18 @@ function ProductPage() {
                     key={s}
                     onClick={() => isAvailable && setSize(s)}
                     disabled={!isAvailable}
-                    className={`h-11 min-w-11 rounded-sm border px-4 text-xs font-medium uppercase tracking-widest transition-colors ${
+                    className={`relative overflow-hidden h-11 min-w-11 rounded-sm border px-4 text-xs font-medium uppercase tracking-widest transition-colors ${
                       s === size
                         ? "border-brand bg-brand text-brand-foreground"
                         : isAvailable
                         ? "border-border hover:border-foreground"
-                        : "border-border text-muted-foreground/30 cursor-not-allowed overflow-hidden relative"
+                        : "border-border text-muted-foreground/30 cursor-not-allowed"
                     }`}
                   >
                     {s}
                     {!isAvailable && (
-                      <div className="absolute inset-0 flex items-center justify-center">
-                        <div className="h-[1px] w-full rotate-45 bg-muted-foreground/30" />
+                      <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
+                        <div className="h-px w-[140%] rotate-45 bg-muted-foreground/40" />
                       </div>
                     )}
                   </button>
