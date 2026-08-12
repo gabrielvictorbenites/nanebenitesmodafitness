@@ -6,7 +6,7 @@ import { useServerFn } from "@tanstack/react-start";
 import { MediaUploader } from "@/components/admin/MediaUploader";
 import { generateProductDescription } from "@/lib/ai.functions";
 import { resolveImageAsync } from "@/lib/product-image";
-import { brands } from "@/lib/site-data";
+import { brands, categories } from "@/lib/site-data";
 
 export const Route = createFileRoute("/admin/produtos")({
   ssr: false,
