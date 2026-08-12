@@ -7,6 +7,7 @@ import { findCategory, formatPrice, type Product } from "@/lib/site-data";
 import { whatsappLink, productWhatsappMessage } from "@/lib/whatsapp";
 import { useFavorites } from "@/lib/favorites";
 import { fetchProductBySlug, fetchProducts, type DbProduct } from "@/lib/products";
+import { colorOf } from "@/lib/product-image";
 
 const SITE_URL = "https://nanebenitesmodafitness.com";
 
@@ -103,6 +104,19 @@ function ProductPage() {
   const p = product;
   const category = findCategory(p.category);
   const gallery = p.gallery && p.gallery.length > 0 ? p.gallery : [p.image];
+  const norm = (s: string) => s.trim().toLowerCase();
+  const indexesForColor = (c: string) =>
+    gallery.map((g, i) => (norm(colorOf(g)) === norm(c) ? i : -1)).filter((i) => i >= 0);
+  const selectedIdx = color ? indexesForColor(color) : [];
+  const shown = selectedIdx.length > 0 ? selectedIdx : gallery.map((_, i) => i);
+  const activeIdx = shown.includes(active) ? active : (shown[0] ?? 0);
+
+  function pickColor(c: string, fallbackIndex: number) {
+    setColor(c);
+    const idxs = indexesForColor(c);
+    if (idxs.length > 0) setActive(idxs[0]);
+    else if (gallery.length > 1) setActive(Math.min(fallbackIndex, gallery.length - 1));
+  }
   const fav = has(p.slug);
 
   async function handleShare() {
@@ -138,25 +152,25 @@ function ProductPage() {
         <div>
           <div className="relative aspect-[3/4] overflow-hidden rounded-sm bg-[color:var(--surface)]">
             <SmartImage
-              src={gallery[active]}
+              src={gallery[activeIdx]}
               alt={product.name}
               priority
-              objectPosition={product.galleryPositions?.[active] ?? product.imagePosition ?? "50% 50%"}
+              objectPosition={product.galleryPositions?.[activeIdx] ?? product.imagePosition ?? "50% 50%"}
             />
           </div>
-          {gallery.length > 1 ? (
+          {shown.length > 1 ? (
             <div className="mt-4 grid grid-cols-4 gap-2">
-              {gallery.map((g: string, i: number) => (
+              {shown.map((i: number) => (
                 <button
                   key={i}
                   onClick={() => setActive(i)}
                   className={`aspect-square overflow-hidden rounded-sm border transition-colors ${
-                    i === active ? "border-brand" : "border-border hover:border-foreground"
+                    i === activeIdx ? "border-brand" : "border-border hover:border-foreground"
                   }`}
                 >
                   <span className="relative block h-full w-full">
                     <SmartImage
-                      src={g}
+                      src={gallery[i]}
                       alt=""
                       objectPosition={product.galleryPositions?.[i] ?? "50% 50%"}
                     />
@@ -187,7 +201,7 @@ function ProductPage() {
             <p className="text-xs uppercase tracking-widest text-muted-foreground">Cor: <span className="text-foreground">{color}</span></p>
             <div className="mt-3 flex flex-wrap gap-2">
               {product.colors.map((c: string, ci: number) => (
-                <button key={c} onClick={() => { setColor(c); if (gallery.length > 1) setActive(Math.min(ci, gallery.length - 1)); }} className={`rounded-full border px-4 py-2 text-xs uppercase tracking-widest transition-colors ${
+                <button key={c} onClick={() => pickColor(c, ci)} className={`rounded-full border px-4 py-2 text-xs uppercase tracking-widest transition-colors ${
                   c === color ? "border-brand bg-brand text-brand-foreground" : "border-border hover:border-foreground"
                 }`}>
                   {c}
