@@ -217,13 +217,30 @@ function ProductPage() {
           <div className="mt-6">
             <p className="text-xs uppercase tracking-widest text-muted-foreground">Tamanho: <span className="text-foreground">{size}</span></p>
             <div className="mt-3 flex flex-wrap gap-2">
-              {product.sizes.map((s: string) => (
-                <button key={s} onClick={() => setSize(s)} className={`h-11 min-w-11 rounded-sm border px-4 text-xs font-medium uppercase tracking-widest transition-colors ${
-                  s === size ? "border-brand bg-brand text-brand-foreground" : "border-border hover:border-foreground"
-                }`}>
-                  {s}
-                </button>
-              ))}
+              {product.sizes.map((s: string) => {
+                const isAvailable = !color || !product.sizeAvailability || !product.sizeAvailability[color] || product.sizeAvailability[color].includes(s);
+                return (
+                  <button
+                    key={s}
+                    onClick={() => isAvailable && setSize(s)}
+                    disabled={!isAvailable}
+                    className={`h-11 min-w-11 rounded-sm border px-4 text-xs font-medium uppercase tracking-widest transition-colors ${
+                      s === size
+                        ? "border-brand bg-brand text-brand-foreground"
+                        : isAvailable
+                        ? "border-border hover:border-foreground"
+                        : "border-border text-muted-foreground/30 cursor-not-allowed overflow-hidden relative"
+                    }`}
+                  >
+                    {s}
+                    {!isAvailable && (
+                      <div className="absolute inset-0 flex items-center justify-center">
+                        <div className="h-[1px] w-full rotate-45 bg-muted-foreground/30" />
+                      </div>
+                    )}
+                  </button>
+                );
+              })}
             </div>
           </div>
 
