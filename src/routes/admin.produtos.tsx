@@ -76,6 +76,7 @@ const CATEGORIES: { slug: string; label: string }[] = [
   { slug: "regatas", label: "Regatas" },
   { slug: "camisetas", label: "Camisetas" },
   { slug: "conjuntos", label: "Conjuntos" },
+  { slug: "macacoes", label: "Macacões" },
   { slug: "body", label: "Body" },
   { slug: "moletons", label: "Moletons" },
   { slug: "casacos-de-ziper", label: "Casacos de zíper" },
