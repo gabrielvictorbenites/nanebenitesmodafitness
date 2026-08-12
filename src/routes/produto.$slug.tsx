@@ -117,6 +117,11 @@ function ProductPage() {
 
   function pickColor(c: string, fallbackIndex: number) {
     setColor(c);
+    const avail = (product as any)?.sizeAvailability?.[c] as string[] | undefined;
+    if (avail && !avail.includes(size)) {
+      const next = (p.sizes ?? []).find((s: string) => avail.includes(s));
+      setSize(next ?? "");
+    }
     const idxs = indexesForColor(c);
     if (idxs.length > 0) setActive(idxs[0]);
     else if (gallery.length > 1) setActive(Math.min(fallbackIndex, gallery.length - 1));
